@@ -1,9 +1,11 @@
 #pragma once
 
+#include "ServoImplementation.hpp"
+
 #include <Servo.h>
 
 template <int pin, int minMicros, int maxMicros, long long milliDegrees>
-class ServoPermanentArduino
+class ServoPermanentArduino : public ServoImplementation
 {
 public:
 	ServoPermanentArduino()
@@ -16,6 +18,11 @@ public:
 		int micros = ratio * (maxMicros - minMicros) + 0.5;
 		servo.writeMicroseconds(micros + minMicros);
 		return micros / float(maxMicros - minMicros);
+	}
+
+	float radiansPerRatio()
+	{
+		return milliDegrees * M_PI / 180000;
 	}
 
 private:
