@@ -1,8 +1,8 @@
-#include "Leg.hpp"
+#include "LegSymmetric.hpp"
 
 #include <math.h>
 
-Leg::Leg(Joint aimingHip, Joint liftingHip, Joint knee, float kneeMinRadians)
+LegSymmetric::LegSymmetric(Joint aimingHip, Joint liftingHip, Joint knee, float kneeMinRadians)
 : aimingHip(aimingHip),
   liftingHip(liftingHip),
   knee(knee),
@@ -12,14 +12,14 @@ Leg::Leg(Joint aimingHip, Joint liftingHip, Joint knee, float kneeMinRadians)
 	setKnee(M_PI_2);
 }
 
-void Leg::setLift(float radians)
+void LegSymmetric::setLift(float radians)
 {
 	liftRadians = radians;
 
 	updateLift();
 }
 
-void Leg::setKnee(float radians)
+void LegSymmetric::setKnee(float radians)
 {
 	knee.setFromA(radians - kneeContractionRadians);
 
@@ -28,7 +28,7 @@ void Leg::setKnee(float radians)
 	updateLift();
 }
 
-void Leg::updateLift()
+void LegSymmetric::updateLift()
 {
 	float limited = fminf(liftRadians + kneeOffset, liftingHip.range());
 

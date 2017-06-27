@@ -1,6 +1,6 @@
 #include <ServoPermanentHextronik.hpp>
 #include <Joint.hpp>
-#include <Leg.hpp>
+#include <LegSymmetric.hpp>
 
 class ThreeLeggedPrototype
 {
@@ -58,9 +58,9 @@ public:
 	}
 
 private:
-	Leg back;
-	Leg left;
-	Leg right;
+	LegSymmetric back;
+	LegSymmetric left;
+	LegSymmetric right;
 };
 
 
