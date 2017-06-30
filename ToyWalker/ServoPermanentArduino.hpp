@@ -13,6 +13,11 @@ public:
 		servo.attach(pin, minMicros, maxMicros);
 	}
 
+	int id() const
+	{
+		return pin;
+	}
+
 	float goRatio(float ratio)
 	{
 		int micros = ratio * (maxMicros - minMicros) + 0.5;
@@ -20,7 +25,7 @@ public:
 		return micros / float(maxMicros - minMicros);
 	}
 
-	float radiansPerRatio()
+	float radiansPerRatio() const
 	{
 		return milliDegrees * M_PI / 180000;
 	}

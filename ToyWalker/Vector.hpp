@@ -11,6 +11,11 @@ public:
 	Vector(float x, float y, float z)
 	: x(x), y(y), z(z)
 	{ }
+
+	Vector operator-() const
+	{
+		return Vector(-x, -y, -z);
+	}
 	
 	Vector operator*(float f) const
 	{
