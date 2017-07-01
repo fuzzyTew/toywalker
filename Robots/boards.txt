@@ -1,0 +1,27 @@
+## Arduino Pro or Pro Mini (5V, 16 MHz) w/ ATmega328
+## -------------------------------------------------
+
+pro5v328.name=Arduino Pro or Pro Mini ATmega328 (5V, 16 MHz)
+
+pro5v328.upload.tool=avrdude
+pro5v328.upload.protocol=arduino
+
+pro5v328.bootloader.tool=avrdude
+pro5v328.bootloader.unlock_bits=0x3F
+pro5v328.bootloader.lock_bits=0x0F
+
+pro5v328.build.board=AVR_PRO
+pro5v328.build.core=arduino
+pro5v328.build.variant=eightanaloginputs
+
+pro5v328.upload.maximum_size=30720
+pro5v328.upload.maximum_data_size=2048
+pro5v328.upload.speed=57600
+
+pro5v328.bootloader.low_fuses=0xFF
+pro5v328.bootloader.high_fuses=0xDA
+pro5v328.bootloader.extended_fuses=0xFD
+pro5v328.bootloader.file=atmega/ATmegaBOOT_168_atmega328.hex
+
+pro5v328.build.mcu=atmega328p
+pro5v328.build.f_cpu=16000000L

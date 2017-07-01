@@ -1,3 +1,4 @@
 Code for a multi-jointed walking toy robot driven by an arduino.
 
-The root folder is treated as an arduino library folder.  The main code is in ToyWalker/examples .
+This project makes heavy use of other projects via submodules.  You'll need to
+`git submodule init` to make it work.

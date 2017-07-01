@@ -1,0 +1,1 @@
+../orocos_kinematics_dynamics/orocos_kdl/src/chainidsolver_vereshchagin.hpp

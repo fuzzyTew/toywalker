@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<!-- +X is forward, +Y is left, +Z is up -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Prototype">
+
+
+	<material name="white">
+		<color rgba="0.875 0.875 0.875 1.0"/>
+	</material>
+	<material name="yellow">
+		<color rgba="0.875 0.875 0.125 1.0"/>
+	</material>
+	<material name="black">
+		<color rgba="0.125 0.125 0.125 1.0"/>
+	</material>
+	<material name="blue">
+		<color rgba="0.125 0.125 1.0 1.0"/>
+	</material>
+
+	<xacro:property name="servoL" value="0.22"/>
+	<xacro:property name="servoW" value="0.22"/>
+	<xacro:property name="servoD" value="0.12"/>
+	<xacro:property name="servoL2" value="0.05"/>
+	<xacro:property name="hornD" value="0.05"/>
+	<xacro:property name="hornY" value="0.06"/>
+	<xacro:property name="hornZ" value="0.19"/>
+	<xacro:property name="hornZ2" value="0.17"/>
+	<xacro:macro name="hxtservojoint" params="name parent child deg:=0 xyz:=${'0 0 0'} rdeg:=0 pdeg:=0 ydeg:=0">
+		<!-- unless adjusted, servo aims along +X, servo origin is at the joint, and larger width portion extends toward +Y -->
+		<link name="${name}_servo">
+			<visual>
+				<geometry>
+					<box size="${servoL} ${servoW} ${servoD}"/>
+				</geometry>
+				<origin xyz="${-servoL/2-servoL2-hornD} ${servoW/2-servoD/2} 0"/>
+				<material name="blue"/>
+			</visual>
+			<visual>
+				<geometry>
+					<cylinder length="${servoL2}" radius="${servoD/2}"/>
+				</geometry>
+				<origin rpy="0 ${pi/2} 0" xyz="${-servoL2 / 2 - hornD} 0 0"/>
+				<material name="blue"/>
+			</visual>
+		</link>
+		<xacro:property name="r" value="${rdeg*pi/180}"/>
+		<xacro:property name="p" value="${pdeg*pi/180}"/>
+		<xacro:property name="y" value="${ydeg*pi/180}"/>
+		<joint name="${name}_servo" type="fixed">
+			<parent link="${parent}"/>
+			<child link="${name}_servo"/>
+			<origin xyz="${xyz}" rpy="${r} ${p} ${y}"/>
+		</joint>
+		<xacro:property name="c1" value="${cos(r)}"/>
+		<xacro:property name="s1" value="${sin(r)}"/>
+		<xacro:property name="c2" value="${cos(p)}"/>
+		<xacro:property name="s2" value="${sin(p)}"/>
+		<xacro:property name="c3" value="${cos(y)}"/>
+		<xacro:property name="s3" value="${sin(y)}"/>
+		<joint name="${name}" type="revolute">
+			<parent link="${parent}"/>
+			<child link="${child}"/>
+			<axis xyz="${c2} ${c1*s2} ${s1*s2}"/>
+			<limit effort="1024.0" lower="${-pi/2}" upper="${pi/2}" velocity="0.5"/>
+			<origin xyz="${xyz}" rpy="${r+deg*pi/180} ${p} ${y}"/>
+		</joint>
+	</xacro:macro>
+	<xacro:macro name="hxtservohorn">
+		<!-- unless adjusted, servo horn aims along +X, and large portion of horn extends toward +Z -->
+		<visual>
+			<geometry>
+				<cylinder length="0.03" radius="0.035"/>
+			</geometry>
+			<origin rpy="0 ${pi/2} 0" xyz="${0.015-hornD} 0 0"/>
+			<material name="black"/>
+		</visual>
+		<visual>
+			<geometry>
+				<box size="0.02 ${hornY*2} 0.04"/>
+			</geometry>
+			<origin xyz="${0.04-hornD} 0 0"/>
+			<material name="black"/>
+		</visual>
+		<visual>
+			<geometry>
+				<box size="0.02 0.05 ${hornZ-0.02}"/>
+			</geometry>
+			<origin xyz="${0.04-hornD} 0 0.105"/>
+			<material name="black"/>
+		</visual>
+		<visual>
+			<geometry>
+				<box size="0.02 0.05 ${hornZ2-0.02}"/>
+			</geometry>
+			<origin xyz="${0.04-hornD} 0 -0.095"/>
+			<material name="black"/>
+		</visual>
+	</xacro:macro>
+
+	<xacro:property name="popsicleL" value="1.14"/>
+	<xacro:property name="popsicleW" value="0.09"/>
+	<xacro:property name="popsicleD" value="0.02"/>
+	<link name="base_link">
+		<xacro:macro name="bodypopsiclevisual" params="deg">
+			<visual>
+				<geometry>
+					<box size="${popsicleW} ${popsicleL} ${popsicleD}"/>
+				</geometry>
+				<origin rpy="0 0 ${deg * pi / 180}" xyz="${-cos(deg*pi/180) * tan(30*pi/180) * (popsicleL - popsicleW)/-2} ${-sin(deg*pi/180) * tan(30*pi/180) * (popsicleL - popsicleW)/-2} ${popsicleD/2}"/>
+				<material name="yellow"/>
+			</visual>
+		</xacro:macro>
+		<xacro:bodypopsiclevisual deg="0"/>
+		<xacro:bodypopsiclevisual deg="120"/>
+		<xacro:bodypopsiclevisual deg="-120"/>
+	</link>
+	<xacro:property name="pencilR" value="0.04"/>
+	<xacro:macro name="pencil" params="length offset">
+		<visual>
+			<geometry>
+				<cylinder length="${length}" radius="${pencilR}"/>
+			</geometry>
+			<origin xyz="${pencilR} 0 ${length/2 - offset}"/>
+			<material name="yellow"/>
+		</visual>
+	</xacro:macro>
+	<xacro:macro name="leg" params="name xyz thighL calfL rdeg:=0 pdeg:=0 ydeg:=0 reflect:=1">
+		<link name="${name}_hip">
+			<xacro:hxtservohorn/>
+		</link>
+		<xacro:hxtservojoint name="${name}_aiming_hip" parent="base_link" child="${name}_hip" xyz="${xyz}" rdeg="${rdeg + 90 - 90 * reflect}" pdeg="${pdeg}" ydeg="${ydeg}" deg="${90 - 90 * reflect}"/>
+		<link name="${name}_thigh">
+			<xacro:pencil length="0.94" offset="${hornZ2}"/>
+			<xacro:hxtservohorn/>
+		</link>
+		<xacro:hxtservojoint name="${name}_lifting_hip" parent="${name}_hip" child="${name}_thigh" deg="${90-90*reflect}" xyz="${servoD/2 + 0.01} ${reflect*(-hornD-servoL2-servoL/2)} 0" ydeg="${reflect*-90}" rdeg="-90"/>
+		<link name="${name}_calf">
+			<xacro:pencil length="0.93" offset="${hornZ2}"/>
+			<xacro:hxtservohorn/>
+		</link>
+		<xacro:hxtservojoint name="${name}_knee" parent="${name}_thigh" child="${name}_calf" deg="${90-90*reflect}" xyz="${-pencilR - servoL - servoL2} 0 ${0.94 - hornZ2 - servoW/2}" ydeg="180" rdeg="90"/>
+		<link name="${name}_foot"/>
+		<joint name="${name}_joint" type="fixed">
+			<parent link="${name}_calf"/>
+			<child link="${name}_foot"/>
+			<origin xyz="${pencilR} 0 ${0.93 - hornZ2}"/>
+		</joint>
+	</xacro:macro>
+	<xacro:leg name="back" thighL="0.94" calfL="0.93" xyz="-0.75 0 ${-servoD/2}" ydeg="180"/>
+	<xacro:leg name="left" thighL="0.91" calfL="0.94" xyz="0.3125 ${popsicleL/2 + hornD + servoL2} ${-servoD/2}" ydeg="90"/>
+	<xacro:leg name="right" thighL="0.92" calfL="0.93" xyz="0.312 ${-popsicleL/2 - hornD - servoL2} ${-servoD/2}" ydeg="-90" reflect="-1"/>
+</robot>
