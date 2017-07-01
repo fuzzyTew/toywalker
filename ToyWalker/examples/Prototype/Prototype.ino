@@ -74,6 +74,25 @@ public:
 		setKnee(heightAmount * M_PI);
 	}
 
+	void setServo(int index, float position)
+	{
+		Joint * j;
+		switch(index) {
+		case 0: j = &back.getAim(); break;
+		case 1: j = &back.getLift(); break;
+		case 2: j = &back.getKnee(); break;
+		case 3: j = &left.getAim(); break;
+		case 4: j = &left.getLift(); break;
+		case 5: j = &left.getKnee();  break;
+		case 6: j = &right.getAim(); break;
+		case 7: j = &right.getLift(); break;
+		case 8: j = &right.getKnee(); break;
+		default: return;
+		}
+
+		j->getServo().goRatio(position);
+	}
+
 //private:
 	LegSymmetric back;
 	LegSymmetric left;
@@ -83,41 +102,74 @@ public:
 
 void setup()
 {
-	//Serial.begin(9600);
 	ThreeLeggedPrototype prototype;
-
-	//prototype.compactPose();
-
-	//prototype.buildingPose();
-	//prototype.standingPose(0.75);
-	//return;
 	
-	
-	prototype.back.setAimFromA(M_PI_2);
 	for (int i = 11; i < 20; ++ i)
 		pinMode(i, INPUT);
 	bool rotary = analogRead(4) < 768;
 	int mode = 0;
 	unsigned long startTime = millis();
+	unsigned long lastTime = startTime;
+	int testServo = 0;
+	float testPosition = 0.5;
+	int testState = 0;
 	for (;;) {
+		unsigned long time = millis();
 		//Serial.println(analogRead(4));
 		bool nextRotary = analogRead(4) < 768;
-		if (rotary != nextRotary && millis() - startTime > 512) {
+		if (rotary != nextRotary && time - startTime > 512) {
 			rotary = nextRotary;
-			mode = (mode + 1) % 3;
+			mode = (mode + 1) % 5;
 			startTime = millis();
 		}
 		switch(mode) {
 		case 0:
+			// hug ground in such a way we are very likely to fall on our feet
 			prototype.standingPose(0.125, M_PI_4);
 			break;
 		case 1:
+			// squats
 			prototype.standingPose(-cos((millis() - startTime) / 1024.0) * (5.0/16.0) + (7.0/16.0));
 			break;
 		case 2:
+			// TODO: joystick
 			//prototype.back.
 			break;
+		case 3:
+			// "home" locations on all joints, for aligning
+			prototype.buildingPose();
+			break;
+		case 4:
+			// test range of all servos
+			{
+				prototype.setServo(testServo, testPosition);
+
+				float delta = (time - lastTime) / 1024.0;
+				switch (testState) {
+				case 0: // forward from 0.5
+					testPosition += delta;
+					if (testPosition < 0.875)
+						break;
+					testPosition = 0.875 * 2 - testPosition + delta;
+					testState = 1;
+				case 1: // backward from 0.875
+					testPosition -= delta;
+					if (testPosition > 0.125)
+						break;
+					testPosition = -testPosition - delta;
+					testState = 2;
+				case 2: // forward from 0.125
+					testPosition += delta;
+					if (testPosition < 0.5)
+						break;
+					prototype.setServo(testServo, 0.5);
+					testServo = (testServo + 1) % 9;
+					testState = 0;
+				}
+			}
+			break;
 		}
+		lastTime = time;
 		/*
 		prototype.back.setKnee(M_PI * (digitalRead(11) ? 0.75 : 0.25));
 		prototype.left.setKnee(M_PI * (digitalRead(12) ? 0.75 : 0.25));

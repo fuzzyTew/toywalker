@@ -1,0 +1,4 @@
+[submodule "stlport"]
+	path = stlport
+	url = https://github.com/vancegroup/stlport-avr.git
+	branch = STLport-5.2-arduino-installed

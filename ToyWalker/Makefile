@@ -1,2 +1,2 @@
 default:
-	make -C ../1_*
+	make -C examples/Prototype
