@@ -1,0 +1,3 @@
+Code for a multi-jointed walking toy robot driven by an arduino.
+
+The root folder is treated as an arduino library folder.  The main code is in ToyWalker/examples .
