@@ -1,4 +1,11 @@
 [submodule "stlport"]
-	path = stlport
+	path = ArduinoLibraries/stlport
 	url = https://github.com/vancegroup/stlport-avr.git
 	branch = STLport-5.2-arduino-installed
+[submodule "Eigen31"]
+	path = ArduinoLibraries/Eigen31
+	url = https://github.com/vancegroup/EigenArduino.git
+	branch = Eigen31
+[submodule "ArduinoLibraries/orocos-kdl/orocos_kinematics_dynamics"]
+	path = ArduinoLibraries/orocos-kdl/orocos_kinematics_dynamics
+	url = https://github.com/fuzzyTew/orocos_kinematics_dynamics.git
