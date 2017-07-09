@@ -4,6 +4,7 @@
 
 #include <stlport.h>
 #include <stlport-missing.h>
+#define EIGEN_DONT_ALIGN
 #include <Eigen31.h>
 
 // remove exceptions from all code

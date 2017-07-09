@@ -1,3 +1,11 @@
+// Arduino pollution
+#ifdef abs
+	#undef abs
+#endif
+#ifdef round
+	#undef round
+#endif
+
 // hack around stlport bug of multiply including stdexcept implementation when iostreams disabled by including it before disabling
 #include <stdexcept>
 
@@ -12,15 +20,11 @@
 // forward is used by eigen
 #include <boost/move/move.hpp>
 namespace std {
-	template <class T, class U>
-	inline T&& forward(U&& t)
-	{
-		return static_cast<T&&>(boost::forward(t));
-	}
+	using boost::forward;
 }
 
 // isfinite is used by ikfast
 #include <boost/math/special_functions/fpclassify.hpp>
 namespace std {
-	template <class T> inline bool isfinite(T x) { return boost::math::isfinite(x); }
+	using boost::math::isfinite;
 }
