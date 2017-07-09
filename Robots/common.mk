@@ -30,15 +30,15 @@ $(KINEMATICS_NAMESPACE)_ikfast.%.cpp: $(KINEMATICS_NAMESPACE)_ikfast.%.ikfast.st
 	sed '1s/^/#include <ToyWalker.h>\n#pragma GCC diagnostic ignored "-Wunused-variable"\n#pragma GCC diagnostic ignored "-Wreturn-type"\n#define IKFAST_NO_MAIN\n#define IKFAST_REAL double\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n/; s/=IKPowWithIntegerCheck(/=IKPowWithIntegerCheck<IkReal>(/g; s/std::vector<\(.*\)> \(.*\)(\(.*\));/\1 \2[\3];/' $< > $@
 
 $(KINEMATICS_NAMESPACE)_ikfast.%.hpp:
-	printf '#define IKFAST_NO_MAIN\n#define IKFAST_REAL double\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n#define IKFAST_HAS_LIBRARY\n\n#include "ikfast.h"\n\nnamespace IKFAST_NAMESPACE {\n#include "$(KINEMATICS_NAMESPACE)_ikfast.$*.limits.inc"\n}\n\n#undef IKFAST_NO_MAIN\n#undef IKFAST_REAL\n#undef IKFAST_NAMESPACE\n#undef IKFAST_HAS_LIBRARY\n' > $@
+	printf '#define IKFAST_NO_MAIN\n#define IKFAST_REAL double\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n#define IKFAST_HAS_LIBRARY\n\n#include "$(KINEMATICS_IKFASTLIMITSHEADER)"\n\n#include "ikfast.h"\n\n#undef IKFAST_NO_MAIN\n#undef IKFAST_REAL\n#undef IKFAST_NAMESPACE\n#undef IKFAST_HAS_LIBRARY\n' > $@
 
-%.translation3d.gcov.ikfast.styled.cpp: %.translation3d.full.ikfast.styled.cpp %.translation3d.limits.inc
+%.translation3d.gcov.ikfast.styled.cpp: %.translation3d.full.ikfast.styled.cpp $(KINEMATICS_IKFASTLIMITSHEADER)
 	mkdir -p $@_gcov
-	cd $@_gcov && g++ -DDECIMATION=64 -DIKFAST_NO_MAIN -DIKFAST_HAS_LIBRARY -I ../../../ArduinoLibraries/ToyWalker -include math.h -include ../$*.translation3d.limits.inc ../../ikfast_gcov_translation3d.cpp ../$< -o gcov_testrun -fprofile-arcs -ftest-coverage
+	cd $@_gcov && g++ -DDECIMATION=64 -DIKFAST_NO_MAIN -DIKFAST_HAS_LIBRARY -DIKFAST_NAMESPACE=$(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@)) -I ../../../ArduinoLibraries/ToyWalker -include ../$(KINEMATICS_IKFASTLIMITSHEADER) ../../ikfast_gcov_translation3d.cpp ../$< -o gcov_testrun -fprofile-arcs -ftest-coverage
 	cd $@_gcov && ./gcov_testrun
 	cd $@_gcov && gcov $< >/dev/null
 	sed -ne 's!    #####: *\([0-9]*\):\s.*!\1s/^/\\/\\//!p' $@_gcov/$*.translation3d.full.ikfast.styled.cpp.gcov > $@_gcov/$*.sed
-	sed -f $@_gcov/$*.sed -e 's!^//\(\s*\)if!\1if (false)//if!; s!^//\(\s*\)else if!\1else if (false)//else if!' < $< > $@
+	sed -f $@_gcov/$*.sed -e 's!^//\(\s*\)if!\1if (false)//if!; s!^//\(\s*\)else if!\1else if (false)//else if!; s!^//\(\s*bool \)!\1!' < $< > $@
 	rm -rf $@_gcov
 
 

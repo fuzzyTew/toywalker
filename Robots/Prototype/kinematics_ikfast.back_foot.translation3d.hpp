@@ -3,11 +3,9 @@
 #define IKFAST_NAMESPACE kinematics_ikfast_back_foot_translation3d
 #define IKFAST_HAS_LIBRARY
 
-#include "ikfast.h"
+#include "kinematics_ikfast.limits.hpp"
 
-namespace IKFAST_NAMESPACE {
-#include "kinematics_ikfast.back_foot.translation3d.limits.inc"
-}
+#include "ikfast.h"
 
 #undef IKFAST_NO_MAIN
 #undef IKFAST_REAL

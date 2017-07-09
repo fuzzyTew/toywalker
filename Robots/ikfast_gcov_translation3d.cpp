@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+using namespace IKFAST_NAMESPACE;
+
 int main()
 {
 	IkReal limits[6] = {xMin, xMax, yMin, yMax, zMin, zMax};
