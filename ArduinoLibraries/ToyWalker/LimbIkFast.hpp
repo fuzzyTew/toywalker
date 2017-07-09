@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cmath>
+#include <tuple>
 #include <vector>
 
-#include <boost/tr1/tuple.hpp>
 #include <Eigen/Core>
 
 #include "ikfast.h"
@@ -19,6 +19,13 @@ class LimbIkFast
 {
 public:
 	typedef Eigen::Matrix<double, sizeof...(Servos), 1> Angles;
+
+	std::tuple<Servos...> servos;
+
+	LimbIkFast()
+	{
+		initImpl<Servos...>();
+	}
 
 	void go(Eigen::Vector3d const & pos)
 	{
@@ -40,6 +47,11 @@ public:
 		goImpl<Servos...>(setup);
 	}
 
+	double goServo(unsigned int servo, double radians)
+	{
+		return goServoImpl<Servos...>(servo, radians);
+	}
+
 	Eigen::Vector3d where()
 	{
 		Eigen::Vector3d ret;
@@ -47,14 +59,17 @@ public:
 		return ret;
 	}
 
-	Eigen::Vector3d wherePlan(Angles const & setup)
+	Eigen::Vector3d where(Angles const & setup)
 	{
 		Eigen::Vector3d ret;
 		ComputeFk_translation3d(&setup(0), &ret(0), nullptr);
 		return ret;
 	}
 
-	std::tr1::tuple<Servos...> servos;
+	double whereServo(unsigned int servo) const
+	{
+		return angles(servo);
+	}
 
 private:
 	Angles angles;
@@ -95,31 +110,59 @@ private:
 	}
 
 	template <int basecase = 0>
-	void goImpl(const Angles & angles)
+	inline void goImpl(const Angles & angles)
 	{ }
 
 	template <typename Servo, typename... Remaining>
-	void goImpl(const Angles & angles)
+	inline void goImpl(const Angles & angles)
 	{
 		constexpr int i = sizeof...(Servos) - sizeof...(Remaining) - 1;
-		std::tr1::get<i>(servos).go(angles(i));
-		this->angles[i] = std::tr1::get<i>(servos).where();
+		std::get<i>(servos).go(angles(i));
+		this->angles[i] = std::get<i>(servos).where();
 		goImpl<Remaining...>(angles);
 	}
 
 	template <int basecase = 0>
-	double distImpl(const Angles & angles)
+	inline double distImpl(const Angles & angles)
 	{
 		return 0;
 	}
 
 	template <typename Servo, typename... Remaining>
-	double distImpl(const Angles & angles)
+	inline double distImpl(const Angles & angles)
 	{
 		constexpr int i = sizeof...(Servos) - sizeof...(Remaining) - 1;
-		if (angles(i) < std::tr1::get<i>(servos).softmin() || angles(i) > std::tr1::get<i>(servos).softmax())
+		if (angles(i) < std::get<i>(servos).softmin() || angles(i) > std::get<i>(servos).softmax())
 			return INFINITY;
-		return std::abs(std::tr1::get<i>(servos).where() - angles(i)) + distImpl<Remaining...>(angles);
+		return std::abs(this->angles(i) - angles(i)) + distImpl<Remaining...>(angles);
+	}
+
+	template <int basecase = 0>
+	inline double goServoImpl(unsigned int servo, double radians)
+	{
+		return 0;
+	}
+
+	template <typename Servo, typename... Remaining>
+	inline double goServoImpl(unsigned int servo, double radians)
+	{
+		constexpr int i = sizeof...(Servos) - sizeof...(Remaining) - 1;
+		if (servo == i)
+			return angles(i) = std::get<i>(servos).go(radians);
+		else
+			return goServoImpl<Remaining...>(servo, radians);
+	}
+
+	template <int basecase = 0>
+	inline void initImpl()
+	{ }
+
+	template <typename Servo, typename... Remaining>
+	inline void initImpl()
+	{
+		constexpr int i = sizeof...(Servos) - sizeof...(Remaining) - 1;
+		angles(i) = std::get<i>(servos).where();
+		initImpl<Remaining...>();
 	}
 };
 

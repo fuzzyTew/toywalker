@@ -1,0 +1,10 @@
+#pragma once
+
+#include <boost/tr1/tuple.hpp>
+
+namespace std {
+
+	using std::tr1::tuple;
+	using std::tr1::get;
+
+}

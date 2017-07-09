@@ -87,15 +87,15 @@ void setup()
 			prototype.rightFootGo(x, y, z);
 			break;
 		case 2:
-			std::tr1::get<0>(prototype.backLeg.servos).go(0);
-			std::tr1::get<1>(prototype.backLeg.servos).go(0);
-			std::tr1::get<2>(prototype.backLeg.servos).go(0);
-			std::tr1::get<0>(prototype.leftLeg.servos).go(0);
-			std::tr1::get<1>(prototype.leftLeg.servos).go(0);
-			std::tr1::get<2>(prototype.leftLeg.servos).go(0);
-			std::tr1::get<0>(prototype.rightLeg.servos).go(0);
-			std::tr1::get<1>(prototype.rightLeg.servos).go(0);
-			std::tr1::get<2>(prototype.rightLeg.servos).go(0);
+			std::get<0>(prototype.backLeg.servos).go(0);
+			std::get<1>(prototype.backLeg.servos).go(0);
+			std::get<2>(prototype.backLeg.servos).go(0);
+			std::get<0>(prototype.leftLeg.servos).go(0);
+			std::get<1>(prototype.leftLeg.servos).go(0);
+			std::get<2>(prototype.leftLeg.servos).go(0);
+			std::get<0>(prototype.rightLeg.servos).go(0);
+			std::get<1>(prototype.rightLeg.servos).go(0);
+			std::get<2>(prototype.rightLeg.servos).go(0);
 			break;
 		}
 	}
