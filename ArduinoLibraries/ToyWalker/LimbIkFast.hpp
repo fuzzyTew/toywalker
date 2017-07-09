@@ -68,7 +68,7 @@ private:
 		bool success = ComputeIk_translation3d(&pos[0], nullptr, nullptr, solutions);
 		if (success) {
 			double bestDistance = INFINITY;
-			const ikfast::IkSolutionBase<double> * bestSolution;
+			const ikfast::IkSolutionBase<double> * bestSolution = nullptr;
 	
 			for(std::size_t i = 0; i < solutions.GetNumSolutions(); ++ i)
 			{
@@ -86,7 +86,10 @@ private:
 	
 			}
 	
-			bestSolution->GetSolution(&solution(0), NULL);
+			if (bestSolution != nullptr)
+				bestSolution->GetSolution(&solution(0), NULL);
+			else
+				return false;
 		}
 		return success;
 	}
@@ -114,7 +117,8 @@ private:
 	double distImpl(const Angles & angles)
 	{
 		constexpr int i = sizeof...(Servos) - sizeof...(Remaining) - 1;
-		//Serial.println(angles(i));
+		if (angles(i) < std::tr1::get<i>(servos).softmin() || angles(i) > std::tr1::get<i>(servos).softmax())
+			return INFINITY;
 		return std::abs(std::tr1::get<i>(servos).where() - angles(i)) + distImpl<Remaining...>(angles);
 	}
 };
