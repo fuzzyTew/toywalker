@@ -7,7 +7,7 @@
 	url = https://github.com/vancegroup/EigenArduino.git
 	branch = Eigen31
 [submodule "ArduinoLibraries/orocos-kdl/orocos_kinematics_dynamics"]
-	path = ArduinoLibraries/orocos-kdl/orocos_kinematics_dynamics
+	path = ArduinoLibraries/orocos_kdl/orocos_kinematics_dynamics
 	url = https://github.com/fuzzyTew/orocos_kinematics_dynamics.git
 [submodule "ArduinoLibraries/boost_1_51_0"]
 	path = ArduinoLibraries/boost_1_51_0

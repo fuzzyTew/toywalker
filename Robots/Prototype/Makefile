@@ -7,7 +7,7 @@ BOARD_TAG = pro5v328
 #BOARD_TAG = pro
 #BOARD_SUB = 16MHzatmega328
 
-ARDUINO_LIBS = Servo SoftwareSerial stlport stlport-missing Eigen31 boost_1_51_0 ToyWalker
+ARDUINO_LIBS = Servo SoftwareSerial stlport stlport_missing Eigen31 boost_1_51_0 ToyWalker
 
 include ../common.mk
 

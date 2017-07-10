@@ -2,9 +2,11 @@
 
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 
-#include <stlport.h>
-#include <stlport-missing.h>
-#define EIGEN_DONT_ALIGN
+#ifdef __AVR__
+	#include <stlport.h>
+	#include <stlport_missing.h>
+	#define EIGEN_DONT_ALIGN
+#endif
 #include <Eigen31.h>
 
 // remove exceptions from all code
