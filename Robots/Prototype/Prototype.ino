@@ -11,17 +11,45 @@
 
 #include "../PrototypeRemote/PrototypeRemote.hpp"
 
-class ThreeLeggedPrototype
-: public Walker<
-	// back leg
+class ThreeLeggedPrototype : public Walker
+{
+public:
+	ThreeLeggedPrototype()
+	: Walker
+	  (
+		{0.5, 2.5},
+		{0.5, 1.5},
+		{0, 0, 0},
+		backLeg, leftLeg, rightLeg
+	  ),
+	  backLeg({-0.75, 0.00, -0.06}),
+	  leftLeg({0.3125, 0.67, -0.06}),
+	  rightLeg({0.3125, -0.67, -0.06})
+	{ }
+
+	void backFootGo(double xPct, double yPct, double zPct)
+	{
+		limb(0).go({kinematics_ikfast_back_foot_translation3d::xMin + xPct, kinematics_ikfast_back_foot_translation3d::yMin + yPct, kinematics_ikfast_back_foot_translation3d::zMin + zPct});
+	}
+
+	void leftFootGo(double xPct, double yPct, double zPct)
+	{
+		limb(1).go({kinematics_ikfast_left_foot_translation3d::xMin + xPct, kinematics_ikfast_left_foot_translation3d::yMin + yPct, kinematics_ikfast_left_foot_translation3d::zMin + zPct});
+	}
+
+	void rightFootGo(double xPct, double yPct, double zPct)
+	{
+		limb(2).go({kinematics_ikfast_right_foot_translation3d::xMin + xPct, kinematics_ikfast_right_foot_translation3d::yMin + yPct, kinematics_ikfast_right_foot_translation3d::zMin + zPct});
+	}
+	
+private:
 	LimbIkFast <
 		kinematics_ikfast_back_foot_translation3d::ComputeIk,
 		kinematics_ikfast_back_foot_translation3d::ComputeFk,
 		ServoPermanentHextronik<2>,
 		ServoPermanentHextronik<4>,
 		ServoPermanentHextronik<3>
-	>,
-	// left leg
+	> backLeg;
 	LimbIkFast
 	<
 		kinematics_ikfast_left_foot_translation3d::ComputeIk,
@@ -29,8 +57,7 @@ class ThreeLeggedPrototype
 		ServoPermanentHextronik<5>,
 		ServoPermanentHextronik<6>,
 		ServoPermanentHextronik<7>
-	>,
-	// right leg
+	> leftLeg;
 	LimbIkFast
 	<
 		kinematics_ikfast_right_foot_translation3d::ComputeIk,
@@ -38,26 +65,7 @@ class ThreeLeggedPrototype
 		ServoPermanentHextronik<8>,
 		ServoPermanentHextronik<9>,
 		ServoPermanentHextronik<10>
-	>
->
-{
-public:
-	void backFootGo(double xPct, double yPct, double zPct)
-	{
-		limbGo(0,{kinematics_ikfast_back_foot_translation3d::xMin + xPct, kinematics_ikfast_back_foot_translation3d::yMin + yPct, kinematics_ikfast_back_foot_translation3d::zMin + zPct});
-	}
-
-	void leftFootGo(double xPct, double yPct, double zPct)
-	{
-		limbGo(1,{kinematics_ikfast_left_foot_translation3d::xMin + xPct, kinematics_ikfast_left_foot_translation3d::yMin + yPct, kinematics_ikfast_left_foot_translation3d::zMin + zPct});
-	}
-
-	void rightFootGo(double xPct, double yPct, double zPct)
-	{
-		limbGo(2,{kinematics_ikfast_right_foot_translation3d::xMin + xPct, kinematics_ikfast_right_foot_translation3d::yMin + yPct, kinematics_ikfast_right_foot_translation3d::zMin + zPct});
-	}
-	
-//private:
+	> rightLeg;
 };
 
 void setup()
@@ -71,6 +79,7 @@ void setup()
 	double x = 0.5, y = 0.5, z = 0.5;
 
 	for (;;) {
+		unsigned int i;
 		remote.receive();
 		digitalWrite(13, (remote.mode() % 2) ? HIGH : LOW);
 		switch(remote.mode()) {
@@ -88,15 +97,8 @@ void setup()
 			prototype.rightFootGo(x, y, z);
 			break;
 		case 2:
-			std::get<0>(std::get<0>(prototype.limbs).servos).go(0);
-			std::get<1>(std::get<0>(prototype.limbs).servos).go(0);
-			std::get<2>(std::get<0>(prototype.limbs).servos).go(0);
-			std::get<0>(std::get<1>(prototype.limbs).servos).go(0);
-			std::get<1>(std::get<1>(prototype.limbs).servos).go(0);
-			std::get<2>(std::get<1>(prototype.limbs).servos).go(0);
-			std::get<0>(std::get<2>(prototype.limbs).servos).go(0);
-			std::get<1>(std::get<2>(prototype.limbs).servos).go(0);
-			std::get<2>(std::get<2>(prototype.limbs).servos).go(0);
+			for (i = 0; i < prototype.servos(); ++ i)
+				prototype.servoGo(i, 0);
 			break;
 		}
 	}

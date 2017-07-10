@@ -1,0 +1,48 @@
+#pragma once
+
+namespace std {
+
+template <typename T>
+class initializer_list
+{
+public:
+	typedef T value_type;
+	typedef T const & reference;
+	typedef T const & const_reference;
+	typedef size_t size_type;
+	typedef T const * iterator;
+	typedef T const * const_iterator;
+
+private:
+	iterator array;
+	size_type len;
+	
+	constexpr initializer_list(const_iterator array, size_type len)
+	: array(array), len(len)
+	{ }
+
+public:
+	constexpr initializer_list()
+	: array(0), len(0)
+	{ }
+	
+	constexpr size_type size() const { return len; }
+	
+	constexpr const_iterator begin() const { return array; }
+	
+	constexpr const_iterator end() const { return begin() + size(); }
+};
+
+template <typename T>
+constexpr T const * begin(initializer_list<T> list)
+{
+	return list.begin();
+}
+
+template <typename T>
+constexpr T const * end(initializer_list<T> list)
+{
+	return list.end();
+}
+
+}

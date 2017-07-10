@@ -18,7 +18,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-/// ikfast version 0x10000049 generated on 2017-07-09 12:09:21.112293
+/// ikfast version 0x10000049 generated on 2017-07-10 11:06:07.412591
 /// To compile with gcc:
 ///     gcc -lstdc++ ik.cpp
 /// To compile without any main function as a shared object (might need -llapack):
@@ -416,7 +416,7 @@ IKFAST_API void ComputeFk(const IkReal* j, IkReal* eetrans, IkReal* eerot)
     x7=(x1*x5);
     x8=(x0*x1);
     x9=((0.76)*x2*x3);
-    eetrans[0]=((0.312)+((x0*x9))+(((0.66)*x8))+(((-0.14)*x5))+((x6*x8)));
+    eetrans[0]=((0.3125)+((x0*x9))+(((0.66)*x8))+(((-0.14)*x5))+((x6*x8)));
     eetrans[1]=((-0.74)+(((0.76)*x1*x2))+(((-0.66)*x3))+(((-1.0)*x3*x6)));
     eetrans[2]=((-0.06)+(((-1.0)*x6*x7))+(((-0.66)*x7))+(((-0.14)*x0))+(((-1.0)*x5*x9)));
 }
@@ -473,7 +473,7 @@ public:
             py = eetrans[1];
             pz = eetrans[2];
 
-            new_px=((-0.312)+px);
+            new_px=((-0.3125)+px);
             new_py=((0.06)+pz);
             new_pz=((-0.74)+(((-1.0)*py)));
             px = new_px;
@@ -2898,7 +2898,7 @@ IKFAST_API bool ComputeIk2(const IkReal* eetrans, const IkReal* eerot, const IkR
 
 IKFAST_API const char* GetKinematicsHash()
 {
-//    return "<robot:GenericRobot - Prototype (dbd83885b2b27d2202afadb037c40abc)>";
+//    return "<robot:GenericRobot - Prototype (a2c460afa174c1654b1dd86a5e8d1d39)>";
 }
 
 IKFAST_API const char* GetIkFastVersion()

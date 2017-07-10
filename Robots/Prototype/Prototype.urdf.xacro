@@ -147,5 +147,5 @@
 	</xacro:macro>
 	<xacro:leg name="back" thighL="0.94" calfL="0.93" xyz="-0.75 0 ${-servoD/2}" ydeg="180"/>
 	<xacro:leg name="left" thighL="0.91" calfL="0.94" xyz="0.3125 ${popsicleL/2 + hornD + servoL2} ${-servoD/2}" ydeg="90"/>
-	<xacro:leg name="right" thighL="0.92" calfL="0.93" xyz="0.312 ${-popsicleL/2 - hornD - servoL2} ${-servoD/2}" ydeg="-90" reflect="-1"/>
+	<xacro:leg name="right" thighL="0.92" calfL="0.93" xyz="0.3125 ${-popsicleL/2 - hornD - servoL2} ${-servoD/2}" ydeg="-90" reflect="-1"/>
 </robot>

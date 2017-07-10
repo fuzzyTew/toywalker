@@ -10,65 +10,71 @@
 
 #include "IkFastSolutionArray.hpp"
 
+#include "Limb.hpp"
+
 template <
 	bool (&ComputeIk_translation3d)(const double*, const double*, const double*, ikfast::IkSolutionListBase<double>&),
 	void (&ComputeFk_translation3d)(const double*, double*, double*),
 	typename... Servos
 >
-class LimbIkFast
+class LimbIkFast : public Limb
 {
 public:
 	typedef Eigen::Matrix<double, sizeof...(Servos), 1> Angles;
 
 	std::tuple<Servos...> servos;
 
-	LimbIkFast()
+	LimbIkFast(Eigen::Vector3d const & hipPos)
+	: Limb(hipPos, sizeof...(Servos))
 	{
 		initImpl<Servos...>();
 	}
 
 	void go(Eigen::Vector3d const & pos)
 	{
-		if (computeIk(pos, angles)) {
+		if (computeIk(pos, angles))
 			goImpl<Servos...>(angles);
-		}
-			
 	}
 
-	Angles plan(Eigen::Vector3d const & pos)
+	Limb::Angles plan(Eigen::Vector3d const & pos)
 	{
 		Angles ret;
 		computeIk(pos, ret);
 		return ret;
 	}
 
-	void goPlan(Angles const & setup)
+	void execute(Limb::Angles const & setup)
 	{
 		goImpl<Servos...>(setup);
 	}
 
-	double goServo(unsigned int servo, double radians)
+	double go(unsigned int servo, double radians)
 	{
 		return goServoImpl<Servos...>(servo, radians);
 	}
 
-	Eigen::Vector3d where()
+	Eigen::Vector3d foot()
 	{
 		Eigen::Vector3d ret;
 		ComputeFk_translation3d(&angles(0), &ret(0), nullptr);
 		return ret;
 	}
 
-	Eigen::Vector3d where(Angles const & setup)
+	Eigen::Vector3d foot(Limb::Angles const & setup)
 	{
 		Eigen::Vector3d ret;
 		ComputeFk_translation3d(&setup(0), &ret(0), nullptr);
 		return ret;
 	}
 
-	double whereServo(unsigned int servo) const
+	Limb::Angles servoRadians()
 	{
-		return angles(servo);
+		return angles;
+	}
+
+	double servoRadians(unsigned int servo)
+	{
+		return angles[servo];
 	}
 
 private:
@@ -147,10 +153,11 @@ private:
 	inline double goServoImpl(unsigned int servo, double radians)
 	{
 		constexpr int i = sizeof...(Servos) - sizeof...(Remaining) - 1;
-		if (servo == i)
+		if (servo == i) {
 			return angles(i) = std::get<i>(servos).go(radians);
-		else
+		} else {
 			return goServoImpl<Remaining...>(servo, radians);
+		}
 	}
 
 	template <int basecase = 0>

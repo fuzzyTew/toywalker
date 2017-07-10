@@ -22,11 +22,11 @@ public:
 		return pin;
 	}
 
-	void go(double radians)
+	double go(double radians)
 	{
 		int micros = radians * (180000.0 * (maxMicros - minMicros) / extentMillidegrees / M_PI);
 		servo.writeMicroseconds(micros + (maxMicros + minMicros) / 2);
-		_radians = micros * (M_PI * extentMillidegrees / (maxMicros - minMicros) / 180000);
+		return _radians = micros * (M_PI * extentMillidegrees / (maxMicros - minMicros) / 180000);
 	}
 
 	double where() const

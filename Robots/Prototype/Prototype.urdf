@@ -491,14 +491,14 @@
   <joint name="right_aiming_hip_servo" type="fixed">
     <parent link="base_link"/>
     <child link="right_aiming_hip_servo"/>
-    <origin rpy="3.14159265359 0.0 -1.57079632679" xyz="0.312 -0.67 -0.06"/>
+    <origin rpy="3.14159265359 0.0 -1.57079632679" xyz="0.3125 -0.67 -0.06"/>
   </joint>
   <joint name="right_aiming_hip" type="revolute">
     <parent link="base_link"/>
     <child link="right_hip"/>
     <axis xyz="1.0 -0.0 0.0"/>
     <limit effort="1024.0" lower="-1.57079632679" upper="1.57079632679" velocity="0.5"/>
-    <origin rpy="6.28318530718 0.0 -1.57079632679" xyz="0.312 -0.67 -0.06"/>
+    <origin rpy="6.28318530718 0.0 -1.57079632679" xyz="0.3125 -0.67 -0.06"/>
   </joint>
   <link name="right_thigh">
     <visual>
