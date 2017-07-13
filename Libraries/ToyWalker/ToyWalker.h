@@ -1,12 +1,17 @@
 #pragma once
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 
 #ifdef __AVR__
 	#include <stlport.h>
 	#include <stlport_missing.h>
-	#define EIGEN_DONT_ALIGN
+#elif defined(__arm__)
+	#if defined(__io)
+		#undef __io
+	#endif
 #endif
+#define EIGEN_DONT_ALIGN
 #include <Eigen31.h>
 
 // remove exceptions from all code

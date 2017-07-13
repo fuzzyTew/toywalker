@@ -9,7 +9,7 @@
 #include "kinematics_ikfast.left_foot.translation3d.hpp"
 #include "kinematics_ikfast.right_foot.translation3d.hpp"
 
-#include "../PrototypeRemote/PrototypeRemote.hpp"
+#include "../A_PrototypeRemote/PrototypeRemote.hpp"
 
 class ThreeLeggedPrototype : public Walker
 {

@@ -1,8 +1,14 @@
 ARDMK_DIR = /usr/share/arduino
 #ARDMK_DIR = /home/user/src/Arduino-Makefile
 ARDUINO_DIR = /opt/arduino-1.8.2
-USER_LIB_PATH = ../../ArduinoLibraries
+RHOBANMAPLE_DIR = /home/user/src/Maple
+
+USER_LIB_PATH = ../../Libraries
 BOARDS_TXT = ../boards.txt
+override LIB_MAPLE_HOME = $(RHOBANMAPLE_DIR)/LibMaple
+override LIB_ROBOT_HOME = $(RHOBANMAPLE_DIR)/LibRhoban
+override PATH := $(PATH):$(RHOBANMAPLE_DIR)/BinutilsArm/bin
+override SRC_FILES := $(SRC_FILES)
 
 upload:
 
@@ -34,7 +40,7 @@ $(KINEMATICS_NAMESPACE)_ikfast.%.hpp:
 
 %.translation3d.gcov.ikfast.styled.cpp: %.translation3d.full.ikfast.styled.cpp $(KINEMATICS_IKFASTLIMITSHEADER)
 	mkdir -p $@_gcov
-	cd $@_gcov && g++ -DDECIMATION=64 -DIKFAST_NO_MAIN -DIKFAST_HAS_LIBRARY -DIKFAST_NAMESPACE=$(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@)) -I ../../../ArduinoLibraries/ToyWalker -include ../$(KINEMATICS_IKFASTLIMITSHEADER) ../../ikfast_gcov_translation3d.cpp ../$< -o gcov_testrun -fprofile-arcs -ftest-coverage
+	cd $@_gcov && g++ -DDECIMATION=64 -DIKFAST_NO_MAIN -DIKFAST_HAS_LIBRARY -DIKFAST_NAMESPACE=$(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@)) -I ../../../Libraries/ToyWalker -include ../$(KINEMATICS_IKFASTLIMITSHEADER) ../../ikfast_gcov_translation3d.cpp ../$< -o gcov_testrun -fprofile-arcs -ftest-coverage
 	cd $@_gcov && ./gcov_testrun
 	cd $@_gcov && gcov $< >/dev/null
 	sed -ne 's!    #####: *\([0-9]*\):\s.*!\1s/^/\\/\\//!p' $@_gcov/$*.translation3d.full.ikfast.styled.cpp.gcov > $@_gcov/$*.sed
