@@ -12,6 +12,8 @@
 
 #include "Limb.hpp"
 
+namespace toywalker {
+
 template <
 	bool (&ComputeIk_translation3d)(const double*, const double*, const double*, ikfast::IkSolutionListBase<double>&),
 	void (&ComputeFk_translation3d)(const double*, double*, double*),
@@ -26,6 +28,13 @@ public:
 
 	LimbIkFast(Eigen::Vector3d const & hipPos)
 	: Limb(hipPos, sizeof...(Servos))
+	{
+		initImpl<Servos...>();
+	}
+
+	LimIkFast(Servos... servos, Eigen::Vector3d const & hipPos)
+	: Limb(hipPos, sizeof...(Servos))
+	  servos{servos...}
 	{
 		initImpl<Servos...>();
 	}
@@ -173,3 +182,4 @@ private:
 	}
 };
 
+}

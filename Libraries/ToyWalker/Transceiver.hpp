@@ -2,11 +2,13 @@
 
 #include <string.h>
 
+namespace toywalker {
+
 template <typename... T>
-class TransceiverImplementation
+class Transceiver
 {
 public:
-	TransceiverImplementation(T &... vars)
+	Transceiver(T &... vars)
 	: vars{(void *)&vars...},
 	  buflen(0)
 	{
@@ -121,3 +123,5 @@ private:
 	unsigned char buffer[maxSize() + 2];
 	unsigned buflen;
 };
+
+}

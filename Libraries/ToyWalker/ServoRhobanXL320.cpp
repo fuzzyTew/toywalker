@@ -5,6 +5,8 @@
 #include <dxl.h>
 #include <wirish/wirish.h>
 
+namespace toywalker {
+
 static ServoRhobanXL320 broadcast(DXL_BROADCAST);
 
 enum Baud {
@@ -97,13 +99,13 @@ struct XL320
 #define READ(what) \
 	((dxl_read(_id, (uint8_t*)&what - (uint8_t*)&xl320, (char*)&what, sizeof(what)), what))
 
-void ServoRhobanXL320::useBaud(unsigned long baud)
+void ServoRhobanXL320::baudUse(unsigned long baud)
 {
 	dxl_init(enumToBaud(baudToEnum(baud)));
 	dxl_configure_all();
 }
 
-void ServoRhobanXL320::setBaud(unsigned long baud)
+void ServoRhobanXL320::baudSet(unsigned long baud)
 {
 	xl320.eeprom.baudRate = baudToEnum(baud);
 	unsigned int _id = broadcast().id();
@@ -116,7 +118,7 @@ void ServoRhobanXL320::tick()
 	dxl_tick();
 }
 
-bool ServoRhobanXL320::ping()
+bool ServoRhobanXL320::present()
 {
 	return dxl_ping(_id);
 }
@@ -129,30 +131,30 @@ ServoRhobanXL320::ServoRhobanXL320(unsigned int id)
 : _id(id)
 { }
 
-void ServoRhobanXL320::useBroadcast()
+void ServoRhobanXL320::idBroadcast()
 {
-	useId(DXL_BROADCAST);
+	idUse(DXL_BROADCAST);
 }
 
-void ServoRhobanXL320::useId(unsigned int id)
+void ServoRhobanXL320::idUse(unsigned int id)
 {
 	_id = id;
 }
 
-void ServoRhobanXL320::setId(unsigned int id)
+void ServoRhobanXL320::idSet(unsigned int id)
 {
 	dxl_configure(_id, id);
 	_id = id;
 }
 
-unsigned int ServoRhobanXL320::askId()
+unsigned int ServoRhobanXL320::idAsk()
 {
 	return READ(xl320.eeprom.id);
 }
 
 ServoRhobanXL320 & ServoRhobanXL320::broadcast()
 {
-	return ::broadcast;
+	return toywalker::broadcast;
 }
 
 void ServoRhobanXL320::activate()
@@ -173,25 +175,25 @@ constexpr double angles_per_radian = 1023.0 * 180.0 / 300.0 / M_PI;
 constexpr double radians_per_angle = M_PI * 300.0 / 180.0 / 1023.0;
 constexpr uint16_t angle_center = 512;
 
-constexpr double radianspersecond_per_speed = M_PI * 114.0 / 1023.0 / 30.0;
-constexpr double speed_per_radianspersecond = 30.0 * 1023.0 / 114.0 / M_PI;
+constexpr double radianspersecond_per_speed = ServoRhobanXL320::VELOCITY_MAX / 1023.0;
+constexpr double speed_per_radianspersecond = 1023.0 / ServoRhobanXL320::VELOCITY_MAX;
 
 constexpr double newtondecimeters_per_load = 3.9 / 1023.0;
 constexpr double loads_per_newtondecimeter = 1023.0 / 3.9;
 
-double ServoRhobanXL320::go(double radians)
+double ServoRhobanXL320::angleGoal(double radians)
 {
 	xl320.ram.goal.position = radians * angles_per_radian + 0.5 + angle_center;
 	WRITE(xl320.ram.goal.position);
 	return (xl320.ram.goal.position - angle_center) * radians_per_angle;
 }
 
-double ServoRhobanXL320::where()
+double ServoRhobanXL320::angle()
 {
 	return (READ(xl320.ram.state.dynamics.position) - angle_center) * radians_per_angle;
 }
 
-double ServoRhobanXL320::speed()
+double ServoRhobanXL320::velocity()
 {
 	double speed = (READ(xl320.ram.state.dynamics.speed) & 1023) * radianspersecond_per_speed;
 	if (xl320.ram.state.dynamics.speed & 1024)
@@ -258,6 +260,14 @@ Eigen::Array2d ServoRhobanXL320::angleLimit(Eigen::Array2d const & radians)
 	};
 }
 
+Eigen::Array2d ServoRhobanXL320::angleLimitMax()
+{
+	return {
+		(0 - angle_center) * radians_per_angle,
+		(1023 - angle_center) * radians_per_angle
+	};
+}
+
 unsigned int ServoRhobanXL320::temperatureLimit()
 {
 	return READ(xl320.eeprom.limitTemperature);
@@ -283,20 +293,20 @@ Eigen::Array2d ServoRhobanXL320::voltageLimit(Eigen::Array2d const & volts)
 	};
 }
 
-double ServoRhobanXL320::maxTorqueLimit()
+double ServoRhobanXL320::torqueLimitMax()
 {
 	READ(xl320.eeprom.maxTorque);
 	return xl320.eeprom.maxTorque * newtondecimeters_per_load;
 }
 
-double ServoRhobanXL320::maxTorqueLimit(double newtonDecimeters)
+double ServoRhobanXL320::torqueLimitMax(double newtonDecimeters)
 {
 	xl320.eeprom.maxTorque = newtonDecimeters * loads_per_newtondecimeter + 0.5;
 	WRITE(xl320.eeprom.maxTorque);
 	return xl320.eeprom.maxTorque * newtondecimeters_per_load;
 }
 
-void ServoRhobanXL320::outOfRangeDetected(bool & voltage, bool & temperature, bool & torque)
+void ServoRhobanXL320::limitsAlarmed(bool & voltage, bool & temperature, bool & torque)
 {
 	READ(xl320.eeprom.alarmShutdown);
 	voltage = xl320.eeprom.alarmShutdown & 0x04;
@@ -304,7 +314,7 @@ void ServoRhobanXL320::outOfRangeDetected(bool & voltage, bool & temperature, bo
 	torque = xl320.eeprom.alarmShutdown & 0x01;
 }
 
-void ServoRhobanXL320::detectOutOfRange(bool voltage, bool temperature, bool torque)
+void ServoRhobanXL320::limitsAlarm(bool voltage, bool temperature, bool torque)
 {
 	xl320.eeprom.alarmShutdown =
 		(voltage ? 0x04 : 0x00) |
@@ -356,17 +366,17 @@ Eigen::Array3d ServoRhobanXL320::pidGain(Eigen::Array3d pid)
 	};
 }
 
-double ServoRhobanXL320::whereGoal()
+double ServoRhobanXL320::angleGoal()
 {
 	return (READ(xl320.ram.goal.position) - angle_center) * radians_per_angle;
 }
 
-double ServoRhobanXL320::goalSpeed()
+double ServoRhobanXL320::velocityGoal()
 {
 	return READ(xl320.ram.goal.velocity) * radianspersecond_per_speed;
 }
 
-double ServoRhobanXL320::goalSpeed(double radiansPerSecond)
+double ServoRhobanXL320::velocityGoal(double radiansPerSecond)
 {
 	xl320.ram.goal.velocity = radiansPerSecond * speed_per_radianspersecond + 0.5;
 	WRITE(xl320.ram.goal.velocity);
@@ -400,7 +410,7 @@ bool ServoRhobanXL320::moving()
 	return READ(xl320.ram.state.moving);
 }
 
-bool ServoRhobanXL320::stateInRange(bool & voltage, bool & temperature, bool & torque)
+bool ServoRhobanXL320::limitsWithin(bool & voltage, bool & temperature, bool & torque)
 {
 	READ(xl320.ram.state.hardwareErrorStatus);
 	voltage = !(xl320.ram.state.hardwareErrorStatus & 0x04);
@@ -421,4 +431,7 @@ double ServoRhobanXL320::punch(double pct)
 	return (xl320.ram.punch - 32.0) / (1023.0 - 32.0);
 }
 
+}
+
 #endif
+

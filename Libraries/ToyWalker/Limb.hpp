@@ -2,11 +2,13 @@
 
 #include <Eigen/Core>
 
+namespace toywalker {
+
 class Limb
 {
 public:
-	typedef Eigen::Array<double, Eigen::Dynamic, 1, 0, 8, 1> Angles;
-	
+	constexpr size_t MAX_JOINTS = 8;
+	typedef Eigen::Array<double, Eigen::Dynamic, 1, 0, MAX_JOINTS, 1> Angles;
 
 	virtual void go(Eigen::Vector3d const &) = 0;
 
@@ -33,3 +35,5 @@ protected:
 	const Eigen::Vector3d _hip;
 	const unsigned int _servos;
 };
+
+}

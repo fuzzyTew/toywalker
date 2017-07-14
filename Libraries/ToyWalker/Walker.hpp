@@ -7,6 +7,8 @@
 
 #include "Limb.hpp"
 
+namespace toywalker {
+
 class Walker
 {
 public:
@@ -62,3 +64,5 @@ private:
 	Eigen::Vector3d centerOfMass;
 	Limbs _limbs;
 };
+
+}

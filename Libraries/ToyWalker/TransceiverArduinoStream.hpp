@@ -4,6 +4,8 @@
 
 #include <Stream.h>
 
+namespace toywalker {
+
 template <typename... T>
 class TransceiverArduinoStream : public TransceiverImplementation<T...>
 {
@@ -31,3 +33,5 @@ private:
 
 	Stream & stream;
 };
+
+}

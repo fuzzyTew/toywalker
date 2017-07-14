@@ -2,73 +2,96 @@
 
 #include "ToyWalker.h"
 
+#include "Servo.hpp"
+
 #include <Eigen/Core>
 
-class ServoRhobanXL320
+namespace toywalker {
+
+class ServoRhobanXL320 : public Servo
 {
 public:
 	ServoRhobanXL320();
-	ServoRhobanXL320(unsigned int id);
+	ServoRhobanXL320(size_t id);
+
 	void activate();
 	void deactivate();
-	unsigned int id() const { return _id; }
-	double go(double radians);
-	double where();
-	double softmin() const { return -150.0 * 180.0 / M_PI; }
-	double softmax() const { return 150.0 * 180.0 / M_PI; }
+	bool activated();
+	bool present();
 
-	double speed(); // radians/sec
+	size_t id() { return _id; }
+
+	bool hasAngle() { return true; }
+	double angle();
+	double angleGoal();
+	double angleGoal(double radians);
+	Eigen::Array2d angleLimit();
+	Eigen::Array2d angleLimit(Eigen::Array2d const & radians);
+	Eigen::Array2d angleLimitMax();
+
+	bool hasVelocity() { return true; }
+	double velocity(); // radians/sec
+	double velocityMax() { return VELOCITY_MAX; }
+	bool hasVelocityGoal() { return true; }
+	double velocityGoal();
+	double velocityGoal(double radiansPerSecond);
+	bool moving();
+	static constexpr double VELOCITY_MAX = M_PI * 114.0 / 30.0;
+
+	bool hasTorque() { return true; }
 	double torque(); // newton-decimeters
-	Eigen::Array3d dynamics(); // position, speed, torque
+	double torqueMax() { return TORQUE_MAX; }
+	bool hasTorqueLimit() { return true; }
+	double torqueLimit();
+	double torqueLimit(double newtonDecimeters);
+	double torqueLimitMax();
+	double torqueLimitMax(double newtonDecimeters);
+	static constexpr double TORQUE_MAX = 3.9;
+
+	Eigen::Array3d dynamics(); // position, velocity, torque
+
+	Eigen::Array3d pidGain();
+	Eigen::Array3d pidGain(Eigen::Array3d pid);
 
 	// must be called frequently
 	static void tick();
 
-	bool ping();
-
 	unsigned int modelNumber();
 	unsigned int firmwareVersion();
+
 	unsigned long baud();
-	Eigen::Array2d angleLimit();
-	Eigen::Array2d angleLimit(Eigen::Array2d const & radians);
+	static void baudUse(unsigned long baud);
+	static void baudSet(unsigned long baud);
+
+	unsigned int temperature();
 	unsigned int temperatureLimit();
+
+	double voltage();
 	Eigen::Array2d voltageLimit();
 	Eigen::Array2d voltageLimit(Eigen::Array2d const & volts);
-	double maxTorqueLimit();
-	double maxTorqueLimit(double newtonDecimeters);
-	void outOfRangeDetected(bool & voltage, bool & temperature, bool & torque);
-	void detectOutOfRange(bool voltage, bool temperature, bool torque);
+
+	bool limitsWithin(bool & voltage, bool & temperature, bool & torque);
+	void limitsAlarmed(bool & voltage, bool & temperature, bool & torque);
+	void limitsAlarm(bool voltage, bool temperature, bool torque);
 	
-	bool activated();
 	struct Color {
 		bool red, green, blue;
 	};
 	Color led();
 	void led(Color color);
-	Eigen::Array3d pidGain();
-	Eigen::Array3d pidGain(Eigen::Array3d pid);
-	double whereGoal();
-	double goalSpeed();
-	double goalSpeed(double radiansPerSecond);
-	double torqueLimit();
-	double torqueLimit(double newtonDecimeters);
-	double voltage();
-	unsigned int temperature();
-	bool moving();
-	bool stateInRange(bool & voltage, bool & temperature, bool & torque);
+
 	double punch();
 	double punch(double pct);
 
-	static void useBaud(unsigned long baud);
-	static void setBaud(unsigned long baud);
-
-	void useBroadcast();
-	void useId(unsigned int id);
-	void setId(unsigned int id);
-	unsigned int askId();
+	void idBroadcast();
+	void idUse(unsigned int id);
+	void idSet(unsigned int id);
+	unsigned int idAsk();
 
 	static ServoRhobanXL320 & broadcast();
 
 private:
-	unsigned int _id;
+	size_t _id;
 };
+
+}

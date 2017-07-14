@@ -17,7 +17,7 @@ public:
 	  _keys{false,false,false,false}
 	{ }
 
-	static constexpr unsigned long BAUD = 9600;//19200;
+	static constexpr unsigned long BAUD = 38400;//19200;
 
 	unsigned char mode() const
 	{

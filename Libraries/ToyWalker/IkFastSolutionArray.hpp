@@ -4,6 +4,8 @@
 
 #include "ikfast.h"
 
+namespace toywalker {
+
 template <size_t JOINTS>
 class IkFastSolutionArray : public ikfast::IkSolutionListBase<double>
 {
@@ -71,3 +73,4 @@ private:
 
 };
 
+}
