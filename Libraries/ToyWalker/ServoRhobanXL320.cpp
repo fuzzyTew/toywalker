@@ -92,12 +92,13 @@ struct XL320
 	} ram;
 } xl320;
 
-#define WRITE(what) \
-	dxl_write(_id, (uint8_t*)&what - (uint8_t*)&xl320, (char*)&what, sizeof(what)); \
-	delay(5);
-
 #define READ(what) \
 	((dxl_read(_id, (uint8_t*)&what - (uint8_t*)&xl320, (char*)&what, sizeof(what)), what))
+
+#define WRITE(what) do { \
+	dxl_write(_id, (uint8_t*)&what - (uint8_t*)&xl320, (char*)&what, sizeof(what)); \
+	delay(5);\
+} while (false)
 
 void ServoRhobanXL320::baudUse(unsigned long baud)
 {
@@ -143,8 +144,9 @@ void ServoRhobanXL320::idUse(unsigned int id)
 
 void ServoRhobanXL320::idSet(unsigned int id)
 {
-	dxl_configure(_id, id);
-	_id = id;
+	//dxl_configure(_id, id);
+	xl320.eeprom.id = _id = id;
+	WRITE(xl320.eeprom.id);
 }
 
 unsigned int ServoRhobanXL320::idAsk()

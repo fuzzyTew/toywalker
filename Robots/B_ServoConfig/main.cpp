@@ -12,44 +12,34 @@
 using namespace toywalker;
 
 unsigned numServos = 0;
+ServoRhobanXL320 servos[12];
+bool button = false;
+uint32 startMillis = 0;
+unsigned int outputServo = 0;
 
-TERMINAL_PARAMETER_INT(id, "Servo ID", 0);
-
-ServoRhobanXL320 servo(id);
-
-
-TERMINAL_COMMAND(setid, "Sets id of connected servo")
+TERMINAL_COMMAND(setid, "Changes id of a servo")
 {
-	numServos = 0;
-	for (unsigned int i = 0; i < 253; ++ i) {
-	        servo.idUse(i);
-	        if (servo.present()) {
-	    	    ++ numServos;
-	        }
-	}
 	if (numServos != 1) {
 		terminal_io()->println("ERR: Require exactly 1 connected servo.");
 		return;
 	}
-	unsigned int id;
-	if (argc > 1) {
+	if (argc != 1) {
 		terminal_io()->println("Usage: setid id");
 		return;
-	} else if (argc == 1) {
-		id = atoi(argv[0]);
-	} else {
-		id = ::id;
 	}
-	servo.idBroadcast();
-	servo.idSet(id);
-	::id = id;
+	servos[0].idBroadcast();
+	servos[0].idSet(atoi(argv[0]));
 }
 
 TERMINAL_COMMAND(eeprom, "Show contents of servo eeprom")
 {
-	servo.idUse(id);
 	auto & io = *terminal_io();
-	io.print("===== EEPROM for Servo "); io.print(id); io.println(" =====");
+	if (argc != 1) {
+		io.println("Usage: eeprom id");
+		return;
+	}
+	ServoRhobanXL320 servo(atoi(argv[0]));
+	io.print("===== EEPROM for Servo "); io.print(servo.id()); io.println(" =====");
 	io.print("Model Number: "); io.println(servo.modelNumber());
 	io.print("Firmware Version: "); io.println(servo.firmwareVersion());
 	io.print("ID: "); io.println(servo.idAsk());
@@ -77,9 +67,13 @@ TERMINAL_COMMAND(eeprom, "Show contents of servo eeprom")
 
 TERMINAL_COMMAND(ram, "Show contents of servo ram")
 {
-	servo.idUse(id);
 	auto & io = *terminal_io();
-	io.print("===== RAM for Servo "); io.print(id); io.println(" =====");
+	if (argc != 1) {
+		io.println("Usage: eeprom id");
+		return;
+	}
+	ServoRhobanXL320 servo(atoi(argv[0]));
+	io.print("===== RAM for Servo "); io.print(servo.id()); io.println(" =====");
 	io.print("Torque Enabled: "); io.println(servo.activated() ? "enabled" : "disabled");
 	io.print("LED: -");
 		auto color = servo.led();
@@ -110,27 +104,57 @@ TERMINAL_COMMAND(ram, "Show contents of servo ram")
 	io.print("Punch: "); io.print(servo.punch() * 100.0); io.println("%");
 }
 
-TERMINAL_COMMAND(position, "Move servo")
+TERMINAL_COMMAND(angle, "Move servo")
 {
-	if (argc != 1) {
-		terminal_io()->println("Usage: position degrees");
+	if (argc != 2) {
+		terminal_io()->println("Usage: angle id degrees");
 		return;
 	}
-	double degrees = atof(argv[0]);
-	servo.idUse(id);
+	ServoRhobanXL320 servo(atoi(argv[0]));
+	double degrees = atof(argv[1]);
 	servo.activate();
 	servo.angleGoal(degrees * M_PI / 180.0);
 }
 
 TERMINAL_COMMAND(led, "LED color")
 {
-	if (argc != 1) {
-		terminal_io()->println("Usage: led integer");
+	if (argc != 2) {
+		terminal_io()->println("Usage: led id integer");
 		return;
 	}
-	int led = atoi(argv[0]);
-	servo.idUse(id);
+	ServoRhobanXL320 servo(atoi(argv[0]));
+	int led = atoi(argv[1]);
 	servo.led({led & 1, led & 2, led & 4});
+}
+
+TERMINAL_COMMAND(servos, "List connected servos")
+{
+	auto & io = *terminal_io();
+	for (unsigned int i = 0; i < numServos; ++ i) {
+		io.print(servos[i].id()); io.print(": -");
+		auto color = servos[i].led();
+		if (color.red) io.print("red-");
+		if (color.green) io.print("green-");
+		if (color.blue) io.print("blue-");
+		io.print(" ");
+		io.print(servos[i].angle() * 180 / M_PI); io.println(" deg");
+	}
+}
+
+TERMINAL_COMMAND(scan, "Rebuild servo list")
+{
+	auto & io = *terminal_io();
+
+    numServos = 0;
+    for (unsigned int i = 0; i < 253; ++ i) {
+	    servos[numServos].idUse(i);
+	    if (servos[numServos].present()) {
+		    servos[numServos].activate();
+		    servos[numServos].led({1,1,0});
+		    io.print("Found servo "); io.println(i);
+		    ++ numServos;
+	    }
+    }
 }
 
 /**
@@ -139,23 +163,28 @@ TERMINAL_COMMAND(led, "LED color")
 void setup()
 {
     terminal_init(&SerialUSB);
+	unsigned int i;
+
+	//for (i = 0; i < 10; ++ i)
+	//	pinMode(i, INPUT_ANALOG);
+	pinMode(0, INPUT_ANALOG);
+	pinMode(1, INPUT_ANALOG);
+	pinMode(10, INPUT);
+
     ServoRhobanXL320::baudUse(1000000);
-    int firstServo = -1;
+
     numServos = 0;
-    for (unsigned int i = 0; i < 253; ++ i) {
-	    servo.idUse(i);
-	    if (servo.present()) {
-		    if (firstServo == -1) firstServo = i;
-		    terminal_io()->print("Found servo "); terminal_io()->println(i);
+    for (i = 0; i < 253 && numServos < sizeof(servos) / sizeof(servos[0]); ++ i) {
+	    servos[numServos].idUse(i);
+	    if (servos[numServos].present()) {
+		    servos[numServos].activate();
+		    servos[numServos].led({1,1,0});
 		    ++ numServos;
 	    }
     }
-    if (firstServo == -1) {
-	    id = ServoRhobanXL320::broadcast().id();
-	} else {
-		id = firstServo;
-	}
 }
+
+int mode = 0;
 
 /**
  * Loop function
@@ -164,6 +193,70 @@ void loop()
 {
     terminal_tick();
     ServoRhobanXL320::tick();
+
+    //unsigned int i;
+
+    /*for (i = 0; i < numServos; ++ i) {
+	    servos[i].angleGoal(analogRead(i) / 4095.0 * M_PI - M_PI/2);
+    		terminal_tick();
+	    ServoRhobanXL320::tick();
+    }*/
+
+    /*
+    if (button != !!digitalRead(10)) {
+	    button = !button;
+	    if (button && numServos == 1) {
+		    servos[0].idSet((servos[0].id() + 1) % 12);
+	    }
+    }
+    */
+
+    if (numServos) {
+	    uint32 time = millis() - startMillis;
+	    if (time < servos[outputServo].id() * 600) {
+		    digitalWrite(BOARD_LED_PIN, (time % 600) < 300);
+	    } else if (time < servos[outputServo].id() * 600 + 600) {
+		    digitalWrite(BOARD_LED_PIN, HIGH);
+	    } else {
+		    startMillis = millis();
+			outputServo = (outputServo + 1) % numServos;
+			mode = (mode + 1) % 4;
+		switch (mode) {
+		case 0:
+			ServoRhobanXL320::broadcast().angleGoal(-M_PI_2);
+			break;
+		case 1:
+			ServoRhobanXL320::broadcast().angleGoal(0);
+			break;
+		case 2:
+			ServoRhobanXL320::broadcast().angleGoal(M_PI_2);
+			break;
+		case 3:
+			ServoRhobanXL320::broadcast().angleGoal(0);
+			break;
+		}
+
+			/*
+		    unsigned int oldNumServos = numServos;
+		    numServos = 0;
+
+		    for (i = 0; i < 12; ++ i) {
+			    servo.idUse(i);
+			    if (servo.present()) {
+				    servos[numServos].idUse(i);
+				    servos[numServos].activate();
+				    ++ numServos;
+			    }
+		    }
+		
+		    if (numServos != oldNumServos) {
+				terminal_io()->print(numServos); terminal_io()->println(" servo(s)");
+			    startMillis = millis();
+			    outputServo = 0;
+		    }
+		    */
+	    }
+	}
 }
 
 void tick()
