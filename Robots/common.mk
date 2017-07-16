@@ -35,8 +35,12 @@ $(KINEMATICS_NAMESPACE)_kdl.gen.cpp: $(KINEMATICS_URDF).urdf
 $(KINEMATICS_NAMESPACE)_ikfast.%.cpp: $(KINEMATICS_NAMESPACE)_ikfast.%.ikfast.styled.cpp
 	sed '1s/^/#include <ToyWalker.h>\n#pragma GCC diagnostic ignored "-Wunused-variable"\n#pragma GCC diagnostic ignored "-Wreturn-type"\n#define IKFAST_NO_MAIN\n#define IKFAST_REAL double\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n/; s/=IKPowWithIntegerCheck(/=IKPowWithIntegerCheck<IkReal>(/g; s/std::vector<\(.*\)> \(.*\)(\(.*\));/\1 \2[\3];/' $< > $@
 
+ifdef KINEMATICS_IKFASTLIMITSHEADER
+	KINEMATICS_IKFASTLIMITSHEADERINCLUDE = #include "$(KINEMATICS_IKFASTLIMITSHEADER)"\n\n
+endif
+
 $(KINEMATICS_NAMESPACE)_ikfast.%.hpp:
-	printf '#define IKFAST_NO_MAIN\n#define IKFAST_REAL double\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n#define IKFAST_HAS_LIBRARY\n\n#include "$(KINEMATICS_IKFASTLIMITSHEADER)"\n\n#include "ikfast.h"\n\n#undef IKFAST_NO_MAIN\n#undef IKFAST_REAL\n#undef IKFAST_NAMESPACE\n#undef IKFAST_HAS_LIBRARY\n' > $@
+	printf '#define IKFAST_NO_MAIN\n#define IKFAST_REAL double\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n#define IKFAST_HAS_LIBRARY\n\n$(KINEMATICS_IKFASTLIMITSHEADERINCLUDE)#include "ikfast.h"\n\n#undef IKFAST_NO_MAIN\n#undef IKFAST_REAL\n#undef IKFAST_NAMESPACE\n#undef IKFAST_HAS_LIBRARY\n' > $@
 
 %.translation3d.gcov.ikfast.styled.cpp: %.translation3d.full.ikfast.styled.cpp $(KINEMATICS_IKFASTLIMITSHEADER)
 	mkdir -p $@_gcov

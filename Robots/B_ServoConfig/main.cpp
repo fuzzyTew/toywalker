@@ -13,7 +13,7 @@ using namespace toywalker;
 
 unsigned numServos = 0;
 ServoRhobanXL320 servos[12];
-bool button = false;
+bool paused = false;
 uint32 startMillis = 0;
 unsigned int outputServo = 0;
 
@@ -146,7 +146,7 @@ TERMINAL_COMMAND(scan, "Rebuild servo list")
 	auto & io = *terminal_io();
 
     numServos = 0;
-    for (unsigned int i = 0; i < 253; ++ i) {
+    for (unsigned int i = 0; i < 253 && numServos < sizeof(servos) / sizeof(servos[0]); ++ i) {
 	    servos[numServos].idUse(i);
 	    if (servos[numServos].present()) {
 		    servos[numServos].activate();
@@ -155,6 +155,16 @@ TERMINAL_COMMAND(scan, "Rebuild servo list")
 		    ++ numServos;
 	    }
     }
+}
+
+TERMINAL_COMMAND(pause, "Stop automatic motion")
+{
+	paused = true;
+}
+
+TERMINAL_COMMAND(resmue, "Resmue automatic motion")
+{
+	paused = false;
 }
 
 /**
@@ -194,23 +204,6 @@ void loop()
     terminal_tick();
     ServoRhobanXL320::tick();
 
-    //unsigned int i;
-
-    /*for (i = 0; i < numServos; ++ i) {
-	    servos[i].angleGoal(analogRead(i) / 4095.0 * M_PI - M_PI/2);
-    		terminal_tick();
-	    ServoRhobanXL320::tick();
-    }*/
-
-    /*
-    if (button != !!digitalRead(10)) {
-	    button = !button;
-	    if (button && numServos == 1) {
-		    servos[0].idSet((servos[0].id() + 1) % 12);
-	    }
-    }
-    */
-
     if (numServos) {
 	    uint32 time = millis() - startMillis;
 	    if (time < servos[outputServo].id() * 600) {
@@ -219,21 +212,23 @@ void loop()
 		    digitalWrite(BOARD_LED_PIN, HIGH);
 	    } else {
 		    startMillis = millis();
-			outputServo = (outputServo + 1) % numServos;
-			mode = (mode + 1) % 4;
-		switch (mode) {
-		case 0:
-			ServoRhobanXL320::broadcast().angleGoal(-M_PI_2);
-			break;
-		case 1:
-			ServoRhobanXL320::broadcast().angleGoal(0);
-			break;
-		case 2:
-			ServoRhobanXL320::broadcast().angleGoal(M_PI_2);
-			break;
-		case 3:
-			ServoRhobanXL320::broadcast().angleGoal(0);
-			break;
+		    if (!paused) {
+				outputServo = (outputServo + 1) % numServos;
+				mode = (mode + 1) % 4;
+			switch (mode) {
+			case 0:
+				ServoRhobanXL320::broadcast().angleGoal(-M_PI_2);
+				break;
+			case 1:
+				ServoRhobanXL320::broadcast().angleGoal(0);
+				break;
+			case 2:
+				ServoRhobanXL320::broadcast().angleGoal(M_PI_2);
+				break;
+			case 3:
+				ServoRhobanXL320::broadcast().angleGoal(0);
+				break;
+			}
 		}
 
 			/*
