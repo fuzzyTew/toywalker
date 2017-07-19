@@ -46,6 +46,9 @@ public:
 	virtual double torqueLimit(double newtonDecimeters) { return 0; }
 
 	virtual Eigen::Array3d dynamics() { return {angle(), velocity(), torque()}; }
+
+	bool hasAlert() { return false; }
+	virtual void alert(bool alert = true) { if(alert) angleGoal(0); }
 };
 
 }

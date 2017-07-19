@@ -1,39 +1,64 @@
 #pragma once
 
+#include "ToyWalker.h"
+
 #include <Eigen/Core>
+
+#include "Servo.hpp"
 
 namespace toywalker {
 
 class Limb
 {
+friend class Walker;
 public:
-	constexpr size_t MAX_JOINTS = 8;
+	constexpr static size_t MAX_JOINTS = 8;
 	typedef Eigen::Array<double, Eigen::Dynamic, 1, 0, MAX_JOINTS, 1> Angles;
+	typedef Eigen::Array<Servo *, Eigen::Dynamic, 1, 0, MAX_JOINTS, 1> Servos;
 
-	virtual void go(Eigen::Vector3d const &) = 0;
+	void activate();
+	bool activated();
+	void deactivate();
 
-	virtual Angles plan(Eigen::Vector3d const &) = 0;
-	virtual void execute(Angles const & plan) = 0;
-
-	virtual Eigen::Vector3d foot() = 0;
+	Eigen::Vector3d const & footGoal() const { return _footGoal; }
+	Eigen::Vector3d foot() { return foot(angles()); }
 	virtual Eigen::Vector3d foot(Angles const & plan) = 0;
 
-	Eigen::Vector3d hip() { return _hip; }
+	Angles const & anglesGoal() const { return _anglesGoal; };
+	Angles anglesGoal(Angles const & plan);
+	Angles angles();
 
-	virtual unsigned int servos() { return _servos; }
+	bool goal(Eigen::Vector3d const & footDestination);
+	virtual Angles plan(Eigen::Vector3d const & footDestination) = 0;
 
-	virtual double go(unsigned int servo, double radians) = 0;
+	Eigen::Vector3d const & home() const { return _home; }
+	Eigen::Array2d reach() const { return _reach; }
 
-	virtual Angles servoRadians() = 0;
-	virtual double servoRadians(unsigned int servo) = 0;
+	size_t servos() const { return _servos.size(); }
+	Servo & servo(size_t index) { return *_servos[index]; }
+
+	bool contact() { return _contact; }
+	Eigen::Vector3d const & worldContact() { return _worldContact; }
 
 protected:
-	Limb(Eigen::Vector3d const & hip, unsigned int const & servos)
-	: _hip(hip), _servos(servos)
-	{ }
+	Limb(Eigen::Vector3d const & home, Eigen::Array2d reach, Servos const & servos);
+	Eigen::Vector3d _footGoal;
 
-	const Eigen::Vector3d _hip;
-	const unsigned int _servos;
+private:
+	const Eigen::Vector3d _home;
+	const Eigen::Array2d _reach;
+	Servos _servos;
+	Angles _anglesGoal;
+
+	void release() { _contact = false; }
+	void contact(Eigen::Vector3d const & world)
+	{
+		_contact = true;
+		_worldContact = world;
+	}
+
+	bool _contact;
+	Eigen::Vector3d _worldContact;
 };
 
 }

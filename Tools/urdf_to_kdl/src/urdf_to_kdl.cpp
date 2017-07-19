@@ -78,12 +78,18 @@ int main(int argc, char ** argv)
 
 	std::cout << "#include <kdl/tree.hpp>" << std::endl;
 	std::cout << std::endl;
-	std::cout << "namespace " << namespace_name << " {";
+	std::cout << "namespace " << namespace_name << " {" << std::endl;
 	std::cout << std::endl;
-	std::cout << "void " << function_name << "(KDL::Tree & tree)" << std::endl;
+	std::cout << "KDL::Tree " << function_name << "()" << std::endl;
 	std::cout << "{" << std::endl;
+
+	std::cout << "\tKDL::Tree tree(\"base_link\");" << std::endl;
+	std::cout << std::endl;
 	
 	output_tree(tree.getRootSegment()->second, "tree.getRootSegment()->second.segment.getName()");
+
+	std::cout << std::endl;
+	std::cout << "\treturn tree;" << std::endl;
 
 	std::cout << "}" << std::endl;
 	std::cout << std::endl;

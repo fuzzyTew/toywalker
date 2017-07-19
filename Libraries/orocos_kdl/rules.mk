@@ -2,15 +2,22 @@
 sp := $(sp).x
 dirstack_$(sp) := $(d)
 d := $(dir)
-BUILDDIRS += $(BUILD_PATH)/$(d)
+BUILDDIRS += $(BUILD_PATH)/$(d)/kdl
 
 # Local flags
-CXXFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES) -std=gnu++11 $(addprefix -I,$(USER_INCLUDES)) -Wall
+CXXFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES) -std=gnu++11 $(addprefix -I,$(USER_INCLUDES)) -Wno-deprecated-declarations -Wno-unused-local-typedefs -Wno-sign-compare
 
 # Local rules and targets
 cSRCS_$(d) :=
 
-cppSRCS_$(d) := IkFastSolutionArray.cpp  Limb.cpp  LimbIkFast.cpp  ServoRhobanXL320.cpp
+cppSRCS_$(d) := \
+	kdl/chain.cpp \
+	kdl/frames.cpp \
+	kdl/joint.cpp \
+	kdl/rigidbodyinertia.cpp \
+	kdl/rotationalinertia.cpp \
+	kdl/segment.cpp \
+	kdl/tree.cpp \
 
 cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)

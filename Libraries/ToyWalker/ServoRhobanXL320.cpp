@@ -9,6 +9,9 @@ namespace toywalker {
 
 static ServoRhobanXL320 broadcast(DXL_BROADCAST);
 
+unsigned int safeTorque = 0;
+double safeTorqueRate = 0.1;
+
 enum Baud {
 	BAUD9600 = 0,
 	BAUD57600 = 1,
@@ -116,6 +119,17 @@ void ServoRhobanXL320::baudSet(unsigned long baud)
 
 void ServoRhobanXL320::tick()
 {
+	if (safeTorque < 1023) {
+		double newTorque = millis() * safeTorqueRate;
+		if (newTorque >= 1023)
+			newTorque = 1023;
+		if (newTorque != safeTorque) {
+			safeTorque = newTorque;
+			xl320.ram.goal.torque = safeTorque;
+			unsigned int _id = DXL_BROADCAST;
+			WRITE(xl320.ram.goal.torque);
+		}
+	}
 	dxl_tick();
 }
 
@@ -161,16 +175,30 @@ ServoRhobanXL320 & ServoRhobanXL320::broadcast()
 
 void ServoRhobanXL320::activate()
 {
+	READ(xl320.ram.state.hardwareErrorStatus);
+	if (xl320.ram.state.hardwareErrorStatus & 1) {
+		angleGoal(angle());
+		deactivate();
+		xl320.eeprom.alarmShutdown = 6;
+		WRITE(xl320.eeprom.alarmShutdown);
+		delay(100);
+	} else {
+		xl320.eeprom.alarmShutdown = 7;
+		WRITE(xl320.eeprom.alarmShutdown);
+	}
+	xl320.ram.goal.torque = safeTorque;
+	WRITE(xl320.ram.goal.torque);
 	xl320.ram.torqueEnable = 1;
 	WRITE(xl320.ram.torqueEnable);
-	xl320.ram.goal.torque = 1023;
-	WRITE(xl320.ram.goal.torque);
+	alert(false);
 }
 
 void ServoRhobanXL320::deactivate()
 {
 	xl320.ram.torqueEnable = 0;
 	WRITE(xl320.ram.torqueEnable);
+	xl320.ram.goal.torque = 0;
+	WRITE(xl320.ram.goal.torque);
 }
 
 constexpr double angles_per_radian = 1023.0 * 180.0 / 300.0 / M_PI;
@@ -225,6 +253,14 @@ Eigen::Array3d ServoRhobanXL320::dynamics()
 			-(xl320.ram.state.dynamics.load & 1023) * newtondecimeters_per_load :
 			xl320.ram.state.dynamics.load * newtondecimeters_per_load
 	};
+}
+
+void ServoRhobanXL320::alert(bool alert)
+{
+	if (alert)
+		led({alert, false, false});
+	else
+		led({true, true, false});
 }
 
 unsigned int ServoRhobanXL320::modelNumber()

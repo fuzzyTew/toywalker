@@ -4,22 +4,28 @@
 
 #include "ikfast.h"
 
+#include <Eigen/Core>
+
 namespace toywalker {
 
-template <size_t JOINTS>
+template <size_t MAX_JOINTS, size_t _MAX_SOLUTIONS=8>
 class IkFastSolutionArray : public ikfast::IkSolutionListBase<double>
 {
 public:
-	IkFastSolutionArray()
-	: numSolutions(0)
+	static constexpr size_t MAX_SOLUTIONS = _MAX_SOLUTIONS;
+	IkFastSolutionArray(size_t dof = 0)
+	: dof(dof)
 	{ }
 	virtual ~IkFastSolutionArray() {}
 
 	virtual size_t AddSolution(const ikfast::IkSingleDOFSolutionBase<double> * vinfos, const int * vfree)
 	{
-		if (numSolutions < sizeof(solutions) / sizeof(solutions[0])) {
-			memcpy(solutions[numSolutions].vinfos, vinfos, sizeof(solutions[numSolutions].vinfos));
-			return numSolutions ++;
+		if (solutions.size() < MAX_SOLUTIONS) {
+			size_t i = solutions.size();
+			solutions.resize(i + 1);
+			solutions[i].vinfos.resize(dof);
+			memcpy(&solutions[i].vinfos[0], vinfos, dof * sizeof(*vinfos));
+			return i;
 		} else {
 			return numSolutions - 1;
 		}
@@ -30,14 +36,19 @@ public:
 	}
 	virtual size_t GetNumSolutions() const
 	{
-		return numSolutions;
+		return solutions.size();
 	}
 	virtual void Clear()
 	{
-		numSolutions = 0;
+		solutions.resize(0);
 	}
 
-	static IkFastSolutionArray<JOINTS> instance;
+	void setDOF(size_t dof)
+	{
+		this->dof = dof;
+	}
+
+	static IkFastSolutionArray<MAX_JOINTS,MAX_SOLUTIONS> instance;
 
 private:
 	size_t numSolutions;
@@ -45,7 +56,7 @@ private:
 	{
 		void GetSolution(double * solution, const double * freevalues) const
 		{
-			for (std::size_t i = 0; i < JOINTS; ++ i)
+			for (std::size_t i = 0; i < vinfos.size(); ++ i)
 				if (vinfos[i].freeind < 0) {
 					solution[i] = vinfos[i].foffset;
 				} else {
@@ -65,12 +76,14 @@ private:
 
 		virtual const int GetDOF() const
 		{
-			return JOINTS;
+			return vinfos.size();
 		}
 
-		ikfast::IkSingleDOFSolutionBase<double> vinfos[JOINTS];
-	} solutions[8];
+		Eigen::Array<ikfast::IkSingleDOFSolutionBase<double>, Eigen::Dynamic, 1, 0, MAX_JOINTS, 1> vinfos;
+	};
 
+	Eigen::Array<Solution, Eigen::Dynamic, 1, 0, MAX_SOLUTIONS, 1> solutions;
+	size_t dof;
 };
 
 }

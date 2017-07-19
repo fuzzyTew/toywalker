@@ -1,8 +1,10 @@
 #include "IkFastSolutionArray.hpp"
 
+#include "Limb.hpp"
+
 namespace toywalker {
 
 template<>
-IkFastSolutionArray<3> IkFastSolutionArray<3>::instance{};
+IkFastSolutionArray<Limb::MAX_JOINTS> IkFastSolutionArray<Limb::MAX_JOINTS>::instance{};
 
 }

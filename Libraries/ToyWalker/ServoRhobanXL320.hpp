@@ -50,6 +50,9 @@ public:
 
 	Eigen::Array3d dynamics(); // position, velocity, torque
 
+	bool hasAlert() { return true; }
+	void alert(bool alert);
+
 	Eigen::Array3d pidGain();
 	Eigen::Array3d pidGain(Eigen::Array3d pid);
 

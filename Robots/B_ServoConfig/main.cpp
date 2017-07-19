@@ -162,9 +162,29 @@ TERMINAL_COMMAND(pause, "Stop automatic motion")
 	paused = true;
 }
 
-TERMINAL_COMMAND(resmue, "Resmue automatic motion")
+TERMINAL_COMMAND(resume, "Resume automatic motion")
 {
 	paused = false;
+}
+
+TERMINAL_COMMAND(activate, "Activate a servo")
+{
+	if (argc != 1) {
+		terminal_io()->println("Usage: activate id");
+		return;
+	}
+	ServoRhobanXL320 servo(atoi(argv[0]));
+	servo.activate();
+}
+
+TERMINAL_COMMAND(deactivate, "Deactivate a servo")
+{
+	if (argc != 1) {
+		terminal_io()->println("Usage: deactivate id");
+		return;
+	}
+	ServoRhobanXL320 servo(atoi(argv[0]));
+	servo.deactivate();
 }
 
 /**
