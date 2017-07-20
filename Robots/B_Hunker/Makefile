@@ -1,6 +1,8 @@
 KINEMATICS_NAMESPACE = kinematics
 KINEMATICS_URDF = Hunker
-KINEMATICS_IKFASTDEPTH = 0
+KINEMATICS_IKFASTDEPTH = 4
+KINEMATICS_IKFASTLIMITSHEADER = $(KINEMATICS_NAMESPACE)_ikfast.limits.hpp
+IKFAST_REAL = float
 
 BOARD = opencm904
 BOOTLOADER = robotis
@@ -14,4 +16,4 @@ include ../common.mk
 
 include $(RHOBANMAPLE_DIR)/skeleton/Makefile
 
-kinematics: kinematics_ikfast.backLeftFoot.translation3d.full.cpp kinematics_ikfast.backRightFoot.translation3d.full.cpp kinematics_ikfast.frontLeftFoot.translation3d.full.cpp kinematics_ikfast.frontRightFoot.translation3d.full.cpp
+kinematics: kinematics_ikfast.backLeftFoot.translation3d.gcov.cpp kinematics_ikfast.backRightFoot.translation3d.gcov.cpp kinematics_ikfast.frontLeftFoot.translation3d.gcov.cpp kinematics_ikfast.frontRightFoot.translation3d.gcov.cpp

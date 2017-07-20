@@ -9,7 +9,7 @@
 namespace toywalker {
 
 template <size_t MAX_JOINTS, size_t _MAX_SOLUTIONS=8>
-class IkFastSolutionArray : public ikfast::IkSolutionListBase<double>
+class IkFastSolutionArray : public ikfast::IkSolutionListBase<Real>
 {
 public:
 	static constexpr size_t MAX_SOLUTIONS = _MAX_SOLUTIONS;
@@ -18,7 +18,7 @@ public:
 	{ }
 	virtual ~IkFastSolutionArray() {}
 
-	virtual size_t AddSolution(const ikfast::IkSingleDOFSolutionBase<double> * vinfos, const int * vfree)
+	virtual size_t AddSolution(const ikfast::IkSingleDOFSolutionBase<Real> * vinfos, const int * vfree)
 	{
 		if (solutions.size() < MAX_SOLUTIONS) {
 			size_t i = solutions.size();
@@ -30,7 +30,7 @@ public:
 			return numSolutions - 1;
 		}
 	}
-	virtual const ikfast::IkSolutionBase<double>& GetSolution(size_t index) const
+	virtual const ikfast::IkSolutionBase<Real>& GetSolution(size_t index) const
 	{
 		return solutions[index];
 	}
@@ -52,9 +52,9 @@ public:
 
 private:
 	size_t numSolutions;
-	struct Solution : public ikfast::IkSolutionBase<double>
+	struct Solution : public ikfast::IkSolutionBase<Real>
 	{
-		void GetSolution(double * solution, const double * freevalues) const
+		void GetSolution(Real * solution, const Real * freevalues) const
 		{
 			for (std::size_t i = 0; i < vinfos.size(); ++ i)
 				if (vinfos[i].freeind < 0) {
@@ -79,7 +79,7 @@ private:
 			return vinfos.size();
 		}
 
-		Eigen::Array<ikfast::IkSingleDOFSolutionBase<double>, Eigen::Dynamic, 1, 0, MAX_JOINTS, 1> vinfos;
+		Eigen::Array<ikfast::IkSingleDOFSolutionBase<Real>, Eigen::Dynamic, 1, 0, MAX_JOINTS, 1> vinfos;
 	};
 
 	Eigen::Array<Solution, Eigen::Dynamic, 1, 0, MAX_SOLUTIONS, 1> solutions;

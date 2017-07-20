@@ -2,6 +2,8 @@
 
 #include <Servo.h>
 
+#include "Vector.hpp"
+
 namespace toywalker {
 
 template <int pin, int minMicros, int maxMicros, long long extentMillidegrees>
@@ -35,39 +37,39 @@ public:
 		return pin;
 	}
 
-	double angleGoal(double radians)
+	Real angleGoal(Real radians)
 	{
 		int micros = radians * (180000.0 * (maxMicros - minMicros) / extentMillidegrees / M_PI);
 		servo.writeMicroseconds(micros + (maxMicros + minMicros) / 2);
 		return _radians = micros * (M_PI * extentMillidegrees / (maxMicros - minMicros) / 180000);
 	}
 
-	double angleGoal() const
+	Real angleGoal() const
 	{
 		return _radians;
 	}
 
-	Eigen::Array2d angleLimit() const
+	Array2 angleLimit() const
 	{
 		return limits;
 	}
 
-	Eigen::Array2d angleLimit(Eigen::Array2d const & radians)
+	Array2 angleLimit(Array2 const & radians)
 	{
 		limits = radians;
 	}
 
-	Eigen::Array2d angleLimitMax()
+	Array2 angleLimitMax()
 	{
 		return { ANGLE_LIMIT_MIN, ANGLE_LIMIT_MAX };
 	}
 
-	static constexpr double ANGLE_LIMIT_MIN = -extentMillidegrees * M_PI / 180000 / 2;
-	static constexpr double ANGLE_LIMIT_MAX = extentMillidegrees * M_PI / 180000 / 2;
+	static constexpr Real ANGLE_LIMIT_MIN = -extentMillidegrees * M_PI / 180000 / 2;
+	static constexpr Real ANGLE_LIMIT_MAX = extentMillidegrees * M_PI / 180000 / 2;
 
 private:
 	Servo servo;
-	Eigen::Array2d limits;
+	Array2 limits;
 };
 
 }

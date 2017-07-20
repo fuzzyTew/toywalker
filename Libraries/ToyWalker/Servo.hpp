@@ -2,7 +2,7 @@
 
 #include "ToyWalker.h"
 
-#include <Eigen/Core>
+#include "Vector.hpp"
 
 namespace toywalker {
 
@@ -19,33 +19,33 @@ public:
 
 	virtual size_t id() = 0;
 
-	virtual double angleGoal() = 0;
-	virtual double angleGoal(double radians) = 0;
+	virtual Real angleGoal() = 0;
+	virtual Real angleGoal(Real radians) = 0;
 
 	bool hasAngle() { return false; }
-	virtual double angle() { return angleGoal(); }
+	virtual Real angle() { return angleGoal(); }
 
-	virtual Eigen::Array2d angleLimit() = 0;
-	virtual Eigen::Array2d angleLimit(Eigen::Array2d const & radians) = 0;
-	virtual Eigen::Array2d angleLimitMax() = 0;
+	virtual Array2 angleLimit() = 0;
+	virtual Array2 angleLimit(Array2 const & radians) = 0;
+	virtual Array2 angleLimitMax() = 0;
 
 	bool hasVelocity() { return false; }
-	virtual double velocity() { return 0; }
-	virtual double velocityMax() = 0;
+	virtual Real velocity() { return 0; }
+	virtual Real velocityMax() = 0;
 
 	bool hasVelocityGoal() { return false; }
-	virtual double velocityGoal() { return 0; }
-	virtual double velocityGoal(double radiansPerSecond) { return 0; }
+	virtual Real velocityGoal() { return 0; }
+	virtual Real velocityGoal(Real radiansPerSecond) { return 0; }
 
 	bool hasTorque() { return false; }
-	virtual double torque() { return 0; }
-	virtual double torqueMax() = 0;
+	virtual Real torque() { return 0; }
+	virtual Real torqueMax() = 0;
 
 	bool hasTorqueLimit() { return false; }
-	virtual double torqueLimit() { return 0; }
-	virtual double torqueLimit(double newtonDecimeters) { return 0; }
+	virtual Real torqueLimit() { return 0; }
+	virtual Real torqueLimit(Real newtonDecimeters) { return 0; }
 
-	virtual Eigen::Array3d dynamics() { return {angle(), velocity(), torque()}; }
+	virtual Array3 dynamics() { return {angle(), velocity(), torque()}; }
 
 	bool hasAlert() { return false; }
 	virtual void alert(bool alert = true) { if(alert) angleGoal(0); }

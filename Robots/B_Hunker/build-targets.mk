@@ -4,7 +4,7 @@
 OBJ_FILES = $(addprefix $(BUILD_PATH)/,$(SRC_FILES:.cpp=.o))
 
 $(BUILD_PATH)/%.o: %.cpp
-	$(SILENT_CXX) $(CXX) $(CFLAGS) $(CXXFLAGS) -g0 $(LIBMAPLE_INCLUDES) $(WIRISH_INCLUDES) -DHAS_DXL -DDISABLE_ALL_COMMANDS -std=gnu++11 -Wall $(addprefix -I,$(USER_INCLUDES)) $(addprefix -I,$(USER_MODULES)) -o $@ -c $<
+	$(SILENT_CXX) $(CXX) $(CFLAGS) $(CXXFLAGS) -O3 $(LIBMAPLE_INCLUDES) $(WIRISH_INCLUDES) -DHAS_DXL -DDISABLE_ALL_COMMANDS -DTOYWALKER_REAL=float -std=gnu++11 -Wall $(addprefix -I,$(USER_INCLUDES)) $(addprefix -I,$(USER_MODULES)) -o $@ -c $<
 
 $(BUILD_PATH)/libmaple.a: $(BUILDDIRS) $(TGT_BIN)
 	- rm -f $@

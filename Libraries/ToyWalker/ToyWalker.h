@@ -23,3 +23,15 @@
 
 // ikfast.h is modified to not require vectors if this is defined
 #define HAVE_NO_VECTOR
+
+#include <Eigen/Core>
+
+namespace toywalker {
+
+#ifdef TOYWALKER_REAL
+	typedef TOYWALKER_REAL Real;
+#else
+	typedef double Real;
+#endif
+
+}

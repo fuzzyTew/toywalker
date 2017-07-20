@@ -29,22 +29,25 @@ $(KINEMATICS_NAMESPACE)_kdl.gen.cpp: $(KINEMATICS_URDF).urdf
 %.dae: %.urdf
 	rosrun collada_urdf urdf_to_collada $< $@
 
+ifndef IKFAST_REAL
+  IKFAST_REAL = double
+endif
 
 #Rules for generating files like `kinematics_ikfast.back_foot.translation3d.full.cpp`
 .PRECIOUS: $(KINEMATICS_NAMESPACE)_ikfast.%.hpp $(KINEMATICS_NAMESPACE)_ikfast.%.cpp
 $(KINEMATICS_NAMESPACE)_ikfast.%.cpp: $(KINEMATICS_NAMESPACE)_ikfast.%.ikfast.styled.cpp
-	sed '1s/^/#include <ToyWalker.h>\n#pragma GCC diagnostic ignored "-Wunused-variable"\n#pragma GCC diagnostic ignored "-Wreturn-type"\n#define IKFAST_NO_MAIN\n#define IKFAST_REAL double\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n/; s/=IKPowWithIntegerCheck(/=IKPowWithIntegerCheck<IkReal>(/g; s/std::vector<\(.*\)> \(.*\)(\(.*\));/\1 \2[\3];/' $< > $@
+	sed '1s/^/#include <ToyWalker.h>\n#pragma GCC diagnostic ignored "-Wunused-variable"\n#pragma GCC diagnostic ignored "-Wreturn-type"\n#define IKFAST_NO_MAIN\n#define IKFAST_REAL $(IKFAST_REAL)\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n/; s/=IKPowWithIntegerCheck(/=IKPowWithIntegerCheck<IkReal>(/g; s/std::vector<\(.*\)> \(.*\)(\(.*\));/\1 \2[\3];/' $< > $@
 
 ifdef KINEMATICS_IKFASTLIMITSHEADER
-	KINEMATICS_IKFASTLIMITSHEADERINCLUDE = #include "$(KINEMATICS_IKFASTLIMITSHEADER)"\n\n
+  KINEMATICS_IKFASTLIMITSHEADERINCLUDE = #include "$(KINEMATICS_IKFASTLIMITSHEADER)"\n\n
 endif
 
 $(KINEMATICS_NAMESPACE)_ikfast.%.hpp:
-	printf '#define IKFAST_NO_MAIN\n#define IKFAST_REAL double\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n#define IKFAST_HAS_LIBRARY\n\n$(KINEMATICS_IKFASTLIMITSHEADERINCLUDE)#include "ikfast.h"\n\n#undef IKFAST_NO_MAIN\n#undef IKFAST_REAL\n#undef IKFAST_NAMESPACE\n#undef IKFAST_HAS_LIBRARY\n' > $@
+	printf '#define IKFAST_NO_MAIN\n#define IKFAST_REAL $(IKFAST_REAL)\n#define IKFAST_NAMESPACE $(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@))\n#define IKFAST_HAS_LIBRARY\n\n$(KINEMATICS_IKFASTLIMITSHEADERINCLUDE)#include "ikfast.h"\n\n#undef IKFAST_NO_MAIN\n#undef IKFAST_REAL\n#undef IKFAST_NAMESPACE\n#undef IKFAST_HAS_LIBRARY\n' > $@
 
 %.translation3d.gcov.ikfast.styled.cpp: %.translation3d.full.ikfast.styled.cpp $(KINEMATICS_IKFASTLIMITSHEADER)
 	mkdir -p $@_gcov
-	cd $@_gcov && g++ -DDECIMATION=64 -DIKFAST_NO_MAIN -DIKFAST_HAS_LIBRARY -DIKFAST_NAMESPACE=$(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@)) -I ../../../Libraries/ToyWalker -include ../$(KINEMATICS_IKFASTLIMITSHEADER) ../../ikfast_gcov_translation3d.cpp ../$< -o gcov_testrun -fprofile-arcs -ftest-coverage
+	cd $@_gcov && g++ -DDECIMATION=64 -DIKFAST_NO_MAIN -DIKFAST_HAS_LIBRARY -DIKFAST_REAL=$(IKFAST_REAL) -DIKFAST_NAMESPACE=$(KINEMATICS_NAMESPACE)_ikfast_$(word 2,$(subst ., ,$@))_$(word 3,$(subst ., ,$@)) -I ../../../Libraries/ToyWalker -include ../$(KINEMATICS_IKFASTLIMITSHEADER) ../../ikfast_gcov_translation3d.cpp ../$< -o gcov_testrun -fprofile-arcs -ftest-coverage
 	cd $@_gcov && ./gcov_testrun
 	cd $@_gcov && gcov $< >/dev/null
 	sed -ne 's!    #####: *\([0-9]*\):\s.*!\1s/^/\\/\\//!p' $@_gcov/$*.translation3d.full.ikfast.styled.cpp.gcov > $@_gcov/$*.sed
@@ -58,3 +61,4 @@ $(KINEMATICS_NAMESPACE)_ikfast.%.hpp:
 DAELINKID = $$(openrave-robot.py $(KINEMATICS_URDF).dae --info links | sed -ne 's/^$(1)\s*\([0-9]*\)\s*\S*/\1/p')
 $(KINEMATICS_NAMESPACE)_ikfast.%.full.ikfast: $(KINEMATICS_URDF).dae
 	python `openrave-config --python-dir`/openravepy/_openravepy_/ikfast.py --robot=$< --iktype=$(word 3,$(subst ., ,$@)) --savefile=$@ --baselink=$(call DAELINKID,base_link) --eelink=$(call DAELINKID,$(word 2,$(subst ., ,$@))) --maxcasedepth=$(KINEMATICS_IKFASTDEPTH)
+	sed -i 's/=IKPowWithIntegerCheck(/=IKPowWithIntegerCheck<IKFAST_REAL>(/' $@ #ikfast bugfix for floats

@@ -10,7 +10,7 @@ namespace toywalker {
 static ServoRhobanXL320 broadcast(DXL_BROADCAST);
 
 unsigned int safeTorque = 0;
-double safeTorqueRate = 0.1;
+Real safeTorqueRate = 0.1;
 
 enum Baud {
 	BAUD9600 = 0,
@@ -100,7 +100,7 @@ struct XL320
 
 #define WRITE(what) do { \
 	dxl_write(_id, (uint8_t*)&what - (uint8_t*)&xl320, (char*)&what, sizeof(what)); \
-	delay(5);\
+	/*delay(5);*/\
 } while (false)
 
 void ServoRhobanXL320::baudUse(unsigned long baud)
@@ -120,7 +120,7 @@ void ServoRhobanXL320::baudSet(unsigned long baud)
 void ServoRhobanXL320::tick()
 {
 	if (safeTorque < 1023) {
-		double newTorque = millis() * safeTorqueRate;
+		Real newTorque = millis() * safeTorqueRate;
 		if (newTorque >= 1023)
 			newTorque = 1023;
 		if (newTorque != safeTorque) {
@@ -201,47 +201,47 @@ void ServoRhobanXL320::deactivate()
 	WRITE(xl320.ram.goal.torque);
 }
 
-constexpr double angles_per_radian = 1023.0 * 180.0 / 300.0 / M_PI;
-constexpr double radians_per_angle = M_PI * 300.0 / 180.0 / 1023.0;
+constexpr Real angles_per_radian = 1023.0 * 180.0 / 300.0 / M_PI;
+constexpr Real radians_per_angle = M_PI * 300.0 / 180.0 / 1023.0;
 constexpr uint16_t angle_center = 512;
 
-constexpr double radianspersecond_per_speed = ServoRhobanXL320::VELOCITY_MAX / 1023.0;
-constexpr double speed_per_radianspersecond = 1023.0 / ServoRhobanXL320::VELOCITY_MAX;
+constexpr Real radianspersecond_per_speed = ServoRhobanXL320::VELOCITY_MAX / 1023.0;
+constexpr Real speed_per_radianspersecond = 1023.0 / ServoRhobanXL320::VELOCITY_MAX;
 
-constexpr double newtondecimeters_per_load = 3.9 / 1023.0;
-constexpr double loads_per_newtondecimeter = 1023.0 / 3.9;
+constexpr Real newtondecimeters_per_load = 3.9 / 1023.0;
+constexpr Real loads_per_newtondecimeter = 1023.0 / 3.9;
 
-double ServoRhobanXL320::angleGoal(double radians)
+Real ServoRhobanXL320::angleGoal(Real radians)
 {
 	xl320.ram.goal.position = radians * angles_per_radian + 0.5 + angle_center;
 	WRITE(xl320.ram.goal.position);
 	return (xl320.ram.goal.position - angle_center) * radians_per_angle;
 }
 
-double ServoRhobanXL320::angle()
+Real ServoRhobanXL320::angle()
 {
 	return (READ(xl320.ram.state.dynamics.position) - angle_center) * radians_per_angle;
 }
 
-double ServoRhobanXL320::velocity()
+Real ServoRhobanXL320::velocity()
 {
-	double speed = (READ(xl320.ram.state.dynamics.speed) & 1023) * radianspersecond_per_speed;
+	Real speed = (READ(xl320.ram.state.dynamics.speed) & 1023) * radianspersecond_per_speed;
 	if (xl320.ram.state.dynamics.speed & 1024)
 		return -speed;
 	else
 		return speed;
 }
 
-double ServoRhobanXL320::torque()
+Real ServoRhobanXL320::torque()
 {
-	double torque = (READ(xl320.ram.state.dynamics.load) & 1023) * newtondecimeters_per_load;
+	Real torque = (READ(xl320.ram.state.dynamics.load) & 1023) * newtondecimeters_per_load;
 	if (xl320.ram.state.dynamics.load & 1024)
 		return -torque;
 	else
 		return torque;
 }
 
-Eigen::Array3d ServoRhobanXL320::dynamics()
+Array3 ServoRhobanXL320::dynamics()
 {
 	READ(xl320.ram.state.dynamics);
 	return {
@@ -278,7 +278,7 @@ unsigned long ServoRhobanXL320::baud()
 	return enumToBaud(Baud(READ(xl320.eeprom.baudRate)));
 }
 
-Eigen::Array2d ServoRhobanXL320::angleLimit()
+Array2 ServoRhobanXL320::angleLimit()
 {
 	READ(xl320.eeprom.angleLimits);
 	return {
@@ -287,7 +287,7 @@ Eigen::Array2d ServoRhobanXL320::angleLimit()
 	};
 }
 
-Eigen::Array2d ServoRhobanXL320::angleLimit(Eigen::Array2d const & radians)
+Array2 ServoRhobanXL320::angleLimit(Array2 const & radians)
 {
 	xl320.eeprom.angleLimits[0] = radians[0] * angles_per_radian + 0.5 + angle_center;
 	xl320.eeprom.angleLimits[1] = radians[1] * angles_per_radian + 0.5 + angle_center;
@@ -298,7 +298,7 @@ Eigen::Array2d ServoRhobanXL320::angleLimit(Eigen::Array2d const & radians)
 	};
 }
 
-Eigen::Array2d ServoRhobanXL320::angleLimitMax()
+Array2 ServoRhobanXL320::angleLimitMax()
 {
 	return {
 		(0 - angle_center) * radians_per_angle,
@@ -311,7 +311,7 @@ unsigned int ServoRhobanXL320::temperatureLimit()
 	return READ(xl320.eeprom.limitTemperature);
 }
 
-Eigen::Array2d ServoRhobanXL320::voltageLimit()
+Array2 ServoRhobanXL320::voltageLimit()
 {
 	READ(xl320.eeprom.voltageLimits);
 	return {
@@ -320,7 +320,7 @@ Eigen::Array2d ServoRhobanXL320::voltageLimit()
 	};
 }
 
-Eigen::Array2d ServoRhobanXL320::voltageLimit(Eigen::Array2d const & volts)
+Array2 ServoRhobanXL320::voltageLimit(Array2 const & volts)
 {
 	xl320.eeprom.voltageLimits[0] = volts[0] * 10 + 0.5;
 	xl320.eeprom.voltageLimits[1] = volts[1] * 10 + 0.5;
@@ -331,13 +331,13 @@ Eigen::Array2d ServoRhobanXL320::voltageLimit(Eigen::Array2d const & volts)
 	};
 }
 
-double ServoRhobanXL320::torqueLimitMax()
+Real ServoRhobanXL320::torqueLimitMax()
 {
 	READ(xl320.eeprom.maxTorque);
 	return xl320.eeprom.maxTorque * newtondecimeters_per_load;
 }
 
-double ServoRhobanXL320::torqueLimitMax(double newtonDecimeters)
+Real ServoRhobanXL320::torqueLimitMax(Real newtonDecimeters)
 {
 	xl320.eeprom.maxTorque = newtonDecimeters * loads_per_newtondecimeter + 0.5;
 	WRITE(xl320.eeprom.maxTorque);
@@ -381,7 +381,7 @@ void ServoRhobanXL320::led(ServoRhobanXL320::Color color)
 	WRITE(xl320.ram.led);
 }
 
-Eigen::Array3d ServoRhobanXL320::pidGain()
+Array3 ServoRhobanXL320::pidGain()
 {
 	READ(xl320.ram.gain);
 	return {
@@ -391,7 +391,7 @@ Eigen::Array3d ServoRhobanXL320::pidGain()
 	};
 }
 
-Eigen::Array3d ServoRhobanXL320::pidGain(Eigen::Array3d pid)
+Array3 ServoRhobanXL320::pidGain(Array3 pid)
 {
 	xl320.ram.gain.proportional = pid[0] * 8.0 + 0.5;
 	xl320.ram.gain.integral = pid[1] * 2048.0 / 1000.0;
@@ -404,36 +404,36 @@ Eigen::Array3d ServoRhobanXL320::pidGain(Eigen::Array3d pid)
 	};
 }
 
-double ServoRhobanXL320::angleGoal()
+Real ServoRhobanXL320::angleGoal()
 {
 	return (READ(xl320.ram.goal.position) - angle_center) * radians_per_angle;
 }
 
-double ServoRhobanXL320::velocityGoal()
+Real ServoRhobanXL320::velocityGoal()
 {
 	return READ(xl320.ram.goal.velocity) * radianspersecond_per_speed;
 }
 
-double ServoRhobanXL320::velocityGoal(double radiansPerSecond)
+Real ServoRhobanXL320::velocityGoal(Real radiansPerSecond)
 {
 	xl320.ram.goal.velocity = radiansPerSecond * speed_per_radianspersecond + 0.5;
 	WRITE(xl320.ram.goal.velocity);
 	return xl320.ram.goal.velocity * radianspersecond_per_speed;
 }
 
-double ServoRhobanXL320::torqueLimit()
+Real ServoRhobanXL320::torqueLimit()
 {
 	return READ(xl320.ram.goal.torque) * newtondecimeters_per_load;
 }
 
-double ServoRhobanXL320::torqueLimit(double newtonDecimeters)
+Real ServoRhobanXL320::torqueLimit(Real newtonDecimeters)
 {
 	xl320.ram.goal.torque = newtonDecimeters * loads_per_newtondecimeter + 0.5;
 	WRITE(xl320.ram.goal.torque);
 	return xl320.ram.goal.torque * newtondecimeters_per_load;
 }
 
-double ServoRhobanXL320::voltage()
+Real ServoRhobanXL320::voltage()
 {
 	return READ(xl320.ram.state.voltage) * 0.1;
 }
@@ -457,12 +457,12 @@ bool ServoRhobanXL320::limitsWithin(bool & voltage, bool & temperature, bool & t
 	return !xl320.ram.state.hardwareErrorStatus;
 }
 
-double ServoRhobanXL320::punch()
+Real ServoRhobanXL320::punch()
 {
 	return (READ(xl320.ram.punch) - 32.0) / (1023.0 - 32.0);
 }
 
-double ServoRhobanXL320::punch(double pct)
+Real ServoRhobanXL320::punch(Real pct)
 {
 	xl320.ram.punch = pct * (1023.0 - 32.0) + 32.0 + 0.5;
 	WRITE(xl320.ram.punch);

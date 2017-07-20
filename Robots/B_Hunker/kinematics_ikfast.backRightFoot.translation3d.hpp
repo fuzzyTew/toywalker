@@ -1,5 +1,5 @@
 #define IKFAST_NO_MAIN
-#define IKFAST_REAL double
+#define IKFAST_REAL float
 #define IKFAST_NAMESPACE kinematics_ikfast_backRightFoot_translation3d
 #define IKFAST_HAS_LIBRARY
 

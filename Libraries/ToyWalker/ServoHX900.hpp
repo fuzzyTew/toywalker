@@ -8,11 +8,11 @@ template <int pin, long long softminMillidegrees = -90000, long long softmaxMill
 class ServoPermanentHextronik : public ServoPermanentArduino<pin, 450, 2450, 180000, softminMillidegrees, softmaxMillidegrees>
 {
 public:
-	double velocityMax() { return VELOCITY_MAX; }
-	static constexpr double VELOCITY_MAX =  60/*deg*/ * M_PI/*rad*/ / 180/*deg*/ / 0.12/*s*/;
+	Real velocityMax() { return VELOCITY_MAX; }
+	static constexpr Real VELOCITY_MAX =  60/*deg*/ * M_PI/*rad*/ / 180/*deg*/ / 0.12/*s*/;
 
-	double torqueMax() { return TORQUE_MAX; }
-	static constexpr double TORQUE_MAX = 1.6/*kg-cm*/ * 9.81/*N/kg*/ / 10/*cm/dm*/;
+	Real torqueMax() { return TORQUE_MAX; }
+	static constexpr Real TORQUE_MAX = 1.6/*kg-cm*/ * 9.81/*N/kg*/ / 10/*cm/dm*/;
 };
 
 }

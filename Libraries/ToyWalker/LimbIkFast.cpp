@@ -3,14 +3,14 @@
 
 namespace toywalker {
 
-Eigen::Vector3d LimbIkFast::foot(Angles const & plan)
+Vector3 LimbIkFast::footBody(Angles const & plan)
 {
-	Eigen::Vector3d ret;
+	Vector3 ret;
 	computeFkTranslation3D(&plan(0), &ret(0), nullptr);
 	return ret;
 }
 
-Limb::Angles LimbIkFast::plan(Eigen::Vector3d const & footDestination)
+Limb::Angles LimbIkFast::planBody(Vector3 const & footDestination)
 {
 	IkFastSolutionArray<MAX_JOINTS> & solutions = IkFastSolutionArray<MAX_JOINTS>::instance;
 
@@ -24,13 +24,13 @@ Limb::Angles LimbIkFast::plan(Eigen::Vector3d const & footDestination)
 		for(std::size_t i = 0; i < solutions.GetNumSolutions(); ++ i)
 		{
 			size_t s;
-			const ikfast::IkSolutionBase<double> & curSolution = solutions.GetSolution(i);
+			const ikfast::IkSolutionBase<Real> & curSolution = solutions.GetSolution(i);
 			Angles curValues;
 			
 			curSolution.GetSolution(&curValues(0), NULL);
 
 			for (std::size_t j = 0; j < servos(); ++ j) {
-				Eigen::Array2d limits = servo(j).angleLimit();
+				Array2 limits = servo(j).angleLimit();
 				if (curValues[j] < limits[0] || curValues[j] > limits[1]) {
 					goto next;
 				}
