@@ -183,7 +183,7 @@
       <geometry>
         <cylinder length="0.03" radius="0.09"/>
       </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0.09 0.135 0.0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0.0 0.135 0.0"/>
       <material name="mud">
         <color rgba="0.5 0.5 0.0 1.0"/>
       </material>
@@ -192,7 +192,7 @@
       <geometry>
         <cylinder length="0.03" radius="0.09"/>
       </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0.09 -0.135 0.0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0.0 -0.135 0.0"/>
       <material name="mud">
         <color rgba="0.5 0.5 0.0 1.0"/>
       </material>
@@ -201,7 +201,7 @@
   <joint name="backRightAnkle" type="fixed">
     <parent link="backRightCalf"/>
     <child link="backRightFoot"/>
-    <origin xyz="-0.33 -0.12 0"/>
+    <origin xyz="-0.24 -0.12 0"/>
   </joint>
   <link name="backLeftHip">
     <visual>
@@ -325,7 +325,7 @@
       <geometry>
         <cylinder length="0.03" radius="0.09"/>
       </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0.09 0.135 0.0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0.0 0.135 0.0"/>
       <material name="mud">
         <color rgba="0.5 0.5 0.0 1.0"/>
       </material>
@@ -334,7 +334,7 @@
       <geometry>
         <cylinder length="0.03" radius="0.09"/>
       </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0.09 -0.135 0.0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0.0 -0.135 0.0"/>
       <material name="mud">
         <color rgba="0.5 0.5 0.0 1.0"/>
       </material>
@@ -343,7 +343,7 @@
   <joint name="backLeftAnkle" type="fixed">
     <parent link="backLeftCalf"/>
     <child link="backLeftFoot"/>
-    <origin xyz="-0.33 0.12 0"/>
+    <origin xyz="-0.24 0.12 0"/>
   </joint>
   <link name="frontRightHip">
     <visual>
@@ -467,7 +467,7 @@
       <geometry>
         <cylinder length="0.03" radius="0.09"/>
       </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0.09 0.135 0.0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0.0 0.135 0.0"/>
       <material name="mud">
         <color rgba="0.5 0.5 0.0 1.0"/>
       </material>
@@ -476,7 +476,7 @@
       <geometry>
         <cylinder length="0.03" radius="0.09"/>
       </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0.09 -0.135 0.0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0.0 -0.135 0.0"/>
       <material name="mud">
         <color rgba="0.5 0.5 0.0 1.0"/>
       </material>
@@ -485,7 +485,7 @@
   <joint name="frontRightAnkle" type="fixed">
     <parent link="frontRightCalf"/>
     <child link="frontRightFoot"/>
-    <origin xyz="-0.33 -0.12 0"/>
+    <origin xyz="-0.24 -0.12 0"/>
   </joint>
   <link name="frontLeftHip">
     <visual>
@@ -609,7 +609,7 @@
       <geometry>
         <cylinder length="0.03" radius="0.09"/>
       </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0.09 0.135 0.0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0.0 0.135 0.0"/>
       <material name="mud">
         <color rgba="0.5 0.5 0.0 1.0"/>
       </material>
@@ -618,7 +618,7 @@
       <geometry>
         <cylinder length="0.03" radius="0.09"/>
       </geometry>
-      <origin rpy="1.57079632679 0 0" xyz="0.09 -0.135 0.0"/>
+      <origin rpy="1.57079632679 0 0" xyz="0.0 -0.135 0.0"/>
       <material name="mud">
         <color rgba="0.5 0.5 0.0 1.0"/>
       </material>
@@ -627,7 +627,7 @@
   <joint name="frontLeftAnkle" type="fixed">
     <parent link="frontLeftCalf"/>
     <child link="frontLeftFoot"/>
-    <origin xyz="-0.33 0.12 0"/>
+    <origin xyz="-0.24 0.12 0"/>
   </joint>
 </robot>
 

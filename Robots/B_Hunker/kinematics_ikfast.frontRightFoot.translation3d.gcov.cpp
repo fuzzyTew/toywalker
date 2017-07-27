@@ -18,7 +18,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-/// ikfast version 0x10000049 generated on 2017-07-20 01:59:54.734873
+/// ikfast version 0x10000049 generated on 2017-07-26 16:19:12.227832
 /// To compile with gcc:
 ///     gcc -lstdc++ ik.cpp
 /// To compile without any main function as a shared object (might need -llapack):
@@ -406,21 +406,21 @@ inline CheckValue<T> IKPowWithIntegerCheck(T f, int n)
 IKFAST_API void ComputeFk(const IkReal* j, IkReal* eetrans, IkReal* eerot)
 {
     IkReal x0,x1,x2,x3,x4,x5,x6,x7,x8,x9;
-    x0=IKcos(j[1]);
-    x1=IKsin(j[0]);
+    x0=IKsin(j[0]);
+    x1=IKcos(j[1]);
     x2=IKcos(j[2]);
     x3=IKcos(j[0]);
     x4=IKsin(j[1]);
     x5=IKsin(j[2]);
-    x6=((0.33)*x5);
+    x6=((0.24)*x5);
     x7=((0.36)*x3);
-    x8=((0.33)*x2);
-    x9=(x0*x1);
-    eetrans[0]=(((x1*x4*x6))+((x8*x9))+(((0.36)*x1))+(((0.36)*x9)));
+    x8=((0.36)*x0);
+    x9=((0.24)*x1*x2);
+    eetrans[0]=(((x0*x9))+((x1*x8))+x8+((x0*x4*x6)));
     IkReal x10=((1.0)*x7);
     IkReal x11=((1.0)*x3);
-    eetrans[1]=((-0.36)+(((-1.0)*x11*x4*x6))+(((-1.0)*x10))+(((-1.0)*x0*x10))+(((-1.0)*x0*x11*x8)));
-    eetrans[2]=((0.15)+(((-1.0)*x0*x6))+((x4*x8))+(((0.36)*x4)));
+    eetrans[1]=((-0.36)+(((-1.0)*x11*x4*x6))+(((-1.0)*x10))+(((-1.0)*x1*x10))+(((-1.0)*x11*x9)));
+    eetrans[2]=((0.15)+(((-1.0)*x1*x6))+(((0.24)*x2*x4))+(((0.36)*x4)));
 }
 
 IKFAST_API int GetNumFreeParameters()
@@ -500,7 +500,7 @@ public:
                                     IkReal j11array[2], cj11array[2], sj11array[2];
                                     bool j11valid[2]= {false};
 //                                    _nj11 = 2;
-//                                    cj11array[0]=((-0.458333333333333)+(((4.20875420875421)*(pz*pz))));
+//                                    cj11array[0]=((-0.333333333333333)+(((5.78703703703704)*(pz*pz))));
                                     if (false)//if( cj11array[0] >= -1-IKFAST_SINCOS_THRESH && cj11array[0] <= 1+IKFAST_SINCOS_THRESH )
                                     {
 //                                        j11valid[0] = j11valid[1] = true;
@@ -545,26 +545,32 @@ public:
 //                                            py=0;
 //                                            pp=pz*pz;
 //                                            IkReal x12=pz*pz;
-//                                            IkReal x13=((825.0)*pz);
+//                                            IkReal x13=((150.0)*pz);
 //                                            j10eval[0]=((-1.0)+(((-7.71604938271605)*x12)));
-//                                            j10eval[1]=((IKabs(((324.0)+(((297.0)*cj11))+((sj11*x13)))))+(IKabs(((((-1.0)*cj11*x13))+(((297.0)*sj11))+(((-900.0)*pz))))));
-//                                            j10eval[2]=IKsign(((-324.0)+(((-2500.0)*x12))));
+//                                            j10eval[1]=IKsign(((-81.0)+(((-625.0)*x12))));
+//                                            j10eval[2]=((IKabs(((((-1.0)*cj11*x13))+(((54.0)*sj11))+(((-225.0)*pz)))))+(IKabs(((81.0)+(((54.0)*cj11))+((sj11*x13))))));
                                             if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  || IKabs(j10eval[2]) < 0.0000010000000000  )
                                             {
                                                 {
-                                                    IkReal j10eval[1];
+                                                    IkReal j10eval[3];
 //                                                    px=0;
 //                                                    py=0;
 //                                                    pp=pz*pz;
-//                                                    j10eval[0]=((1.09090909090909)+cj11+(((-2.77777777777778)*pz*sj11)));
-                                                    if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  )
+//                                                    IkReal x14=((225.0)*pz);
+//                                                    IkReal x15=((54.0)*sj11);
+//                                                    IkReal x16=(cj11*pz);
+//                                                    IkReal x17=(x15+x14);
+//                                                    j10eval[0]=((((-4.16666666666667)*pz))+(((-1.0)*sj11))+(((-2.77777777777778)*x16)));
+//                                                    j10eval[1]=((IKabs(((((36.0)*cj11*sj11))+x17)))+(IKabs(((36.0)+(((-36.0)*(cj11*cj11)))+(((-625.0)*(pz*pz)))))));
+//                                                    j10eval[2]=IKsign(((((-1.0)*x17))+(((-150.0)*x16))));
+                                                    if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  || IKabs(j10eval[2]) < 0.0000010000000000  )
                                                     {
                                                         {
                                                             IkReal j10eval[1];
 //                                                            px=0;
 //                                                            py=0;
 //                                                            pp=pz*pz;
-//                                                            j10eval[0]=((((-2.77777777777778)*cj11*pz))+(((-1.0)*sj11))+(((-3.03030303030303)*pz)));
+//                                                            j10eval[0]=((1.5)+cj11+(((-2.77777777777778)*pz*sj11)));
                                                             if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  )
                                                             {
                                                                 {
@@ -572,46 +578,45 @@ public:
                                                                     bool bgotonextstatement = true;
                                                                     do
                                                                     {
-//                                                                        IkReal x14=pz*pz;
-//                                                                        IkReal x15=((1.0)+(((7.71604938271605)*x14)));
-                                                                        if (false)//if((x15) < -0.00001)
+//                                                                        IkReal x18=((1.0)+(((7.71604938271605)*(pz*pz))));
+//                                                                        IkReal x25 = x18;
+                                                                        if (false)//if(IKabs(x25)==0)
                                                                         {
 //                                                                            continue;
                                                                         }
-//                                                                        IkReal x16=IKabs(IKsqrt(x15));
-//                                                                        IkReal x22 = x15;
-                                                                        if (false)//if(IKabs(x22)==0)
+//                                                                        IkReal x19=pow(x25,-0.5);
+                                                                        if (false)//if((x18) < -0.00001)
                                                                         {
 //                                                                            continue;
                                                                         }
-//                                                                        IkReal x17=pow(x22,-0.5);
-//                                                                        CheckValue<IkReal> x23=IKPowWithIntegerCheck<IKFAST_REAL>(x16,-1);
-                                                                        if (false)//if(!x23.valid)
+//                                                                        IkReal x20=IKabs(IKsqrt(x18));
+//                                                                        IkReal x21=(pz*x19);
+//                                                                        CheckValue<IkReal> x26=IKPowWithIntegerCheck<IKFAST_REAL>(x20,-1);
+                                                                        if (false)//if(!x26.valid)
                                                                         {
 //                                                                            continue;
                                                                         }
-//                                                                        IkReal x18=x23.value;
-//                                                                        IkReal x19=((3.03030303030303)*pz*x18);
-                                                                        if (false)//if((((1.0)+(((-9.18273645546373)*x14*(x18*x18))))) < -0.00001)
+//                                                                        IkReal x22=x26.value;
+//                                                                        IkReal x23=((1.5)*x22);
+                                                                        if (false)//if((((1.0)+(((-2.25)*(x22*x22))))) < -0.00001)
                                                                         {
 //                                                                            continue;
                                                                         }
-//                                                                        IkReal x20=IKsqrt(((1.0)+(((-9.18273645546373)*x14*(x18*x18)))));
-//                                                                        IkReal x21=(x17*x20);
-                                                                        if (false)//if( (x19) < -1-IKFAST_SINCOS_THRESH || (x19) > 1+IKFAST_SINCOS_THRESH )
+//                                                                        IkReal x24=IKsqrt(((1.0)+(((-2.25)*(x22*x22)))));
+//                                                                        CheckValue<IkReal> x27 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
+                                                                        if (false)//if(!x27.valid)
                                                                         {
 //                                                                            continue;
                                                                         }
-//                                                                        CheckValue<IkReal> x24 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
-                                                                        if (false)//if(!x24.valid)
+                                                                        if (false)//if( (x23) < -1-IKFAST_SINCOS_THRESH || (x23) > 1+IKFAST_SINCOS_THRESH )
                                                                         {
 //                                                                            continue;
                                                                         }
-//                                                                        IkReal gconst0=((IKasin(x19))+(((-1.0)*(x24.value))));
-//                                                                        IkReal gconst1=((((-1.0)*x17*x19))+(((2.77777777777778)*pz*x21)));
-//                                                                        IkReal gconst2=((((-1.0)*x21))+(((-8.41750841750842)*x14*x17*x18)));
-//                                                                        CheckValue<IkReal> x25 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
-                                                                        if (false)//if(!x25.valid)
+//                                                                        IkReal gconst0=((((-1.0)*(x27.value)))+(((-1.0)*(IKasin(x23)))));
+//                                                                        IkReal gconst1=((((-1.0)*x19*x24))+(((4.16666666666667)*x21*x22)));
+//                                                                        IkReal gconst2=((((-1.0)*x19*x23))+(((-2.77777777777778)*x21*x24)));
+//                                                                        CheckValue<IkReal> x28 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
+                                                                        if (false)//if(!x28.valid)
                                                                         {
 //                                                                            continue;
                                                                         }
@@ -619,91 +624,89 @@ public:
                                                                         {
 //                                                                            continue;
                                                                         }
-//                                                                        CheckValue<IkReal> x26=IKPowWithIntegerCheck<IKFAST_REAL>(IKabs(IKsqrt(((1.0)+(((7.71604938271605)*(pz*pz)))))),-1);
-                                                                        if (false)//if(!x26.valid)
+//                                                                        CheckValue<IkReal> x29=IKPowWithIntegerCheck<IKFAST_REAL>(IKabs(IKsqrt(((1.0)+(((7.71604938271605)*(pz*pz)))))),-1);
+                                                                        if (false)//if(!x29.valid)
                                                                         {
 //                                                                            continue;
                                                                         }
-                                                                        if (false)//if( (((3.03030303030303)*pz*(x26.value))) < -1-IKFAST_SINCOS_THRESH || (((3.03030303030303)*pz*(x26.value))) > 1+IKFAST_SINCOS_THRESH )
+                                                                        if (false)//if( (((1.5)*(x29.value))) < -1-IKFAST_SINCOS_THRESH || (((1.5)*(x29.value))) > 1+IKFAST_SINCOS_THRESH )
                                                                         {
 //                                                                            continue;
                                                                         }
-//                                                                        evalcond[0]=((-3.14159265358979)+(IKfmod(((3.14159265358979)+(IKabs((j11+(x25.value)+(((-1.0)*(IKasin(((3.03030303030303)*pz*(x26.value)))))))))), 6.28318530717959)));
+//                                                                        evalcond[0]=((-3.14159265358979)+(IKfmod(((3.14159265358979)+(IKabs(((x28.value)+j11+(IKasin(((1.5)*(x29.value)))))))), 6.28318530717959)));
                                                                         if (false)//if( IKabs(evalcond[0]) < 0.0000050000000000  )
                                                                         {
 //                                                                            bgotonextstatement=false;
                                                                             {
                                                                                 IkReal j10eval[2];
-//                                                                                IkReal x27=pz*pz;
-//                                                                                IkReal x28=x15;
-                                                                                if (false)//if((x28) < -0.00001)
+//                                                                                IkReal x30=pz*pz;
+//                                                                                IkReal x31=x18;
+//                                                                                IkReal x39 = x31;
+                                                                                if (false)//if(IKabs(x39)==0)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x29=IKabs(IKsqrt(x28));
-//                                                                                IkReal x36 = x28;
-                                                                                if (false)//if(IKabs(x36)==0)
+//                                                                                IkReal x32=pow(x39,-0.5);
+                                                                                if (false)//if((x31) < -0.00001)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x30=pow(x36,-0.5);
-//                                                                                CheckValue<IkReal> x37=IKPowWithIntegerCheck<IKFAST_REAL>(x29,-1);
-                                                                                if (false)//if(!x37.valid)
+//                                                                                IkReal x33=IKabs(IKsqrt(x31));
+//                                                                                IkReal x34=(pz*x32);
+//                                                                                CheckValue<IkReal> x40=IKPowWithIntegerCheck<IKFAST_REAL>(x33,-1);
+                                                                                if (false)//if(!x40.valid)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x31=x37.value;
-//                                                                                IkReal x32=((3.03030303030303)*pz*x31);
-                                                                                if (false)//if( (x32) < -1-IKFAST_SINCOS_THRESH || (x32) > 1+IKFAST_SINCOS_THRESH )
+//                                                                                IkReal x35=x40.value;
+//                                                                                IkReal x36=((1.5)*x35);
+                                                                                if (false)//if((((1.0)+(((-2.25)*(x35*x35))))) < -0.00001)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                CheckValue<IkReal> x38 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
-                                                                                if (false)//if(!x38.valid)
+//                                                                                IkReal x37=IKsqrt(((1.0)+(((-2.25)*(x35*x35)))));
+//                                                                                CheckValue<IkReal> x41 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
+                                                                                if (false)//if(!x41.valid)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x33=((IKasin(x32))+(((-1.0)*(x38.value))));
-                                                                                if (false)//if((((1.0)+(((-9.18273645546373)*x27*(x31*x31))))) < -0.00001)
+                                                                                if (false)//if( (x36) < -1-IKFAST_SINCOS_THRESH || (x36) > 1+IKFAST_SINCOS_THRESH )
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x34=IKsqrt(((1.0)+(((-9.18273645546373)*x27*(x31*x31)))));
-//                                                                                IkReal x35=(x30*x34);
+//                                                                                IkReal x38=((((-1.0)*(x41.value)))+(((-1.0)*(IKasin(x36)))));
 //                                                                                px=0;
 //                                                                                py=0;
-//                                                                                pp=x27;
+//                                                                                pp=x30;
 //                                                                                sj11=gconst1;
 //                                                                                cj11=gconst2;
-//                                                                                j11=x33;
-//                                                                                IkReal gconst0=x33;
-//                                                                                IkReal gconst1=((((2.77777777777778)*pz*x35))+(((-1.0)*x30*x32)));
-//                                                                                IkReal gconst2=((((-1.0)*x35))+(((-8.41750841750842)*x27*x30*x31)));
-//                                                                                IkReal x39=pz*pz;
-//                                                                                j10eval[0]=((-1.0)+(((-7.71604938271605)*x39)));
-//                                                                                j10eval[1]=IKsign(((-324.0)+(((-2500.0)*x39))));
+//                                                                                j11=x38;
+//                                                                                IkReal gconst0=x38;
+//                                                                                IkReal gconst1=((((4.16666666666667)*x34*x35))+(((-1.0)*x32*x37)));
+//                                                                                IkReal gconst2=((((-1.0)*x32*x36))+(((-2.77777777777778)*x34*x37)));
+//                                                                                IkReal x42=pz*pz;
+//                                                                                j10eval[0]=((-1.0)+(((-7.71604938271605)*x42)));
+//                                                                                j10eval[1]=IKsign(((-81.0)+(((-625.0)*x42))));
                                                                                 if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  )
                                                                                 {
                                                                                     {
                                                                                         IkReal j10array[1], cj10array[1], sj10array[1];
                                                                                         bool j10valid[1]= {false};
 //                                                                                        _nj10 = 1;
-//                                                                                        IkReal x40=(gconst1*pz);
-//                                                                                        CheckValue<IkReal> x41=IKPowWithIntegerCheck<IKFAST_REAL>(((4.32)+(((3.96)*gconst2))+(((-11.0)*x40))),-1);
-                                                                                        if (false)//if(!x41.valid)
+//                                                                                        IkReal x43=((225.0)*pz);
+//                                                                                        IkReal x44=((54.0)*gconst1);
+//                                                                                        IkReal x45=(x44+x43);
+//                                                                                        CheckValue<IkReal> x46=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((((-1.0)*x45))+(((-150.0)*gconst2*pz)))),-1);
+                                                                                        if (false)//if(!x46.valid)
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-//                                                                                        CheckValue<IkReal> x42=IKPowWithIntegerCheck<IKFAST_REAL>(((-432.0)+(((1100.0)*x40))+(((-396.0)*gconst2))),-1);
-                                                                                        if (false)//if(!x42.valid)
+//                                                                                        CheckValue<IkReal> x47 = IKatan2WithCheck(IkReal(((((-108.0)*gconst2))+(((-36.0)*(gconst2*gconst2))))),IkReal((x45+(((36.0)*gconst1*gconst2)))),IKFAST_ATAN2_MAGTHRESH);
+                                                                                        if (false)//if(!x47.valid)
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-                                                                                        if (false)//if( IKabs(((x41.value)*(((((-3.96)*gconst1))+(((12.0)*pz))+(((-3.63)*gconst1*gconst2)))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(((x42.value)*(((432.0)+(((-363.0)*(gconst1*gconst1))))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(IKsqr(((x41.value)*(((((-3.96)*gconst1))+(((12.0)*pz))+(((-3.63)*gconst1*gconst2))))))+IKsqr(((x42.value)*(((432.0)+(((-363.0)*(gconst1*gconst1)))))))-1) <= IKFAST_SINCOS_THRESH )
-                                                                                        {
-//                                                                                            continue;
-                                                                                        }
-//                                                                                        j10array[0]=IKatan2(((x41.value)*(((((-3.96)*gconst1))+(((12.0)*pz))+(((-3.63)*gconst1*gconst2))))), ((x42.value)*(((432.0)+(((-363.0)*(gconst1*gconst1)))))));
+//                                                                                        j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x46.value)))+(x47.value));
 //                                                                                        sj10array[0]=IKsin(j10array[0]);
 //                                                                                        cj10array[0]=IKcos(j10array[0]);
                                                                                         if (false)//if( j10array[0] > IKPI )
@@ -737,18 +740,19 @@ public:
 //                                                                                            sj10 = sj10array[ij10];
                                                                                             {
                                                                                                 IkReal evalcond[5];
-//                                                                                                IkReal x43=IKsin(j10);
-//                                                                                                IkReal x44=IKcos(j10);
-//                                                                                                IkReal x45=((0.33)*gconst1);
-//                                                                                                IkReal x46=((0.33)*gconst2);
-//                                                                                                IkReal x47=((0.36)*x43);
-//                                                                                                IkReal x48=((0.36)*x44);
-//                                                                                                IkReal x49=(pz*x43);
-//                                                                                                evalcond[0]=((-0.36)+(((-1.0)*x46))+(((-1.0)*x48))+x49);
-//                                                                                                evalcond[1]=((((-1.0)*x45))+(((-1.0)*x47))+(((-1.0)*pz*x44)));
-//                                                                                                evalcond[2]=((-0.1503)+(((-0.2592)*x44))+(((0.72)*x49))+(((-1.0)*(pz*pz))));
-//                                                                                                evalcond[3]=((((-1.0)*x47))+(((-1.0)*x43*x46))+pz+((x44*x45)));
-//                                                                                                evalcond[4]=((-0.36)+(((-1.0)*x48))+(((-1.0)*x43*x45))+(((-1.0)*x44*x46)));
+//                                                                                                IkReal x48=IKsin(j10);
+//                                                                                                IkReal x49=IKcos(j10);
+//                                                                                                IkReal x50=((0.24)*gconst1);
+//                                                                                                IkReal x51=((0.24)*gconst2);
+//                                                                                                IkReal x52=((0.36)*x48);
+//                                                                                                IkReal x53=((0.36)*x49);
+//                                                                                                IkReal x54=((0.24)*x49);
+//                                                                                                IkReal x55=(pz*x48);
+//                                                                                                evalcond[0]=((-0.36)+x55+(((-1.0)*x51))+(((-1.0)*x53)));
+//                                                                                                evalcond[1]=((((-1.0)*pz*x49))+(((-1.0)*x52))+(((-1.0)*x50)));
+//                                                                                                evalcond[2]=((-0.2016)+(((-0.2592)*x49))+(((0.72)*x55))+(((-1.0)*(pz*pz))));
+//                                                                                                evalcond[3]=((((-1.0)*x48*x51))+pz+((x49*x50))+(((-1.0)*x52)));
+//                                                                                                evalcond[4]=((-0.36)+(((-1.0)*x48*x50))+(((-1.0)*x49*x51))+(((-1.0)*x53)));
                                                                                                 if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                                                 {
 //                                                                                                    continue;
@@ -824,18 +828,18 @@ public:
                                                                                         IkReal j10array[1], cj10array[1], sj10array[1];
                                                                                         bool j10valid[1]= {false};
 //                                                                                        _nj10 = 1;
-//                                                                                        IkReal x50=((825.0)*pz);
-//                                                                                        CheckValue<IkReal> x51 = IKatan2WithCheck(IkReal(((((297.0)*gconst1))+(((-1.0)*gconst2*x50))+(((-900.0)*pz)))),IkReal(((324.0)+(((297.0)*gconst2))+((gconst1*x50)))),IKFAST_ATAN2_MAGTHRESH);
-                                                                                        if (false)//if(!x51.valid)
+//                                                                                        IkReal x56=((150.0)*pz);
+//                                                                                        CheckValue<IkReal> x57=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-81.0)+(((-625.0)*(pz*pz))))),-1);
+                                                                                        if (false)//if(!x57.valid)
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-//                                                                                        CheckValue<IkReal> x52=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-324.0)+(((-2500.0)*(pz*pz))))),-1);
-                                                                                        if (false)//if(!x52.valid)
+//                                                                                        CheckValue<IkReal> x58 = IKatan2WithCheck(IkReal(((((54.0)*gconst1))+(((-1.0)*gconst2*x56))+(((-225.0)*pz)))),IkReal(((81.0)+(((54.0)*gconst2))+((gconst1*x56)))),IKFAST_ATAN2_MAGTHRESH);
+                                                                                        if (false)//if(!x58.valid)
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-//                                                                                        j10array[0]=((-1.5707963267949)+(x51.value)+(((1.5707963267949)*(x52.value))));
+//                                                                                        j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x57.value)))+(x58.value));
 //                                                                                        sj10array[0]=IKsin(j10array[0]);
 //                                                                                        cj10array[0]=IKcos(j10array[0]);
                                                                                         if (false)//if( j10array[0] > IKPI )
@@ -869,18 +873,19 @@ public:
 //                                                                                            sj10 = sj10array[ij10];
                                                                                             {
                                                                                                 IkReal evalcond[5];
-//                                                                                                IkReal x53=IKsin(j10);
-//                                                                                                IkReal x54=IKcos(j10);
-//                                                                                                IkReal x55=((0.33)*gconst1);
-//                                                                                                IkReal x56=((0.33)*gconst2);
-//                                                                                                IkReal x57=((0.36)*x53);
-//                                                                                                IkReal x58=((0.36)*x54);
-//                                                                                                IkReal x59=(pz*x53);
-//                                                                                                evalcond[0]=((-0.36)+x59+(((-1.0)*x58))+(((-1.0)*x56)));
-//                                                                                                evalcond[1]=((((-1.0)*x57))+(((-1.0)*x55))+(((-1.0)*pz*x54)));
-//                                                                                                evalcond[2]=((-0.1503)+(((0.72)*x59))+(((-0.2592)*x54))+(((-1.0)*(pz*pz))));
-//                                                                                                evalcond[3]=((((-1.0)*x53*x56))+pz+(((-1.0)*x57))+((x54*x55)));
-//                                                                                                evalcond[4]=((-0.36)+(((-1.0)*x53*x55))+(((-1.0)*x54*x56))+(((-1.0)*x58)));
+//                                                                                                IkReal x59=IKsin(j10);
+//                                                                                                IkReal x60=IKcos(j10);
+//                                                                                                IkReal x61=((0.24)*gconst1);
+//                                                                                                IkReal x62=((0.24)*gconst2);
+//                                                                                                IkReal x63=((0.36)*x59);
+//                                                                                                IkReal x64=((0.36)*x60);
+//                                                                                                IkReal x65=((0.24)*x60);
+//                                                                                                IkReal x66=(pz*x59);
+//                                                                                                evalcond[0]=((-0.36)+x66+(((-1.0)*x62))+(((-1.0)*x64)));
+//                                                                                                evalcond[1]=((((-1.0)*pz*x60))+(((-1.0)*x63))+(((-1.0)*x61)));
+//                                                                                                evalcond[2]=((-0.2016)+(((0.72)*x66))+(((-0.2592)*x60))+(((-1.0)*(pz*pz))));
+//                                                                                                evalcond[3]=(((x60*x61))+(((-1.0)*x59*x62))+pz+(((-1.0)*x63)));
+//                                                                                                evalcond[4]=((-0.36)+(((-1.0)*x59*x61))+(((-1.0)*x64))+(((-1.0)*x60*x62)));
                                                                                                 if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                                                 {
 //                                                                                                    continue;
@@ -961,138 +966,136 @@ public:
                                                                         bool bgotonextstatement = true;
                                                                         do
                                                                         {
-//                                                                            IkReal x60=pz*pz;
-//                                                                            IkReal x61=((1.0)+(((7.71604938271605)*x60)));
-//                                                                            IkReal x68 = x61;
-                                                                            if (false)//if(IKabs(x68)==0)
+//                                                                            IkReal x67=((1.0)+(((7.71604938271605)*(pz*pz))));
+//                                                                            IkReal x74 = x67;
+                                                                            if (false)//if(IKabs(x74)==0)
                                                                             {
 //                                                                                continue;
                                                                             }
-//                                                                            IkReal x62=pow(x68,-0.5);
-                                                                            if (false)//if((x61) < -0.00001)
+//                                                                            IkReal x68=pow(x74,-0.5);
+                                                                            if (false)//if((x67) < -0.00001)
                                                                             {
 //                                                                                continue;
                                                                             }
-//                                                                            IkReal x63=IKabs(IKsqrt(x61));
-//                                                                            CheckValue<IkReal> x69=IKPowWithIntegerCheck<IKFAST_REAL>(x63,-1);
-                                                                            if (false)//if(!x69.valid)
+//                                                                            IkReal x69=IKabs(IKsqrt(x67));
+//                                                                            CheckValue<IkReal> x75=IKPowWithIntegerCheck<IKFAST_REAL>(x69,-1);
+                                                                            if (false)//if(!x75.valid)
                                                                             {
 //                                                                                continue;
                                                                             }
-//                                                                            IkReal x64=x69.value;
-//                                                                            IkReal x65=((3.03030303030303)*pz*x64);
-                                                                            if (false)//if((((1.0)+(((-9.18273645546373)*x60*(x64*x64))))) < -0.00001)
+//                                                                            IkReal x70=x75.value;
+//                                                                            IkReal x71=((1.5)*x70);
+                                                                            if (false)//if((((1.0)+(((-2.25)*(x70*x70))))) < -0.00001)
                                                                             {
 //                                                                                continue;
                                                                             }
-//                                                                            IkReal x66=IKsqrt(((1.0)+(((-9.18273645546373)*x60*(x64*x64)))));
-//                                                                            IkReal x67=(x62*x66);
-                                                                            if (false)//if( (x65) < -1-IKFAST_SINCOS_THRESH || (x65) > 1+IKFAST_SINCOS_THRESH )
+//                                                                            IkReal x72=IKsqrt(((1.0)+(((-2.25)*(x70*x70)))));
+//                                                                            IkReal x73=(x68*x72);
+//                                                                            CheckValue<IkReal> x76 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
+                                                                            if (false)//if(!x76.valid)
                                                                             {
 //                                                                                continue;
                                                                             }
-//                                                                            CheckValue<IkReal> x70 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
-                                                                            if (false)//if(!x70.valid)
+                                                                            if (false)//if( (x71) < -1-IKFAST_SINCOS_THRESH || (x71) > 1+IKFAST_SINCOS_THRESH )
                                                                             {
 //                                                                                continue;
                                                                             }
-//                                                                            IkReal gconst3=((3.14159265358979)+(((-1.0)*(IKasin(x65))))+(((-1.0)*(x70.value))));
-//                                                                            IkReal gconst4=((((-2.77777777777778)*pz*x67))+(((-1.0)*x62*x65)));
-//                                                                            IkReal gconst5=((((-8.41750841750842)*x60*x62*x64))+(((1.0)*x67)));
-//                                                                            CheckValue<IkReal> x71 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
-                                                                            if (false)//if(!x71.valid)
-                                                                            {
-//                                                                                continue;
-                                                                            }
+//                                                                            IkReal gconst3=((3.14159265358979)+(((-1.0)*(x76.value)))+(IKasin(x71)));
+//                                                                            IkReal gconst4=((((1.0)*x73))+(((4.16666666666667)*pz*x68*x70)));
+//                                                                            IkReal gconst5=((((2.77777777777778)*pz*x73))+(((-1.0)*x68*x71)));
                                                                             if (false)//if((((1.0)+(((7.71604938271605)*(pz*pz))))) < -0.00001)
                                                                             {
 //                                                                                continue;
                                                                             }
-//                                                                            CheckValue<IkReal> x72=IKPowWithIntegerCheck<IKFAST_REAL>(IKabs(IKsqrt(((1.0)+(((7.71604938271605)*(pz*pz)))))),-1);
-                                                                            if (false)//if(!x72.valid)
+//                                                                            CheckValue<IkReal> x77=IKPowWithIntegerCheck<IKFAST_REAL>(IKabs(IKsqrt(((1.0)+(((7.71604938271605)*(pz*pz)))))),-1);
+                                                                            if (false)//if(!x77.valid)
                                                                             {
 //                                                                                continue;
                                                                             }
-                                                                            if (false)//if( (((3.03030303030303)*pz*(x72.value))) < -1-IKFAST_SINCOS_THRESH || (((3.03030303030303)*pz*(x72.value))) > 1+IKFAST_SINCOS_THRESH )
+                                                                            if (false)//if( (((1.5)*(x77.value))) < -1-IKFAST_SINCOS_THRESH || (((1.5)*(x77.value))) > 1+IKFAST_SINCOS_THRESH )
                                                                             {
 //                                                                                continue;
                                                                             }
-//                                                                            evalcond[0]=((-3.14159265358979)+(IKfmod(((3.14159265358979)+(IKabs(((-3.14159265358979)+j11+(x71.value)+(IKasin(((3.03030303030303)*pz*(x72.value)))))))), 6.28318530717959)));
+//                                                                            CheckValue<IkReal> x78 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
+                                                                            if (false)//if(!x78.valid)
+                                                                            {
+//                                                                                continue;
+                                                                            }
+//                                                                            evalcond[0]=((-3.14159265358979)+(IKfmod(((3.14159265358979)+(IKabs(((-3.14159265358979)+(((-1.0)*(IKasin(((1.5)*(x77.value))))))+(x78.value)+j11)))), 6.28318530717959)));
                                                                             if (false)//if( IKabs(evalcond[0]) < 0.0000050000000000  )
                                                                             {
 //                                                                                bgotonextstatement=false;
                                                                                 {
                                                                                     IkReal j10eval[2];
-//                                                                                    IkReal x73=pz*pz;
-//                                                                                    IkReal x74=x61;
-//                                                                                    IkReal x82 = x74;
-                                                                                    if (false)//if(IKabs(x82)==0)
+//                                                                                    IkReal x79=pz*pz;
+//                                                                                    CheckValue<IkReal> x89 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
+                                                                                    if (false)//if(!x89.valid)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x75=pow(x82,-0.5);
-                                                                                    if (false)//if((x74) < -0.00001)
+//                                                                                    IkReal x80=((1.0)*(x89.value));
+//                                                                                    IkReal x81=x67;
+//                                                                                    IkReal x90 = x81;
+                                                                                    if (false)//if(IKabs(x90)==0)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x76=IKabs(IKsqrt(x74));
-//                                                                                    CheckValue<IkReal> x83=IKPowWithIntegerCheck<IKFAST_REAL>(x76,-1);
-                                                                                    if (false)//if(!x83.valid)
+//                                                                                    IkReal x82=pow(x90,-0.5);
+                                                                                    if (false)//if((x81) < -0.00001)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x77=x83.value;
-//                                                                                    IkReal x78=((3.03030303030303)*pz*x77);
-                                                                                    if (false)//if((((1.0)+(((-9.18273645546373)*x73*(x77*x77))))) < -0.00001)
+//                                                                                    IkReal x83=IKabs(IKsqrt(x81));
+//                                                                                    CheckValue<IkReal> x91=IKPowWithIntegerCheck<IKFAST_REAL>(x83,-1);
+                                                                                    if (false)//if(!x91.valid)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x79=IKsqrt(((1.0)+(((-9.18273645546373)*x73*(x77*x77)))));
-//                                                                                    CheckValue<IkReal> x84 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
-                                                                                    if (false)//if(!x84.valid)
+//                                                                                    IkReal x84=x91.value;
+//                                                                                    IkReal x85=((1.5)*x84);
+                                                                                    if (false)//if( (x85) < -1-IKFAST_SINCOS_THRESH || (x85) > 1+IKFAST_SINCOS_THRESH )
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-                                                                                    if (false)//if( (x78) < -1-IKFAST_SINCOS_THRESH || (x78) > 1+IKFAST_SINCOS_THRESH )
+//                                                                                    IkReal x86=IKasin(x85);
+                                                                                    if (false)//if((((1.0)+(((-2.25)*(x84*x84))))) < -0.00001)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x80=((((1.0)*(x84.value)))+(((1.0)*(IKasin(x78)))));
-//                                                                                    IkReal x81=(x75*x79);
+//                                                                                    IkReal x87=IKsqrt(((1.0)+(((-2.25)*(x84*x84)))));
+//                                                                                    IkReal x88=(x82*x87);
 //                                                                                    px=0;
 //                                                                                    py=0;
-//                                                                                    pp=x73;
+//                                                                                    pp=x79;
 //                                                                                    sj11=gconst4;
 //                                                                                    cj11=gconst5;
-//                                                                                    j11=((3.14159265)+(((-1.0)*x80)));
-//                                                                                    IkReal gconst3=((3.14159265358979)+(((-1.0)*x80)));
-//                                                                                    IkReal gconst4=((((-2.77777777777778)*pz*x81))+(((-1.0)*x75*x78)));
-//                                                                                    IkReal gconst5=((((-8.41750841750842)*x73*x75*x77))+(((1.0)*x81)));
-//                                                                                    IkReal x85=pz*pz;
-//                                                                                    j10eval[0]=((-1.0)+(((-7.71604938271605)*x85)));
-//                                                                                    j10eval[1]=IKsign(((-324.0)+(((-2500.0)*x85))));
+//                                                                                    j11=((3.14159265)+x86+(((-1.0)*x80)));
+//                                                                                    IkReal gconst3=((3.14159265358979)+x86+(((-1.0)*x80)));
+//                                                                                    IkReal gconst4=((((4.16666666666667)*pz*x82*x84))+(((1.0)*x88)));
+//                                                                                    IkReal gconst5=((((-1.0)*x82*x85))+(((2.77777777777778)*pz*x88)));
+//                                                                                    IkReal x92=pz*pz;
+//                                                                                    j10eval[0]=((-1.0)+(((-7.71604938271605)*x92)));
+//                                                                                    j10eval[1]=IKsign(((-81.0)+(((-625.0)*x92))));
                                                                                     if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  )
                                                                                     {
                                                                                         {
                                                                                             IkReal j10array[1], cj10array[1], sj10array[1];
                                                                                             bool j10valid[1]= {false};
 //                                                                                            _nj10 = 1;
-//                                                                                            IkReal x86=(gconst4*pz);
-//                                                                                            CheckValue<IkReal> x87=IKPowWithIntegerCheck<IKFAST_REAL>(((4.32)+(((3.96)*gconst5))+(((-11.0)*x86))),-1);
-                                                                                            if (false)//if(!x87.valid)
+//                                                                                            IkReal x93=((225.0)*pz);
+//                                                                                            IkReal x94=((54.0)*gconst4);
+//                                                                                            IkReal x95=(x93+x94);
+//                                                                                            CheckValue<IkReal> x96 = IKatan2WithCheck(IkReal(((((36.0)*(gconst4*gconst4)))+(((-625.0)*(pz*pz))))),IkReal((x95+(((36.0)*gconst4*gconst5)))),IKFAST_ATAN2_MAGTHRESH);
+                                                                                            if (false)//if(!x96.valid)
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-//                                                                                            CheckValue<IkReal> x88=IKPowWithIntegerCheck<IKFAST_REAL>(((-432.0)+(((1100.0)*x86))+(((-396.0)*gconst5))),-1);
-                                                                                            if (false)//if(!x88.valid)
+//                                                                                            CheckValue<IkReal> x97=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((((-150.0)*gconst5*pz))+(((-1.0)*x95)))),-1);
+                                                                                            if (false)//if(!x97.valid)
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-                                                                                            if (false)//if( IKabs(((x87.value)*(((((-3.96)*gconst4))+(((12.0)*pz))+(((-3.63)*gconst4*gconst5)))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(((x88.value)*(((432.0)+(((-363.0)*(gconst4*gconst4))))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(IKsqr(((x87.value)*(((((-3.96)*gconst4))+(((12.0)*pz))+(((-3.63)*gconst4*gconst5))))))+IKsqr(((x88.value)*(((432.0)+(((-363.0)*(gconst4*gconst4)))))))-1) <= IKFAST_SINCOS_THRESH )
-                                                                                            {
-//                                                                                                continue;
-                                                                                            }
-//                                                                                            j10array[0]=IKatan2(((x87.value)*(((((-3.96)*gconst4))+(((12.0)*pz))+(((-3.63)*gconst4*gconst5))))), ((x88.value)*(((432.0)+(((-363.0)*(gconst4*gconst4)))))));
+//                                                                                            j10array[0]=((-1.5707963267949)+(x96.value)+(((1.5707963267949)*(x97.value))));
 //                                                                                            sj10array[0]=IKsin(j10array[0]);
 //                                                                                            cj10array[0]=IKcos(j10array[0]);
                                                                                             if (false)//if( j10array[0] > IKPI )
@@ -1126,18 +1129,19 @@ public:
 //                                                                                                sj10 = sj10array[ij10];
                                                                                                 {
                                                                                                     IkReal evalcond[5];
-//                                                                                                    IkReal x89=IKsin(j10);
-//                                                                                                    IkReal x90=IKcos(j10);
-//                                                                                                    IkReal x91=((0.33)*gconst5);
-//                                                                                                    IkReal x92=((0.33)*gconst4);
-//                                                                                                    IkReal x93=((0.36)*x89);
-//                                                                                                    IkReal x94=((0.36)*x90);
-//                                                                                                    IkReal x95=(pz*x89);
-//                                                                                                    evalcond[0]=((-0.36)+x95+(((-1.0)*x91))+(((-1.0)*x94)));
-//                                                                                                    evalcond[1]=((((-1.0)*pz*x90))+(((-1.0)*x93))+(((-1.0)*x92)));
-//                                                                                                    evalcond[2]=((-0.1503)+(((-0.2592)*x90))+(((-1.0)*(pz*pz)))+(((0.72)*x95)));
-//                                                                                                    evalcond[3]=(((x90*x92))+pz+(((-1.0)*x93))+(((-1.0)*x89*x91)));
-//                                                                                                    evalcond[4]=((-0.36)+(((-1.0)*x90*x91))+(((-1.0)*x94))+(((-1.0)*x89*x92)));
+//                                                                                                    IkReal x98=IKsin(j10);
+//                                                                                                    IkReal x99=IKcos(j10);
+//                                                                                                    IkReal x100=((0.24)*gconst5);
+//                                                                                                    IkReal x101=((0.24)*gconst4);
+//                                                                                                    IkReal x102=((0.36)*x98);
+//                                                                                                    IkReal x103=((0.36)*x99);
+//                                                                                                    IkReal x104=((0.24)*x99);
+//                                                                                                    IkReal x105=(pz*x98);
+//                                                                                                    evalcond[0]=((-0.36)+(((-1.0)*x100))+(((-1.0)*x103))+x105);
+//                                                                                                    evalcond[1]=((((-1.0)*pz*x99))+(((-1.0)*x101))+(((-1.0)*x102)));
+//                                                                                                    evalcond[2]=((-0.2016)+(((0.72)*x105))+(((-0.2592)*x99))+(((-1.0)*(pz*pz))));
+//                                                                                                    evalcond[3]=(((x101*x99))+(((-1.0)*x102))+pz+(((-1.0)*x100*x98)));
+//                                                                                                    evalcond[4]=((-0.36)+(((-1.0)*x103))+(((-1.0)*x101*x98))+(((-1.0)*x100*x99)));
                                                                                                     if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                                                     {
 //                                                                                                        continue;
@@ -1213,18 +1217,18 @@ public:
                                                                                             IkReal j10array[1], cj10array[1], sj10array[1];
                                                                                             bool j10valid[1]= {false};
 //                                                                                            _nj10 = 1;
-//                                                                                            IkReal x96=((825.0)*pz);
-//                                                                                            CheckValue<IkReal> x97 = IKatan2WithCheck(IkReal(((((-1.0)*gconst5*x96))+(((297.0)*gconst4))+(((-900.0)*pz)))),IkReal(((324.0)+(((297.0)*gconst5))+((gconst4*x96)))),IKFAST_ATAN2_MAGTHRESH);
-                                                                                            if (false)//if(!x97.valid)
+//                                                                                            IkReal x106=((150.0)*pz);
+//                                                                                            CheckValue<IkReal> x107=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-81.0)+(((-625.0)*(pz*pz))))),-1);
+                                                                                            if (false)//if(!x107.valid)
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-//                                                                                            CheckValue<IkReal> x98=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-324.0)+(((-2500.0)*(pz*pz))))),-1);
-                                                                                            if (false)//if(!x98.valid)
+//                                                                                            CheckValue<IkReal> x108 = IKatan2WithCheck(IkReal(((((54.0)*gconst4))+(((-1.0)*gconst5*x106))+(((-225.0)*pz)))),IkReal(((81.0)+(((54.0)*gconst5))+((gconst4*x106)))),IKFAST_ATAN2_MAGTHRESH);
+                                                                                            if (false)//if(!x108.valid)
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-//                                                                                            j10array[0]=((-1.5707963267949)+(x97.value)+(((1.5707963267949)*(x98.value))));
+//                                                                                            j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x107.value)))+(x108.value));
 //                                                                                            sj10array[0]=IKsin(j10array[0]);
 //                                                                                            cj10array[0]=IKcos(j10array[0]);
                                                                                             if (false)//if( j10array[0] > IKPI )
@@ -1258,18 +1262,19 @@ public:
 //                                                                                                sj10 = sj10array[ij10];
                                                                                                 {
                                                                                                     IkReal evalcond[5];
-//                                                                                                    IkReal x99=IKsin(j10);
-//                                                                                                    IkReal x100=IKcos(j10);
-//                                                                                                    IkReal x101=((0.33)*gconst5);
-//                                                                                                    IkReal x102=((0.33)*gconst4);
-//                                                                                                    IkReal x103=((0.36)*x99);
-//                                                                                                    IkReal x104=((0.36)*x100);
-//                                                                                                    IkReal x105=(pz*x99);
-//                                                                                                    evalcond[0]=((-0.36)+(((-1.0)*x101))+(((-1.0)*x104))+x105);
-//                                                                                                    evalcond[1]=((((-1.0)*x103))+(((-1.0)*x102))+(((-1.0)*pz*x100)));
-//                                                                                                    evalcond[2]=((-0.1503)+(((0.72)*x105))+(((-0.2592)*x100))+(((-1.0)*(pz*pz))));
-//                                                                                                    evalcond[3]=((((-1.0)*x103))+pz+(((-1.0)*x101*x99))+((x100*x102)));
-//                                                                                                    evalcond[4]=((-0.36)+(((-1.0)*x102*x99))+(((-1.0)*x100*x101))+(((-1.0)*x104)));
+//                                                                                                    IkReal x109=IKsin(j10);
+//                                                                                                    IkReal x110=IKcos(j10);
+//                                                                                                    IkReal x111=((0.24)*gconst5);
+//                                                                                                    IkReal x112=((0.24)*gconst4);
+//                                                                                                    IkReal x113=((0.36)*x109);
+//                                                                                                    IkReal x114=((0.36)*x110);
+//                                                                                                    IkReal x115=((0.24)*x110);
+//                                                                                                    IkReal x116=(pz*x109);
+//                                                                                                    evalcond[0]=((-0.36)+(((-1.0)*x111))+(((-1.0)*x114))+x116);
+//                                                                                                    evalcond[1]=((((-1.0)*x112))+(((-1.0)*x113))+(((-1.0)*pz*x110)));
+//                                                                                                    evalcond[2]=((-0.2016)+(((0.72)*x116))+(((-0.2592)*x110))+(((-1.0)*(pz*pz))));
+//                                                                                                    evalcond[3]=(((x110*x112))+(((-1.0)*x113))+(((-1.0)*x109*x111))+pz);
+//                                                                                                    evalcond[4]=((-0.36)+(((-1.0)*x114))+(((-1.0)*x110*x111))+(((-1.0)*x109*x112)));
                                                                                                     if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                                                     {
 //                                                                                                        continue;
@@ -1350,45 +1355,47 @@ public:
                                                                             bool bgotonextstatement = true;
                                                                             do
                                                                             {
-//                                                                                IkReal x106=((1.0)+(((7.71604938271605)*(pz*pz))));
-//                                                                                IkReal x113 = x106;
-                                                                                if (false)//if(IKabs(x113)==0)
+//                                                                                IkReal x117=pz*pz;
+//                                                                                IkReal x118=((4.16666666666667)*pz);
+//                                                                                IkReal x119=((1.0)+(((7.71604938271605)*x117)));
+                                                                                if (false)//if((x119) < -0.00001)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x107=pow(x113,-0.5);
-                                                                                if (false)//if((x106) < -0.00001)
+//                                                                                IkReal x120=IKabs(IKsqrt(x119));
+//                                                                                IkReal x126 = x119;
+                                                                                if (false)//if(IKabs(x126)==0)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x108=IKabs(IKsqrt(x106));
-//                                                                                IkReal x109=(pz*x107);
-//                                                                                CheckValue<IkReal> x114=IKPowWithIntegerCheck<IKFAST_REAL>(x108,-1);
-                                                                                if (false)//if(!x114.valid)
+//                                                                                IkReal x121=pow(x126,-0.5);
+//                                                                                CheckValue<IkReal> x127=IKPowWithIntegerCheck<IKFAST_REAL>(x120,-1);
+                                                                                if (false)//if(!x127.valid)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x110=x114.value;
-//                                                                                IkReal x111=((1.09090909090909)*x110);
-                                                                                if (false)//if((((1.0)+(((-1.1900826446281)*(x110*x110))))) < -0.00001)
+//                                                                                IkReal x122=x127.value;
+                                                                                if (false)//if((((1.0)+(((-17.3611111111111)*x117*(x122*x122))))) < -0.00001)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal x112=IKsqrt(((1.0)+(((-1.1900826446281)*(x110*x110)))));
-//                                                                                CheckValue<IkReal> x115 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
-                                                                                if (false)//if(!x115.valid)
+//                                                                                IkReal x123=IKsqrt(((1.0)+(((-17.3611111111111)*x117*(x122*x122)))));
+//                                                                                IkReal x124=(x121*x122);
+//                                                                                IkReal x125=(x121*x123);
+                                                                                if (false)//if( ((x118*x122)) < -1-IKFAST_SINCOS_THRESH || ((x118*x122)) > 1+IKFAST_SINCOS_THRESH )
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-                                                                                if (false)//if( (x111) < -1-IKFAST_SINCOS_THRESH || (x111) > 1+IKFAST_SINCOS_THRESH )
+//                                                                                CheckValue<IkReal> x128 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
+                                                                                if (false)//if(!x128.valid)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                IkReal gconst6=((((-1.0)*(x115.value)))+(((-1.0)*(IKasin(x111)))));
-//                                                                                IkReal gconst7=((((-1.0)*x107*x112))+(((3.03030303030303)*x109*x110)));
-//                                                                                IkReal gconst8=((((-2.77777777777778)*x109*x112))+(((-1.0)*x107*x111)));
-//                                                                                CheckValue<IkReal> x116 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
-                                                                                if (false)//if(!x116.valid)
+//                                                                                IkReal gconst6=((IKasin((x118*x122)))+(((-1.0)*(x128.value))));
+//                                                                                IkReal gconst7=((((-1.0)*x118*x124))+(((2.77777777777778)*pz*x125)));
+//                                                                                IkReal gconst8=((((-1.0)*x125))+(((-11.5740740740741)*x117*x124)));
+//                                                                                CheckValue<IkReal> x129 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
+                                                                                if (false)//if(!x129.valid)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
@@ -1396,93 +1403,92 @@ public:
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                CheckValue<IkReal> x117=IKPowWithIntegerCheck<IKFAST_REAL>(IKabs(IKsqrt(((1.0)+(((7.71604938271605)*(pz*pz)))))),-1);
-                                                                                if (false)//if(!x117.valid)
+//                                                                                CheckValue<IkReal> x130=IKPowWithIntegerCheck<IKFAST_REAL>(IKabs(IKsqrt(((1.0)+(((7.71604938271605)*(pz*pz)))))),-1);
+                                                                                if (false)//if(!x130.valid)
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-                                                                                if (false)//if( (((1.09090909090909)*(x117.value))) < -1-IKFAST_SINCOS_THRESH || (((1.09090909090909)*(x117.value))) > 1+IKFAST_SINCOS_THRESH )
+                                                                                if (false)//if( (((4.16666666666667)*pz*(x130.value))) < -1-IKFAST_SINCOS_THRESH || (((4.16666666666667)*pz*(x130.value))) > 1+IKFAST_SINCOS_THRESH )
                                                                                 {
 //                                                                                    continue;
                                                                                 }
-//                                                                                evalcond[0]=((-3.14159265358979)+(IKfmod(((3.14159265358979)+(IKabs(((x116.value)+j11+(IKasin(((1.09090909090909)*(x117.value)))))))), 6.28318530717959)));
+//                                                                                evalcond[0]=((-3.14159265358979)+(IKfmod(((3.14159265358979)+(IKabs((j11+(x129.value)+(((-1.0)*(IKasin(((4.16666666666667)*pz*(x130.value)))))))))), 6.28318530717959)));
                                                                                 if (false)//if( IKabs(evalcond[0]) < 0.0000050000000000  )
                                                                                 {
 //                                                                                    bgotonextstatement=false;
                                                                                     {
                                                                                         IkReal j10eval[2];
-//                                                                                        IkReal x118=pz*pz;
-//                                                                                        CheckValue<IkReal> x127 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
-                                                                                        if (false)//if(!x127.valid)
+//                                                                                        IkReal x131=pz*pz;
+//                                                                                        IkReal x132=((4.16666666666667)*pz);
+//                                                                                        IkReal x133=x119;
+                                                                                        if (false)//if((x133) < -0.00001)
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-//                                                                                        IkReal x119=((1.0)*(x127.value));
-//                                                                                        IkReal x120=x106;
-//                                                                                        IkReal x128 = x120;
-                                                                                        if (false)//if(IKabs(x128)==0)
+//                                                                                        IkReal x134=IKabs(IKsqrt(x133));
+//                                                                                        IkReal x141 = x133;
+                                                                                        if (false)//if(IKabs(x141)==0)
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-//                                                                                        IkReal x121=pow(x128,-0.5);
-                                                                                        if (false)//if((x120) < -0.00001)
+//                                                                                        IkReal x135=pow(x141,-0.5);
+//                                                                                        CheckValue<IkReal> x142=IKPowWithIntegerCheck<IKFAST_REAL>(x134,-1);
+                                                                                        if (false)//if(!x142.valid)
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-//                                                                                        IkReal x122=IKabs(IKsqrt(x120));
-//                                                                                        CheckValue<IkReal> x129=IKPowWithIntegerCheck<IKFAST_REAL>(x122,-1);
-                                                                                        if (false)//if(!x129.valid)
+//                                                                                        IkReal x136=x142.value;
+//                                                                                        CheckValue<IkReal> x143 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
+                                                                                        if (false)//if(!x143.valid)
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-//                                                                                        IkReal x123=x129.value;
-                                                                                        if (false)//if((((1.0)+(((-1.1900826446281)*(x123*x123))))) < -0.00001)
+                                                                                        if (false)//if( ((x132*x136)) < -1-IKFAST_SINCOS_THRESH || ((x132*x136)) > 1+IKFAST_SINCOS_THRESH )
                                                                                         {
 //                                                                                            continue;
                                                                                         }
-//                                                                                        IkReal x124=IKsqrt(((1.0)+(((-1.1900826446281)*(x123*x123)))));
-//                                                                                        IkReal x125=(x121*x123);
-//                                                                                        IkReal x126=(x121*x124);
+//                                                                                        IkReal x137=((((-1.0)*(x143.value)))+(IKasin((x132*x136))));
+                                                                                        if (false)//if((((1.0)+(((-17.3611111111111)*x131*(x136*x136))))) < -0.00001)
+                                                                                        {
+//                                                                                            continue;
+                                                                                        }
+//                                                                                        IkReal x138=IKsqrt(((1.0)+(((-17.3611111111111)*x131*(x136*x136)))));
+//                                                                                        IkReal x139=(x135*x136);
+//                                                                                        IkReal x140=(x135*x138);
 //                                                                                        px=0;
 //                                                                                        py=0;
-//                                                                                        pp=x118;
+//                                                                                        pp=x131;
 //                                                                                        sj11=gconst7;
 //                                                                                        cj11=gconst8;
-                                                                                        if (false)//if( (((1.09090908694215)*x123)) < -1-IKFAST_SINCOS_THRESH || (((1.09090908694215)*x123)) > 1+IKFAST_SINCOS_THRESH )
-                                                                                        {
-//                                                                                            continue;
-                                                                                        }
-//                                                                                        j11=((((-1.0)*x119))+(((-1.0)*(IKasin(((1.09090908694215)*x123))))));
-                                                                                        if (false)//if( (((1.09090909090909)*x123)) < -1-IKFAST_SINCOS_THRESH || (((1.09090909090909)*x123)) > 1+IKFAST_SINCOS_THRESH )
-                                                                                        {
-//                                                                                            continue;
-                                                                                        }
-//                                                                                        IkReal gconst6=((((-1.0)*x119))+(((-1.0)*(IKasin(((1.09090909090909)*x123))))));
-//                                                                                        IkReal gconst7=((((3.03030303030303)*pz*x125))+(((-1.0)*x126)));
-//                                                                                        IkReal gconst8=((((-1.09090909090909)*x125))+(((-2.77777777777778)*pz*x126)));
-//                                                                                        IkReal x130=pz*pz;
-//                                                                                        j10eval[0]=((-1.0)+(((-7.71604938271605)*x130)));
-//                                                                                        j10eval[1]=IKsign(((-324.0)+(((-2500.0)*x130))));
+//                                                                                        j11=x137;
+//                                                                                        IkReal gconst6=x137;
+//                                                                                        IkReal gconst7=((((2.77777777777778)*pz*x140))+(((-1.0)*x132*x139)));
+//                                                                                        IkReal gconst8=((((-11.5740740740741)*x131*x139))+(((-1.0)*x140)));
+//                                                                                        IkReal x144=pz*pz;
+//                                                                                        j10eval[0]=((-1.0)+(((-7.71604938271605)*x144)));
+//                                                                                        j10eval[1]=IKsign(((-81.0)+(((-625.0)*x144))));
                                                                                         if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  )
                                                                                         {
                                                                                             {
                                                                                                 IkReal j10array[1], cj10array[1], sj10array[1];
                                                                                                 bool j10valid[1]= {false};
 //                                                                                                _nj10 = 1;
-//                                                                                                IkReal x131=((297.0)*gconst7);
-//                                                                                                IkReal x132=((900.0)*pz);
-//                                                                                                IkReal x133=(x131+x132);
-//                                                                                                CheckValue<IkReal> x134 = IKatan2WithCheck(IkReal(((((-594.0)*gconst8))+(((-272.25)*(gconst8*gconst8))))),IkReal((x133+(((272.25)*gconst7*gconst8)))),IKFAST_ATAN2_MAGTHRESH);
-                                                                                                if (false)//if(!x134.valid)
+//                                                                                                IkReal x145=(gconst7*pz);
+//                                                                                                CheckValue<IkReal> x146=IKPowWithIntegerCheck<IKFAST_REAL>(((1.08)+(((0.72)*gconst8))+(((-2.0)*x145))),-1);
+                                                                                                if (false)//if(!x146.valid)
                                                                                                 {
 //                                                                                                    continue;
                                                                                                 }
-//                                                                                                CheckValue<IkReal> x135=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((((-1.0)*x133))+(((-825.0)*gconst8*pz)))),-1);
-                                                                                                if (false)//if(!x135.valid)
+//                                                                                                CheckValue<IkReal> x147=IKPowWithIntegerCheck<IKFAST_REAL>(((-27.0)+(((-18.0)*gconst8))+(((50.0)*x145))),-1);
+                                                                                                if (false)//if(!x147.valid)
                                                                                                 {
 //                                                                                                    continue;
                                                                                                 }
-//                                                                                                j10array[0]=((-1.5707963267949)+(x134.value)+(((1.5707963267949)*(x135.value))));
+                                                                                                if (false)//if( IKabs(((x146.value)*(((((-0.72)*gconst7))+(((3.0)*pz))+(((-0.48)*gconst7*gconst8)))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(((x147.value)*(((27.0)+(((-12.0)*(gconst7*gconst7))))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(IKsqr(((x146.value)*(((((-0.72)*gconst7))+(((3.0)*pz))+(((-0.48)*gconst7*gconst8))))))+IKsqr(((x147.value)*(((27.0)+(((-12.0)*(gconst7*gconst7)))))))-1) <= IKFAST_SINCOS_THRESH )
+                                                                                                {
+//                                                                                                    continue;
+                                                                                                }
+//                                                                                                j10array[0]=IKatan2(((x146.value)*(((((-0.72)*gconst7))+(((3.0)*pz))+(((-0.48)*gconst7*gconst8))))), ((x147.value)*(((27.0)+(((-12.0)*(gconst7*gconst7)))))));
 //                                                                                                sj10array[0]=IKsin(j10array[0]);
 //                                                                                                cj10array[0]=IKcos(j10array[0]);
                                                                                                 if (false)//if( j10array[0] > IKPI )
@@ -1516,19 +1522,18 @@ public:
 //                                                                                                    sj10 = sj10array[ij10];
                                                                                                     {
                                                                                                         IkReal evalcond[5];
-//                                                                                                        IkReal x136=IKsin(j10);
-//                                                                                                        IkReal x137=IKcos(j10);
-//                                                                                                        IkReal x138=((0.33)*gconst7);
-//                                                                                                        IkReal x139=((0.33)*gconst8);
-//                                                                                                        IkReal x140=((0.36)*x136);
-//                                                                                                        IkReal x141=((0.36)*x137);
-//                                                                                                        IkReal x142=((0.33)*x137);
-//                                                                                                        IkReal x143=(pz*x136);
-//                                                                                                        evalcond[0]=((-0.36)+(((-1.0)*x141))+x143+(((-1.0)*x139)));
-//                                                                                                        evalcond[1]=((((-1.0)*x140))+(((-1.0)*x138))+(((-1.0)*pz*x137)));
-//                                                                                                        evalcond[2]=((-0.1503)+(((-0.2592)*x137))+(((0.72)*x143))+(((-1.0)*(pz*pz))));
-//                                                                                                        evalcond[3]=((((-1.0)*x140))+((x137*x138))+(((-1.0)*x136*x139))+pz);
-//                                                                                                        evalcond[4]=((-0.36)+(((-1.0)*x141))+(((-1.0)*x137*x139))+(((-1.0)*x136*x138)));
+//                                                                                                        IkReal x148=IKsin(j10);
+//                                                                                                        IkReal x149=IKcos(j10);
+//                                                                                                        IkReal x150=((0.24)*gconst8);
+//                                                                                                        IkReal x151=((0.24)*gconst7);
+//                                                                                                        IkReal x152=((0.36)*x148);
+//                                                                                                        IkReal x153=((0.36)*x149);
+//                                                                                                        IkReal x154=(pz*x148);
+//                                                                                                        evalcond[0]=((-0.36)+(((-1.0)*x150))+(((-1.0)*x153))+x154);
+//                                                                                                        evalcond[1]=((((-1.0)*x151))+(((-1.0)*x152))+(((-1.0)*pz*x149)));
+//                                                                                                        evalcond[2]=((-0.2016)+(((-0.2592)*x149))+(((0.72)*x154))+(((-1.0)*(pz*pz))));
+//                                                                                                        evalcond[3]=(((x149*x151))+(((-1.0)*x152))+pz+(((-1.0)*x148*x150)));
+//                                                                                                        evalcond[4]=((-0.36)+(((-1.0)*x153))+(((-1.0)*x148*x151))+(((-1.0)*x149*x150)));
                                                                                                         if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                                                         {
 //                                                                                                            continue;
@@ -1604,18 +1609,18 @@ public:
                                                                                                 IkReal j10array[1], cj10array[1], sj10array[1];
                                                                                                 bool j10valid[1]= {false};
 //                                                                                                _nj10 = 1;
-//                                                                                                IkReal x144=((825.0)*pz);
-//                                                                                                CheckValue<IkReal> x145 = IKatan2WithCheck(IkReal(((((297.0)*gconst7))+(((-1.0)*gconst8*x144))+(((-900.0)*pz)))),IkReal(((324.0)+(((297.0)*gconst8))+((gconst7*x144)))),IKFAST_ATAN2_MAGTHRESH);
-                                                                                                if (false)//if(!x145.valid)
+//                                                                                                IkReal x155=((150.0)*pz);
+//                                                                                                CheckValue<IkReal> x156=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-81.0)+(((-625.0)*(pz*pz))))),-1);
+                                                                                                if (false)//if(!x156.valid)
                                                                                                 {
 //                                                                                                    continue;
                                                                                                 }
-//                                                                                                CheckValue<IkReal> x146=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-324.0)+(((-2500.0)*(pz*pz))))),-1);
-                                                                                                if (false)//if(!x146.valid)
+//                                                                                                CheckValue<IkReal> x157 = IKatan2WithCheck(IkReal(((((54.0)*gconst7))+(((-1.0)*gconst8*x155))+(((-225.0)*pz)))),IkReal(((81.0)+(((54.0)*gconst8))+((gconst7*x155)))),IKFAST_ATAN2_MAGTHRESH);
+                                                                                                if (false)//if(!x157.valid)
                                                                                                 {
 //                                                                                                    continue;
                                                                                                 }
-//                                                                                                j10array[0]=((-1.5707963267949)+(x145.value)+(((1.5707963267949)*(x146.value))));
+//                                                                                                j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x156.value)))+(x157.value));
 //                                                                                                sj10array[0]=IKsin(j10array[0]);
 //                                                                                                cj10array[0]=IKcos(j10array[0]);
                                                                                                 if (false)//if( j10array[0] > IKPI )
@@ -1649,19 +1654,18 @@ public:
 //                                                                                                    sj10 = sj10array[ij10];
                                                                                                     {
                                                                                                         IkReal evalcond[5];
-//                                                                                                        IkReal x147=IKsin(j10);
-//                                                                                                        IkReal x148=IKcos(j10);
-//                                                                                                        IkReal x149=((0.33)*gconst7);
-//                                                                                                        IkReal x150=((0.33)*gconst8);
-//                                                                                                        IkReal x151=((0.36)*x147);
-//                                                                                                        IkReal x152=((0.36)*x148);
-//                                                                                                        IkReal x153=((0.33)*x148);
-//                                                                                                        IkReal x154=(pz*x147);
-//                                                                                                        evalcond[0]=((-0.36)+(((-1.0)*x150))+(((-1.0)*x152))+x154);
-//                                                                                                        evalcond[1]=((((-1.0)*x149))+(((-1.0)*x151))+(((-1.0)*pz*x148)));
-//                                                                                                        evalcond[2]=((-0.1503)+(((-0.2592)*x148))+(((0.72)*x154))+(((-1.0)*(pz*pz))));
-//                                                                                                        evalcond[3]=((((-1.0)*x151))+pz+(((-1.0)*x147*x150))+((x148*x149)));
-//                                                                                                        evalcond[4]=((-0.36)+(((-1.0)*x152))+(((-1.0)*x147*x149))+(((-1.0)*x148*x150)));
+//                                                                                                        IkReal x158=IKsin(j10);
+//                                                                                                        IkReal x159=IKcos(j10);
+//                                                                                                        IkReal x160=((0.24)*gconst8);
+//                                                                                                        IkReal x161=((0.24)*gconst7);
+//                                                                                                        IkReal x162=((0.36)*x158);
+//                                                                                                        IkReal x163=((0.36)*x159);
+//                                                                                                        IkReal x164=(pz*x158);
+//                                                                                                        evalcond[0]=((-0.36)+(((-1.0)*x160))+(((-1.0)*x163))+x164);
+//                                                                                                        evalcond[1]=((((-1.0)*x162))+(((-1.0)*x161))+(((-1.0)*pz*x159)));
+//                                                                                                        evalcond[2]=((-0.2016)+(((-0.2592)*x159))+(((0.72)*x164))+(((-1.0)*(pz*pz))));
+//                                                                                                        evalcond[3]=((((-1.0)*x158*x160))+(((-1.0)*x162))+pz+((x159*x161)));
+//                                                                                                        evalcond[4]=((-0.36)+(((-1.0)*x158*x161))+(((-1.0)*x163))+(((-1.0)*x159*x160)));
                                                                                                         if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                                                         {
 //                                                                                                            continue;
@@ -1742,141 +1746,138 @@ public:
                                                                                 bool bgotonextstatement = true;
                                                                                 do
                                                                                 {
-//                                                                                    IkReal x155=((1.0)+(((7.71604938271605)*(pz*pz))));
-                                                                                    if (false)//if((x155) < -0.00001)
+//                                                                                    IkReal x165=pz*pz;
+//                                                                                    IkReal x166=((4.16666666666667)*pz);
+//                                                                                    IkReal x167=((1.0)+(((7.71604938271605)*x165)));
+//                                                                                    IkReal x174 = x167;
+                                                                                    if (false)//if(IKabs(x174)==0)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x156=IKabs(IKsqrt(x155));
-//                                                                                    IkReal x162 = x155;
-                                                                                    if (false)//if(IKabs(x162)==0)
+//                                                                                    IkReal x168=pow(x174,-0.5);
+                                                                                    if (false)//if((x167) < -0.00001)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x157=pow(x162,-0.5);
-//                                                                                    IkReal x158=(pz*x157);
-//                                                                                    CheckValue<IkReal> x163=IKPowWithIntegerCheck<IKFAST_REAL>(x156,-1);
-                                                                                    if (false)//if(!x163.valid)
+//                                                                                    IkReal x169=IKabs(IKsqrt(x167));
+//                                                                                    CheckValue<IkReal> x175=IKPowWithIntegerCheck<IKFAST_REAL>(x169,-1);
+                                                                                    if (false)//if(!x175.valid)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x159=x163.value;
-//                                                                                    IkReal x160=((1.09090909090909)*x159);
-                                                                                    if (false)//if((((1.0)+(((-1.1900826446281)*(x159*x159))))) < -0.00001)
+//                                                                                    IkReal x170=x175.value;
+                                                                                    if (false)//if((((1.0)+(((-17.3611111111111)*x165*(x170*x170))))) < -0.00001)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal x161=IKsqrt(((1.0)+(((-1.1900826446281)*(x159*x159)))));
-//                                                                                    CheckValue<IkReal> x164 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
-                                                                                    if (false)//if(!x164.valid)
+//                                                                                    IkReal x171=IKsqrt(((1.0)+(((-17.3611111111111)*x165*(x170*x170)))));
+//                                                                                    IkReal x172=(x168*x170);
+//                                                                                    IkReal x173=(x168*x171);
+                                                                                    if (false)//if( ((x166*x170)) < -1-IKFAST_SINCOS_THRESH || ((x166*x170)) > 1+IKFAST_SINCOS_THRESH )
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-                                                                                    if (false)//if( (x160) < -1-IKFAST_SINCOS_THRESH || (x160) > 1+IKFAST_SINCOS_THRESH )
+//                                                                                    CheckValue<IkReal> x176 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
+                                                                                    if (false)//if(!x176.valid)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    IkReal gconst9=((3.14159265358979)+(((-1.0)*(x164.value)))+(IKasin(x160)));
-//                                                                                    IkReal gconst10=((((1.0)*x157*x161))+(((3.03030303030303)*x158*x159)));
-//                                                                                    IkReal gconst11=((((-1.0)*x157*x160))+(((2.77777777777778)*x158*x161)));
-//                                                                                    CheckValue<IkReal> x165 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
-                                                                                    if (false)//if(!x165.valid)
-                                                                                    {
-//                                                                                        continue;
-                                                                                    }
+//                                                                                    IkReal gconst9=((3.14159265358979)+(((-1.0)*(IKasin((x166*x170)))))+(((-1.0)*(x176.value))));
+//                                                                                    IkReal gconst10=((((-2.77777777777778)*pz*x173))+(((-1.0)*x166*x172)));
+//                                                                                    IkReal gconst11=((((1.0)*x173))+(((-11.5740740740741)*x165*x172)));
                                                                                     if (false)//if((((1.0)+(((7.71604938271605)*(pz*pz))))) < -0.00001)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    CheckValue<IkReal> x166=IKPowWithIntegerCheck<IKFAST_REAL>(IKabs(IKsqrt(((1.0)+(((7.71604938271605)*(pz*pz)))))),-1);
-                                                                                    if (false)//if(!x166.valid)
+//                                                                                    CheckValue<IkReal> x177=IKPowWithIntegerCheck<IKFAST_REAL>(IKabs(IKsqrt(((1.0)+(((7.71604938271605)*(pz*pz)))))),-1);
+                                                                                    if (false)//if(!x177.valid)
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-                                                                                    if (false)//if( (((1.09090909090909)*(x166.value))) < -1-IKFAST_SINCOS_THRESH || (((1.09090909090909)*(x166.value))) > 1+IKFAST_SINCOS_THRESH )
+                                                                                    if (false)//if( (((4.16666666666667)*pz*(x177.value))) < -1-IKFAST_SINCOS_THRESH || (((4.16666666666667)*pz*(x177.value))) > 1+IKFAST_SINCOS_THRESH )
                                                                                     {
 //                                                                                        continue;
                                                                                     }
-//                                                                                    evalcond[0]=((-3.14159265358979)+(IKfmod(((3.14159265358979)+(IKabs(((-3.14159265358979)+(x165.value)+j11+(((-1.0)*(IKasin(((1.09090909090909)*(x166.value)))))))))), 6.28318530717959)));
+//                                                                                    CheckValue<IkReal> x178 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
+                                                                                    if (false)//if(!x178.valid)
+                                                                                    {
+//                                                                                        continue;
+                                                                                    }
+//                                                                                    evalcond[0]=((-3.14159265358979)+(IKfmod(((3.14159265358979)+(IKabs(((-3.14159265358979)+(IKasin(((4.16666666666667)*pz*(x177.value))))+j11+(x178.value))))), 6.28318530717959)));
                                                                                     if (false)//if( IKabs(evalcond[0]) < 0.0000050000000000  )
                                                                                     {
 //                                                                                        bgotonextstatement=false;
                                                                                         {
                                                                                             IkReal j10eval[2];
-//                                                                                            IkReal x167=pz*pz;
-//                                                                                            CheckValue<IkReal> x176 = IKatan2WithCheck(IkReal(1.0),IkReal(((-2.77777777777778)*pz)),IKFAST_ATAN2_MAGTHRESH);
-                                                                                            if (false)//if(!x176.valid)
+//                                                                                            IkReal x179=pz*pz;
+//                                                                                            IkReal x180=((4.16666666666667)*pz);
+//                                                                                            IkReal x181=x167;
+//                                                                                            IkReal x189 = x181;
+                                                                                            if (false)//if(IKabs(x189)==0)
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-//                                                                                            IkReal x168=((1.0)*(x176.value));
-//                                                                                            IkReal x169=x155;
-                                                                                            if (false)//if((x169) < -0.00001)
+//                                                                                            IkReal x182=pow(x189,-0.5);
+                                                                                            if (false)//if((x181) < -0.00001)
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-//                                                                                            IkReal x170=IKabs(IKsqrt(x169));
-//                                                                                            IkReal x177 = x169;
-                                                                                            if (false)//if(IKabs(x177)==0)
+//                                                                                            IkReal x183=IKabs(IKsqrt(x181));
+//                                                                                            CheckValue<IkReal> x190=IKPowWithIntegerCheck<IKFAST_REAL>(x183,-1);
+                                                                                            if (false)//if(!x190.valid)
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-//                                                                                            IkReal x171=pow(x177,-0.5);
-//                                                                                            CheckValue<IkReal> x178=IKPowWithIntegerCheck<IKFAST_REAL>(x170,-1);
-                                                                                            if (false)//if(!x178.valid)
+//                                                                                            IkReal x184=x190.value;
+                                                                                            if (false)//if((((1.0)+(((-17.3611111111111)*x179*(x184*x184))))) < -0.00001)
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-//                                                                                            IkReal x172=x178.value;
-                                                                                            if (false)//if((((1.0)+(((-1.1900826446281)*(x172*x172))))) < -0.00001)
+//                                                                                            IkReal x185=IKsqrt(((1.0)+(((-17.3611111111111)*x179*(x184*x184)))));
+//                                                                                            IkReal x186=(x182*x184);
+                                                                                            if (false)//if( ((x180*x184)) < -1-IKFAST_SINCOS_THRESH || ((x180*x184)) > 1+IKFAST_SINCOS_THRESH )
                                                                                             {
 //                                                                                                continue;
                                                                                             }
-//                                                                                            IkReal x173=IKsqrt(((1.0)+(((-1.1900826446281)*(x172*x172)))));
-//                                                                                            IkReal x174=(x171*x172);
-//                                                                                            IkReal x175=(x171*x173);
+//                                                                                            CheckValue<IkReal> x191 = IKatan2WithCheck(IkReal(((-2.77777777777778)*pz)),IkReal(-1.0),IKFAST_ATAN2_MAGTHRESH);
+                                                                                            if (false)//if(!x191.valid)
+                                                                                            {
+//                                                                                                continue;
+                                                                                            }
+//                                                                                            IkReal x187=((((1.0)*(IKasin((x180*x184)))))+(((1.0)*(x191.value))));
+//                                                                                            IkReal x188=(x182*x185);
 //                                                                                            px=0;
 //                                                                                            py=0;
-//                                                                                            pp=x167;
+//                                                                                            pp=x179;
 //                                                                                            sj11=gconst10;
 //                                                                                            cj11=gconst11;
-                                                                                            if (false)//if( (((1.09090908694215)*x172)) < -1-IKFAST_SINCOS_THRESH || (((1.09090908694215)*x172)) > 1+IKFAST_SINCOS_THRESH )
-                                                                                            {
-//                                                                                                continue;
-                                                                                            }
-//                                                                                            j11=((3.14159265)+(((-1.0)*x168))+(IKasin(((1.09090908694215)*x172))));
-                                                                                            if (false)//if( (((1.09090909090909)*x172)) < -1-IKFAST_SINCOS_THRESH || (((1.09090909090909)*x172)) > 1+IKFAST_SINCOS_THRESH )
-                                                                                            {
-//                                                                                                continue;
-                                                                                            }
-//                                                                                            IkReal gconst9=((3.14159265358979)+(((-1.0)*x168))+(IKasin(((1.09090909090909)*x172))));
-//                                                                                            IkReal gconst10=((((3.03030303030303)*pz*x174))+(((1.0)*x175)));
-//                                                                                            IkReal gconst11=((((2.77777777777778)*pz*x175))+(((-1.09090909090909)*x174)));
-//                                                                                            IkReal x179=pz*pz;
-//                                                                                            j10eval[0]=((-1.0)+(((-7.71604938271605)*x179)));
-//                                                                                            j10eval[1]=IKsign(((-324.0)+(((-2500.0)*x179))));
+//                                                                                            j11=((3.14159265)+(((-1.0)*x187)));
+//                                                                                            IkReal gconst9=((3.14159265358979)+(((-1.0)*x187)));
+//                                                                                            IkReal gconst10=((((-2.77777777777778)*pz*x188))+(((-1.0)*x180*x186)));
+//                                                                                            IkReal gconst11=((((-11.5740740740741)*x179*x186))+(((1.0)*x188)));
+//                                                                                            IkReal x192=pz*pz;
+//                                                                                            j10eval[0]=((-1.0)+(((-7.71604938271605)*x192)));
+//                                                                                            j10eval[1]=IKsign(((-81.0)+(((-625.0)*x192))));
                                                                                             if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  )
                                                                                             {
                                                                                                 {
                                                                                                     IkReal j10array[1], cj10array[1], sj10array[1];
                                                                                                     bool j10valid[1]= {false};
 //                                                                                                    _nj10 = 1;
-//                                                                                                    IkReal x180=(gconst10*pz);
-//                                                                                                    CheckValue<IkReal> x181=IKPowWithIntegerCheck<IKFAST_REAL>(((4.32)+(((3.96)*gconst11))+(((-11.0)*x180))),-1);
-                                                                                                    if (false)//if(!x181.valid)
+//                                                                                                    IkReal x193=((225.0)*pz);
+//                                                                                                    IkReal x194=((54.0)*gconst10);
+//                                                                                                    IkReal x195=(x193+x194);
+//                                                                                                    CheckValue<IkReal> x196 = IKatan2WithCheck(IkReal(((((36.0)*(gconst10*gconst10)))+(((-625.0)*(pz*pz))))),IkReal(((((36.0)*gconst10*gconst11))+x195)),IKFAST_ATAN2_MAGTHRESH);
+                                                                                                    if (false)//if(!x196.valid)
                                                                                                     {
 //                                                                                                        continue;
                                                                                                     }
-//                                                                                                    CheckValue<IkReal> x182=IKPowWithIntegerCheck<IKFAST_REAL>(((-432.0)+(((-396.0)*gconst11))+(((1100.0)*x180))),-1);
-                                                                                                    if (false)//if(!x182.valid)
+//                                                                                                    CheckValue<IkReal> x197=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((((-150.0)*gconst11*pz))+(((-1.0)*x195)))),-1);
+                                                                                                    if (false)//if(!x197.valid)
                                                                                                     {
 //                                                                                                        continue;
                                                                                                     }
-                                                                                                    if (false)//if( IKabs(((x181.value)*(((((-3.96)*gconst10))+(((12.0)*pz))+(((-3.63)*gconst10*gconst11)))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(((x182.value)*(((432.0)+(((-363.0)*(gconst10*gconst10))))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(IKsqr(((x181.value)*(((((-3.96)*gconst10))+(((12.0)*pz))+(((-3.63)*gconst10*gconst11))))))+IKsqr(((x182.value)*(((432.0)+(((-363.0)*(gconst10*gconst10)))))))-1) <= IKFAST_SINCOS_THRESH )
-                                                                                                    {
-//                                                                                                        continue;
-                                                                                                    }
-//                                                                                                    j10array[0]=IKatan2(((x181.value)*(((((-3.96)*gconst10))+(((12.0)*pz))+(((-3.63)*gconst10*gconst11))))), ((x182.value)*(((432.0)+(((-363.0)*(gconst10*gconst10)))))));
+//                                                                                                    j10array[0]=((-1.5707963267949)+(x196.value)+(((1.5707963267949)*(x197.value))));
 //                                                                                                    sj10array[0]=IKsin(j10array[0]);
 //                                                                                                    cj10array[0]=IKcos(j10array[0]);
                                                                                                     if (false)//if( j10array[0] > IKPI )
@@ -1910,19 +1911,18 @@ public:
 //                                                                                                        sj10 = sj10array[ij10];
                                                                                                         {
                                                                                                             IkReal evalcond[5];
-//                                                                                                            IkReal x183=IKsin(j10);
-//                                                                                                            IkReal x184=IKcos(j10);
-//                                                                                                            IkReal x185=((0.33)*gconst10);
-//                                                                                                            IkReal x186=((0.33)*gconst11);
-//                                                                                                            IkReal x187=((0.36)*x183);
-//                                                                                                            IkReal x188=((0.36)*x184);
-//                                                                                                            IkReal x189=((0.33)*x184);
-//                                                                                                            IkReal x190=(pz*x183);
-//                                                                                                            evalcond[0]=((-0.36)+(((-1.0)*x186))+(((-1.0)*x188))+x190);
-//                                                                                                            evalcond[1]=((((-1.0)*x187))+(((-1.0)*x185))+(((-1.0)*pz*x184)));
-//                                                                                                            evalcond[2]=((-0.1503)+(((0.72)*x190))+(((-1.0)*(pz*pz)))+(((-0.2592)*x184)));
-//                                                                                                            evalcond[3]=((((-1.0)*x187))+((x184*x185))+pz+(((-1.0)*x183*x186)));
-//                                                                                                            evalcond[4]=((-0.36)+(((-1.0)*x188))+(((-1.0)*x184*x186))+(((-1.0)*x183*x185)));
+//                                                                                                            IkReal x198=IKsin(j10);
+//                                                                                                            IkReal x199=IKcos(j10);
+//                                                                                                            IkReal x200=((0.24)*gconst11);
+//                                                                                                            IkReal x201=((0.24)*gconst10);
+//                                                                                                            IkReal x202=((0.36)*x198);
+//                                                                                                            IkReal x203=((0.36)*x199);
+//                                                                                                            IkReal x204=(pz*x198);
+//                                                                                                            evalcond[0]=((-0.36)+(((-1.0)*x200))+(((-1.0)*x203))+x204);
+//                                                                                                            evalcond[1]=((((-1.0)*x201))+(((-1.0)*x202))+(((-1.0)*pz*x199)));
+//                                                                                                            evalcond[2]=((-0.2016)+(((0.72)*x204))+(((-1.0)*(pz*pz)))+(((-0.2592)*x199)));
+//                                                                                                            evalcond[3]=((((-1.0)*x202))+(((-1.0)*x198*x200))+pz+((x199*x201)));
+//                                                                                                            evalcond[4]=((-0.36)+(((-1.0)*x203))+(((-1.0)*x198*x201))+(((-1.0)*x199*x200)));
                                                                                                             if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                                                             {
 //                                                                                                                continue;
@@ -1998,18 +1998,18 @@ public:
                                                                                                     IkReal j10array[1], cj10array[1], sj10array[1];
                                                                                                     bool j10valid[1]= {false};
 //                                                                                                    _nj10 = 1;
-//                                                                                                    IkReal x191=((825.0)*pz);
-//                                                                                                    CheckValue<IkReal> x192 = IKatan2WithCheck(IkReal(((((297.0)*gconst10))+(((-900.0)*pz))+(((-1.0)*gconst11*x191)))),IkReal(((324.0)+(((297.0)*gconst11))+((gconst10*x191)))),IKFAST_ATAN2_MAGTHRESH);
-                                                                                                    if (false)//if(!x192.valid)
+//                                                                                                    IkReal x205=((150.0)*pz);
+//                                                                                                    CheckValue<IkReal> x206=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-81.0)+(((-625.0)*(pz*pz))))),-1);
+                                                                                                    if (false)//if(!x206.valid)
                                                                                                     {
 //                                                                                                        continue;
                                                                                                     }
-//                                                                                                    CheckValue<IkReal> x193=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-324.0)+(((-2500.0)*(pz*pz))))),-1);
-                                                                                                    if (false)//if(!x193.valid)
+//                                                                                                    CheckValue<IkReal> x207 = IKatan2WithCheck(IkReal(((((54.0)*gconst10))+(((-225.0)*pz))+(((-1.0)*gconst11*x205)))),IkReal(((81.0)+(((54.0)*gconst11))+((gconst10*x205)))),IKFAST_ATAN2_MAGTHRESH);
+                                                                                                    if (false)//if(!x207.valid)
                                                                                                     {
 //                                                                                                        continue;
                                                                                                     }
-//                                                                                                    j10array[0]=((-1.5707963267949)+(x192.value)+(((1.5707963267949)*(x193.value))));
+//                                                                                                    j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x206.value)))+(x207.value));
 //                                                                                                    sj10array[0]=IKsin(j10array[0]);
 //                                                                                                    cj10array[0]=IKcos(j10array[0]);
                                                                                                     if (false)//if( j10array[0] > IKPI )
@@ -2043,19 +2043,18 @@ public:
 //                                                                                                        sj10 = sj10array[ij10];
                                                                                                         {
                                                                                                             IkReal evalcond[5];
-//                                                                                                            IkReal x194=IKsin(j10);
-//                                                                                                            IkReal x195=IKcos(j10);
-//                                                                                                            IkReal x196=((0.33)*gconst10);
-//                                                                                                            IkReal x197=((0.33)*gconst11);
-//                                                                                                            IkReal x198=((0.36)*x194);
-//                                                                                                            IkReal x199=((0.36)*x195);
-//                                                                                                            IkReal x200=((0.33)*x195);
-//                                                                                                            IkReal x201=(pz*x194);
-//                                                                                                            evalcond[0]=((-0.36)+(((-1.0)*x199))+(((-1.0)*x197))+x201);
-//                                                                                                            evalcond[1]=((((-1.0)*x198))+(((-1.0)*x196))+(((-1.0)*pz*x195)));
-//                                                                                                            evalcond[2]=((-0.1503)+(((0.72)*x201))+(((-1.0)*(pz*pz)))+(((-0.2592)*x195)));
-//                                                                                                            evalcond[3]=((((-1.0)*x194*x197))+(((-1.0)*x198))+((x195*x196))+pz);
-//                                                                                                            evalcond[4]=((-0.36)+(((-1.0)*x194*x196))+(((-1.0)*x195*x197))+(((-1.0)*x199)));
+//                                                                                                            IkReal x208=IKsin(j10);
+//                                                                                                            IkReal x209=IKcos(j10);
+//                                                                                                            IkReal x210=((0.24)*gconst11);
+//                                                                                                            IkReal x211=((0.24)*gconst10);
+//                                                                                                            IkReal x212=((0.36)*x208);
+//                                                                                                            IkReal x213=((0.36)*x209);
+//                                                                                                            IkReal x214=(pz*x208);
+//                                                                                                            evalcond[0]=((-0.36)+x214+(((-1.0)*x210))+(((-1.0)*x213)));
+//                                                                                                            evalcond[1]=((((-1.0)*x212))+(((-1.0)*x211))+(((-1.0)*pz*x209)));
+//                                                                                                            evalcond[2]=((-0.2016)+(((-0.2592)*x209))+(((0.72)*x214))+(((-1.0)*(pz*pz))));
+//                                                                                                            evalcond[3]=(((x209*x211))+pz+(((-1.0)*x212))+(((-1.0)*x208*x210)));
+//                                                                                                            evalcond[4]=((-0.36)+(((-1.0)*x213))+(((-1.0)*x208*x211))+(((-1.0)*x209*x210)));
                                                                                                             if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                                                             {
 //                                                                                                                continue;
@@ -2160,25 +2159,22 @@ public:
                                                                     IkReal j10array[1], cj10array[1], sj10array[1];
                                                                     bool j10valid[1]= {false};
 //                                                                    _nj10 = 1;
-//                                                                    IkReal x202=((297.0)*sj11);
-//                                                                    IkReal x203=((900.0)*pz);
-//                                                                    IkReal x204=(cj11*pz);
-//                                                                    IkReal x205=(x203+x202);
-//                                                                    CheckValue<IkReal> x206=IKPowWithIntegerCheck<IKFAST_REAL>(((((-1188.0)*sj11))+(((-3300.0)*x204))+(((-3600.0)*pz))),-1);
-                                                                    if (false)//if(!x206.valid)
+//                                                                    IkReal x215=(pz*sj11);
+//                                                                    CheckValue<IkReal> x216=IKPowWithIntegerCheck<IKFAST_REAL>(((1.08)+(((-2.0)*x215))+(((0.72)*cj11))),-1);
+                                                                    if (false)//if(!x216.valid)
                                                                     {
 //                                                                        continue;
                                                                     }
-//                                                                    CheckValue<IkReal> x207=IKPowWithIntegerCheck<IKFAST_REAL>(((((-1.0)*x205))+(((-825.0)*x204))),-1);
-                                                                    if (false)//if(!x207.valid)
+//                                                                    CheckValue<IkReal> x217=IKPowWithIntegerCheck<IKFAST_REAL>(((-27.0)+(((50.0)*x215))+(((-18.0)*cj11))),-1);
+                                                                    if (false)//if(!x217.valid)
                                                                     {
 //                                                                        continue;
                                                                     }
-                                                                    if (false)//if( IKabs(((x206.value)*(((1089.0)+(((-10000.0)*(pz*pz)))+(((-1089.0)*(cj11*cj11))))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(((x207.value)*(((((272.25)*cj11*sj11))+x205)))) < IKFAST_ATAN2_MAGTHRESH && IKabs(IKsqr(((x206.value)*(((1089.0)+(((-10000.0)*(pz*pz)))+(((-1089.0)*(cj11*cj11)))))))+IKsqr(((x207.value)*(((((272.25)*cj11*sj11))+x205))))-1) <= IKFAST_SINCOS_THRESH )
+                                                                    if (false)//if( IKabs(((x216.value)*(((((-0.72)*sj11))+(((3.0)*pz))+(((-0.48)*cj11*sj11)))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(((x217.value)*(((15.0)+(((12.0)*(cj11*cj11))))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(IKsqr(((x216.value)*(((((-0.72)*sj11))+(((3.0)*pz))+(((-0.48)*cj11*sj11))))))+IKsqr(((x217.value)*(((15.0)+(((12.0)*(cj11*cj11)))))))-1) <= IKFAST_SINCOS_THRESH )
                                                                     {
 //                                                                        continue;
                                                                     }
-//                                                                    j10array[0]=IKatan2(((x206.value)*(((1089.0)+(((-10000.0)*(pz*pz)))+(((-1089.0)*(cj11*cj11)))))), ((x207.value)*(((((272.25)*cj11*sj11))+x205))));
+//                                                                    j10array[0]=IKatan2(((x216.value)*(((((-0.72)*sj11))+(((3.0)*pz))+(((-0.48)*cj11*sj11))))), ((x217.value)*(((15.0)+(((12.0)*(cj11*cj11)))))));
 //                                                                    sj10array[0]=IKsin(j10array[0]);
 //                                                                    cj10array[0]=IKcos(j10array[0]);
                                                                     if (false)//if( j10array[0] > IKPI )
@@ -2212,18 +2208,19 @@ public:
 //                                                                        sj10 = sj10array[ij10];
                                                                         {
                                                                             IkReal evalcond[5];
-//                                                                            IkReal x208=IKsin(j10);
-//                                                                            IkReal x209=IKcos(j10);
-//                                                                            IkReal x210=((0.33)*sj11);
-//                                                                            IkReal x211=((0.33)*cj11);
-//                                                                            IkReal x212=((0.36)*x208);
-//                                                                            IkReal x213=((0.36)*x209);
-//                                                                            IkReal x214=(pz*x208);
-//                                                                            evalcond[0]=((-0.36)+x214+(((-1.0)*x211))+(((-1.0)*x213)));
-//                                                                            evalcond[1]=((((-1.0)*x212))+(((-1.0)*x210))+(((-1.0)*pz*x209)));
-//                                                                            evalcond[2]=((-0.1503)+(((-0.2592)*x209))+(((0.72)*x214))+(((-1.0)*(pz*pz))));
-//                                                                            evalcond[3]=(((x209*x210))+pz+(((-1.0)*x212))+(((-1.0)*x208*x211)));
-//                                                                            evalcond[4]=((-0.36)+(((-1.0)*x213))+(((-1.0)*x208*x210))+(((-1.0)*x209*x211)));
+//                                                                            IkReal x218=IKsin(j10);
+//                                                                            IkReal x219=IKcos(j10);
+//                                                                            IkReal x220=((0.24)*sj11);
+//                                                                            IkReal x221=((0.24)*cj11);
+//                                                                            IkReal x222=((0.36)*x218);
+//                                                                            IkReal x223=((0.36)*x219);
+//                                                                            IkReal x224=((0.24)*x218);
+//                                                                            IkReal x225=(pz*x218);
+//                                                                            evalcond[0]=((-0.36)+x225+(((-1.0)*x223))+(((-1.0)*x221)));
+//                                                                            evalcond[1]=((((-1.0)*pz*x219))+(((-1.0)*x220))+(((-1.0)*x222)));
+//                                                                            evalcond[2]=((-0.2016)+(((-0.2592)*x219))+(((0.72)*x225))+(((-1.0)*(pz*pz))));
+//                                                                            evalcond[3]=(((x219*x220))+pz+(((-1.0)*x218*x221))+(((-1.0)*x222)));
+//                                                                            evalcond[4]=((-0.36)+(((-1.0)*x219*x221))+(((-1.0)*x218*x220))+(((-1.0)*x223)));
                                                                             if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                             {
 //                                                                                continue;
@@ -2303,22 +2300,20 @@ public:
                                                             IkReal j10array[1], cj10array[1], sj10array[1];
                                                             bool j10valid[1]= {false};
 //                                                            _nj10 = 1;
-//                                                            IkReal x215=(pz*sj11);
-//                                                            CheckValue<IkReal> x216=IKPowWithIntegerCheck<IKFAST_REAL>(((4.32)+(((3.96)*cj11))+(((-11.0)*x215))),-1);
-                                                            if (false)//if(!x216.valid)
+//                                                            IkReal x226=((225.0)*pz);
+//                                                            IkReal x227=((54.0)*sj11);
+//                                                            IkReal x228=(x227+x226);
+//                                                            CheckValue<IkReal> x229=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((((-150.0)*cj11*pz))+(((-1.0)*x228)))),-1);
+                                                            if (false)//if(!x229.valid)
                                                             {
 //                                                                continue;
                                                             }
-//                                                            CheckValue<IkReal> x217=IKPowWithIntegerCheck<IKFAST_REAL>(((-432.0)+(((1100.0)*x215))+(((-396.0)*cj11))),-1);
-                                                            if (false)//if(!x217.valid)
+//                                                            CheckValue<IkReal> x230 = IKatan2WithCheck(IkReal(((36.0)+(((-36.0)*(cj11*cj11)))+(((-625.0)*(pz*pz))))),IkReal((x228+(((36.0)*cj11*sj11)))),IKFAST_ATAN2_MAGTHRESH);
+                                                            if (false)//if(!x230.valid)
                                                             {
 //                                                                continue;
                                                             }
-                                                            if (false)//if( IKabs(((x216.value)*(((((12.0)*pz))+(((-3.96)*sj11))+(((-3.63)*cj11*sj11)))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(((x217.value)*(((69.0)+(((363.0)*(cj11*cj11))))))) < IKFAST_ATAN2_MAGTHRESH && IKabs(IKsqr(((x216.value)*(((((12.0)*pz))+(((-3.96)*sj11))+(((-3.63)*cj11*sj11))))))+IKsqr(((x217.value)*(((69.0)+(((363.0)*(cj11*cj11)))))))-1) <= IKFAST_SINCOS_THRESH )
-                                                            {
-//                                                                continue;
-                                                            }
-//                                                            j10array[0]=IKatan2(((x216.value)*(((((12.0)*pz))+(((-3.96)*sj11))+(((-3.63)*cj11*sj11))))), ((x217.value)*(((69.0)+(((363.0)*(cj11*cj11)))))));
+//                                                            j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x229.value)))+(x230.value));
 //                                                            sj10array[0]=IKsin(j10array[0]);
 //                                                            cj10array[0]=IKcos(j10array[0]);
                                                             if (false)//if( j10array[0] > IKPI )
@@ -2352,18 +2347,19 @@ public:
 //                                                                sj10 = sj10array[ij10];
                                                                 {
                                                                     IkReal evalcond[5];
-//                                                                    IkReal x218=IKsin(j10);
-//                                                                    IkReal x219=IKcos(j10);
-//                                                                    IkReal x220=((0.33)*sj11);
-//                                                                    IkReal x221=((0.33)*cj11);
-//                                                                    IkReal x222=((0.36)*x218);
-//                                                                    IkReal x223=((0.36)*x219);
-//                                                                    IkReal x224=(pz*x218);
-//                                                                    evalcond[0]=((-0.36)+x224+(((-1.0)*x223))+(((-1.0)*x221)));
-//                                                                    evalcond[1]=((((-1.0)*pz*x219))+(((-1.0)*x220))+(((-1.0)*x222)));
-//                                                                    evalcond[2]=((-0.1503)+(((-0.2592)*x219))+(((0.72)*x224))+(((-1.0)*(pz*pz))));
-//                                                                    evalcond[3]=(((x219*x220))+pz+(((-1.0)*x218*x221))+(((-1.0)*x222)));
-//                                                                    evalcond[4]=((-0.36)+(((-1.0)*x219*x221))+(((-1.0)*x218*x220))+(((-1.0)*x223)));
+//                                                                    IkReal x231=IKsin(j10);
+//                                                                    IkReal x232=IKcos(j10);
+//                                                                    IkReal x233=((0.24)*sj11);
+//                                                                    IkReal x234=((0.24)*cj11);
+//                                                                    IkReal x235=((0.36)*x231);
+//                                                                    IkReal x236=((0.36)*x232);
+//                                                                    IkReal x237=((0.24)*x231);
+//                                                                    IkReal x238=(pz*x231);
+//                                                                    evalcond[0]=((-0.36)+(((-1.0)*x234))+(((-1.0)*x236))+x238);
+//                                                                    evalcond[1]=((((-1.0)*x233))+(((-1.0)*x235))+(((-1.0)*pz*x232)));
+//                                                                    evalcond[2]=((-0.2016)+(((0.72)*x238))+(((-0.2592)*x232))+(((-1.0)*(pz*pz))));
+//                                                                    evalcond[3]=(((x232*x233))+(((-1.0)*x235))+pz+(((-1.0)*x231*x234)));
+//                                                                    evalcond[4]=((-0.36)+(((-1.0)*x236))+(((-1.0)*x231*x233))+(((-1.0)*x232*x234)));
                                                                     if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                     {
 //                                                                        continue;
@@ -2443,18 +2439,18 @@ public:
                                                     IkReal j10array[1], cj10array[1], sj10array[1];
                                                     bool j10valid[1]= {false};
 //                                                    _nj10 = 1;
-//                                                    IkReal x225=((825.0)*pz);
-//                                                    CheckValue<IkReal> x226=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-324.0)+(((-2500.0)*(pz*pz))))),-1);
-                                                    if (false)//if(!x226.valid)
+//                                                    IkReal x239=((150.0)*pz);
+//                                                    CheckValue<IkReal> x240=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((-81.0)+(((-625.0)*(pz*pz))))),-1);
+                                                    if (false)//if(!x240.valid)
                                                     {
 //                                                        continue;
                                                     }
-//                                                    CheckValue<IkReal> x227 = IKatan2WithCheck(IkReal(((((297.0)*sj11))+(((-1.0)*cj11*x225))+(((-900.0)*pz)))),IkReal(((324.0)+(((297.0)*cj11))+((sj11*x225)))),IKFAST_ATAN2_MAGTHRESH);
-                                                    if (false)//if(!x227.valid)
+//                                                    CheckValue<IkReal> x241 = IKatan2WithCheck(IkReal(((((54.0)*sj11))+(((-225.0)*pz))+(((-1.0)*cj11*x239)))),IkReal(((81.0)+(((54.0)*cj11))+((sj11*x239)))),IKFAST_ATAN2_MAGTHRESH);
+                                                    if (false)//if(!x241.valid)
                                                     {
 //                                                        continue;
                                                     }
-//                                                    j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x226.value)))+(x227.value));
+//                                                    j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x240.value)))+(x241.value));
 //                                                    sj10array[0]=IKsin(j10array[0]);
 //                                                    cj10array[0]=IKcos(j10array[0]);
                                                     if (false)//if( j10array[0] > IKPI )
@@ -2488,18 +2484,19 @@ public:
 //                                                        sj10 = sj10array[ij10];
                                                         {
                                                             IkReal evalcond[5];
-//                                                            IkReal x228=IKsin(j10);
-//                                                            IkReal x229=IKcos(j10);
-//                                                            IkReal x230=((0.33)*sj11);
-//                                                            IkReal x231=((0.33)*cj11);
-//                                                            IkReal x232=((0.36)*x228);
-//                                                            IkReal x233=((0.36)*x229);
-//                                                            IkReal x234=(pz*x228);
-//                                                            evalcond[0]=((-0.36)+(((-1.0)*x233))+(((-1.0)*x231))+x234);
-//                                                            evalcond[1]=((((-1.0)*x230))+(((-1.0)*x232))+(((-1.0)*pz*x229)));
-//                                                            evalcond[2]=((-0.1503)+(((0.72)*x234))+(((-0.2592)*x229))+(((-1.0)*(pz*pz))));
-//                                                            evalcond[3]=(((x229*x230))+(((-1.0)*x232))+pz+(((-1.0)*x228*x231)));
-//                                                            evalcond[4]=((-0.36)+(((-1.0)*x233))+(((-1.0)*x229*x231))+(((-1.0)*x228*x230)));
+//                                                            IkReal x242=IKsin(j10);
+//                                                            IkReal x243=IKcos(j10);
+//                                                            IkReal x244=((0.24)*sj11);
+//                                                            IkReal x245=((0.24)*cj11);
+//                                                            IkReal x246=((0.36)*x242);
+//                                                            IkReal x247=((0.36)*x243);
+//                                                            IkReal x248=((0.24)*x242);
+//                                                            IkReal x249=(pz*x242);
+//                                                            evalcond[0]=((-0.36)+x249+(((-1.0)*x245))+(((-1.0)*x247)));
+//                                                            evalcond[1]=((((-1.0)*pz*x243))+(((-1.0)*x244))+(((-1.0)*x246)));
+//                                                            evalcond[2]=((-0.2016)+(((-1.0)*(pz*pz)))+(((-0.2592)*x243))+(((0.72)*x249)));
+//                                                            evalcond[3]=((((-1.0)*x242*x245))+pz+(((-1.0)*x246))+((x243*x244)));
+//                                                            evalcond[4]=((-0.36)+(((-1.0)*x242*x244))+(((-1.0)*x243*x245))+(((-1.0)*x247)));
                                                             if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                             {
 //                                                                continue;
@@ -2603,16 +2600,16 @@ public:
                         IkReal j9array[2], cj9array[2], sj9array[2];
                         bool j9valid[2]= {false};
                         _nj9 = 2;
-                        CheckValue<IkReal> x236 = IKatan2WithCheck(IkReal(((-1.0)*px)),IkReal(((-1.0)*py)),IKFAST_ATAN2_MAGTHRESH);
-                        if(!x236.valid)
+                        CheckValue<IkReal> x251 = IKatan2WithCheck(IkReal(((-1.0)*px)),IkReal(((-1.0)*py)),IKFAST_ATAN2_MAGTHRESH);
+                        if(!x251.valid)
                         {
 //                            continue;
                         }
-                        IkReal x235=x236.value;
-                        j9array[0]=((-1.0)*x235);
+                        IkReal x250=x251.value;
+                        j9array[0]=((-1.0)*x250);
                         sj9array[0]=IKsin(j9array[0]);
                         cj9array[0]=IKcos(j9array[0]);
-                        j9array[1]=((3.14159265358979)+(((-1.0)*x235)));
+                        j9array[1]=((3.14159265358979)+(((-1.0)*x250)));
                         sj9array[1]=IKsin(j9array[1]);
                         cj9array[1]=IKcos(j9array[1]);
                         if( j9array[0] > IKPI )
@@ -2658,7 +2655,7 @@ public:
                                 IkReal j11array[2], cj11array[2], sj11array[2];
                                 bool j11valid[2]= {false};
                                 _nj11 = 2;
-                                cj11array[0]=((-0.458333333333333)+(((4.20875420875421)*(pz*pz)))+(((4.20875420875421)*(py*py)))+(((3.03030303030303)*cj9*py))+(((4.20875420875421)*(px*px)))+(((-3.03030303030303)*px*sj9)));
+                                cj11array[0]=((-0.333333333333333)+(((-4.16666666666667)*px*sj9))+(((5.78703703703704)*(py*py)))+(((5.78703703703704)*(pz*pz)))+(((5.78703703703704)*(px*px)))+(((4.16666666666667)*cj9*py)));
                                 if( cj11array[0] >= -1-IKFAST_SINCOS_THRESH && cj11array[0] <= 1+IKFAST_SINCOS_THRESH )
                                 {
                                     j11valid[0] = j11valid[1] = true;
@@ -2699,43 +2696,44 @@ public:
 
                                     {
                                         IkReal j10eval[3];
-                                        IkReal x237=(px*sj9);
-                                        IkReal x238=((3300.0)*cj11);
-                                        IkReal x239=(cj9*py);
-                                        IkReal x240=((3300.0)*sj11);
-                                        j10eval[0]=((1.00378787878788)+cj11);
-                                        j10eval[1]=((IKabs(((((3600.0)*pz))+(((-1188.0)*sj11))+((x237*x240))+((pz*x238))+(((-1.0)*x239*x240)))))+(IKabs(((-1296.0)+((x237*x238))+(((-1.0)*pz*x240))+(((3600.0)*x237))+(((-3600.0)*x239))+(((-1.0)*x238*x239))+(((-1188.0)*cj11))))));
-                                        j10eval[2]=IKsign(((2385.0)+(((2376.0)*cj11))));
+                                        IkReal x252=((150.0)*sj11);
+                                        IkReal x253=(cj9*py);
+                                        IkReal x254=(px*sj9);
+                                        IkReal x255=((150.0)*cj11);
+                                        j10eval[0]=((1.08333333333333)+cj11);
+                                        j10eval[1]=((IKabs(((((-1.0)*x252*x253))+(((225.0)*pz))+((pz*x255))+(((-54.0)*sj11))+((x252*x254)))))+(IKabs(((-81.0)+(((225.0)*x254))+(((-225.0)*x253))+(((-1.0)*pz*x252))+((x254*x255))+(((-1.0)*x253*x255))+(((-54.0)*cj11))))));
+                                        j10eval[2]=IKsign(((117.0)+(((108.0)*cj11))));
                                         if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  || IKabs(j10eval[2]) < 0.0000010000000000  )
                                         {
                                             {
                                                 IkReal j10eval[3];
-//                                                IkReal x241=(cj9*py);
-//                                                IkReal x242=((2.77777777777778)*cj11);
-//                                                IkReal x243=(pz*sj11);
-//                                                IkReal x244=(px*sj9);
-//                                                IkReal x245=((100.0)*pz);
-//                                                IkReal x246=((33.0)*cj11);
-//                                                j10eval[0]=((1.09090909090909)+(((-1.0)*x242*x244))+(((-3.03030303030303)*x244))+cj11+(((-2.77777777777778)*x243))+(((3.03030303030303)*x241))+((x241*x242)));
-//                                                j10eval[1]=IKsign(((12.96)+(((36.0)*x241))+(((-33.0)*x243))+((x241*x246))+(((-36.0)*x244))+(((-1.0)*x244*x246))+(((11.88)*cj11))));
-//                                                j10eval[2]=((IKabs(((((-10.89)*cj11*sj11))+((x241*x245))+(((36.0)*pz))+(((-11.88)*sj11))+(((-1.0)*x244*x245)))))+(IKabs(((-12.96)+(((-10.89)*(cj11*cj11)))+(((-23.76)*cj11))+((pz*x245))))));
+//                                                IkReal x256=((6.0)*cj11);
+//                                                IkReal x257=(px*sj9);
+//                                                IkReal x258=(pz*sj11);
+//                                                IkReal x259=(cj9*py);
+//                                                IkReal x260=((25.0)*pz);
+//                                                IkReal x261=((2.77777777777778)*cj11);
+//                                                j10eval[0]=((1.5)+((x259*x261))+(((-4.16666666666667)*x257))+(((4.16666666666667)*x259))+cj11+(((-2.77777777777778)*x258))+(((-1.0)*x257*x261)));
+//                                                j10eval[1]=((IKabs((((x259*x260))+(((9.0)*pz))+(((-2.16)*sj11))+(((-1.0)*x257*x260))+(((-1.44)*cj11*sj11)))))+(IKabs(((-3.24)+((pz*x260))+(((-4.32)*cj11))+(((-1.44)*(cj11*cj11)))))));
+//                                                j10eval[2]=IKsign(((3.24)+(((2.16)*cj11))+(((-1.0)*x256*x257))+((x256*x259))+(((-9.0)*x257))+(((9.0)*x259))+(((-6.0)*x258))));
                                                 if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  || IKabs(j10eval[2]) < 0.0000010000000000  )
                                                 {
                                                     {
                                                         IkReal j10eval[3];
-//                                                        IkReal x247=cj9*cj9;
-//                                                        IkReal x248=px*px;
-//                                                        IkReal x249=py*py;
-//                                                        IkReal x250=pz*pz;
-//                                                        IkReal x251=(px*sj9);
-//                                                        IkReal x252=((33.0)*sj11);
-//                                                        IkReal x253=((33.0)*cj11);
-//                                                        IkReal x254=(cj9*py);
-//                                                        IkReal x255=((7.71604938271605)*x247);
-//                                                        IkReal x256=((100.0)*x247);
-//                                                        j10eval[0]=((1.0)+((x249*x255))+(((7.71604938271605)*x248))+(((-5.55555555555556)*x251))+(((-1.0)*x248*x255))+(((5.55555555555556)*x254))+(((-15.4320987654321)*x251*x254))+(((7.71604938271605)*x250)));
-//                                                        j10eval[1]=IKsign(((12.96)+(((-200.0)*x251*x254))+((x249*x256))+(((-1.0)*x248*x256))+(((100.0)*x250))+(((-72.0)*x251))+(((100.0)*x248))+(((72.0)*x254))));
-//                                                        j10eval[2]=((IKabs(((((-1.0)*x252*x254))+((pz*x253))+((x251*x252))+(((36.0)*pz))+(((-11.88)*sj11)))))+(IKabs(((-12.96)+((x251*x253))+(((-1.0)*pz*x252))+(((-36.0)*x254))+(((36.0)*x251))+(((-1.0)*x253*x254))+(((-11.88)*cj11))))));
+//                                                        IkReal x262=cj9*cj9;
+//                                                        IkReal x263=px*px;
+//                                                        IkReal x264=pz*pz;
+//                                                        IkReal x265=py*py;
+//                                                        IkReal x266=((6.0)*pz);
+//                                                        IkReal x267=(px*sj9);
+//                                                        IkReal x268=(cj9*py);
+//                                                        IkReal x269=((6.0)*cj11);
+//                                                        IkReal x270=((6.0)*sj11);
+//                                                        IkReal x271=((7.71604938271605)*x262);
+//                                                        IkReal x272=((25.0)*x262);
+//                                                        j10eval[0]=((1.0)+(((7.71604938271605)*x263))+(((7.71604938271605)*x264))+(((-1.0)*x263*x271))+(((-15.4320987654321)*x267*x268))+(((5.55555555555556)*x268))+((x265*x271))+(((-5.55555555555556)*x267)));
+//                                                        j10eval[1]=IKsign(((3.24)+(((18.0)*x268))+(((-1.0)*x263*x272))+(((-50.0)*x267*x268))+(((-18.0)*x267))+(((25.0)*x263))+(((25.0)*x264))+((x265*x272))));
+//                                                        j10eval[2]=((IKabs(((-3.24)+(((-2.16)*cj11))+((x267*x269))+(((-9.0)*x268))+(((9.0)*x267))+(((-1.0)*x268*x269))+(((-1.0)*sj11*x266)))))+(IKabs(((((9.0)*pz))+(((-2.16)*sj11))+((cj11*x266))+(((-1.0)*x268*x270))+((x267*x270))))));
                                                         if (false)//if( IKabs(j10eval[0]) < 0.0000010000000000  || IKabs(j10eval[1]) < 0.0000010000000000  || IKabs(j10eval[2]) < 0.0000010000000000  )
                                                         {
 //                                                            continue; // no branches [j10]
@@ -2747,24 +2745,24 @@ public:
                                                                 IkReal j10array[1], cj10array[1], sj10array[1];
                                                                 bool j10valid[1]= {false};
 //                                                                _nj10 = 1;
-//                                                                IkReal x257=cj9*cj9;
-//                                                                IkReal x258=px*px;
-//                                                                IkReal x259=((33.0)*cj11);
-//                                                                IkReal x260=(cj9*py);
-//                                                                IkReal x261=(px*sj9);
-//                                                                IkReal x262=((33.0)*sj11);
-//                                                                IkReal x263=((100.0)*x258);
-//                                                                CheckValue<IkReal> x264=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((12.96)+(((-72.0)*x261))+(((72.0)*x260))+(((100.0)*(pz*pz)))+x263+(((-200.0)*x260*x261))+(((-1.0)*x257*x263))+(((100.0)*x257*(py*py))))),-1);
-                                                                if (false)//if(!x264.valid)
+//                                                                IkReal x273=cj9*cj9;
+//                                                                IkReal x274=px*px;
+//                                                                IkReal x275=(px*sj9);
+//                                                                IkReal x276=((6.0)*cj11);
+//                                                                IkReal x277=(cj9*py);
+//                                                                IkReal x278=((6.0)*sj11);
+//                                                                IkReal x279=((25.0)*x274);
+//                                                                CheckValue<IkReal> x280 = IKatan2WithCheck(IkReal((((x275*x278))+(((-1.0)*x277*x278))+(((9.0)*pz))+(((-2.16)*sj11))+((pz*x276)))),IkReal(((-3.24)+(((-2.16)*cj11))+(((-1.0)*pz*x278))+((x275*x276))+(((9.0)*x275))+(((-9.0)*x277))+(((-1.0)*x276*x277)))),IKFAST_ATAN2_MAGTHRESH);
+                                                                if (false)//if(!x280.valid)
                                                                 {
 //                                                                    continue;
                                                                 }
-//                                                                CheckValue<IkReal> x265 = IKatan2WithCheck(IkReal((((pz*x259))+(((36.0)*pz))+((x261*x262))+(((-11.88)*sj11))+(((-1.0)*x260*x262)))),IkReal(((-12.96)+(((36.0)*x261))+((x259*x261))+(((-1.0)*x259*x260))+(((-11.88)*cj11))+(((-1.0)*pz*x262))+(((-36.0)*x260)))),IKFAST_ATAN2_MAGTHRESH);
-                                                                if (false)//if(!x265.valid)
+//                                                                CheckValue<IkReal> x281=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((3.24)+(((25.0)*(pz*pz)))+(((25.0)*x273*(py*py)))+(((-1.0)*x273*x279))+(((18.0)*x277))+x279+(((-18.0)*x275))+(((-50.0)*x275*x277)))),-1);
+                                                                if (false)//if(!x281.valid)
                                                                 {
 //                                                                    continue;
                                                                 }
-//                                                                j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x264.value)))+(x265.value));
+//                                                                j10array[0]=((-1.5707963267949)+(x280.value)+(((1.5707963267949)*(x281.value))));
 //                                                                sj10array[0]=IKsin(j10array[0]);
 //                                                                cj10array[0]=IKcos(j10array[0]);
                                                                 if (false)//if( j10array[0] > IKPI )
@@ -2798,22 +2796,22 @@ public:
 //                                                                    sj10 = sj10array[ij10];
                                                                     {
                                                                         IkReal evalcond[5];
-//                                                                        IkReal x266=IKsin(j10);
-//                                                                        IkReal x267=IKcos(j10);
-//                                                                        IkReal x268=(px*sj9);
-//                                                                        IkReal x269=((0.33)*cj11);
-//                                                                        IkReal x270=(cj9*py);
-//                                                                        IkReal x271=((0.33)*sj11);
-//                                                                        IkReal x272=((0.36)*x267);
-//                                                                        IkReal x273=((0.36)*x266);
-//                                                                        IkReal x274=(pz*x266);
-//                                                                        IkReal x275=((1.0)*x267);
-//                                                                        IkReal x276=((0.72)*x267);
-//                                                                        evalcond[0]=(pz+(((-1.0)*x273))+(((-1.0)*x266*x269))+((x267*x271)));
-//                                                                        evalcond[1]=((-0.36)+(((-1.0)*x270))+x268+(((-1.0)*x267*x269))+(((-1.0)*x272))+(((-1.0)*x266*x271)));
-//                                                                        evalcond[2]=((-0.36)+((x267*x268))+x274+(((-1.0)*x272))+(((-1.0)*x270*x275))+(((-1.0)*x269)));
-//                                                                        evalcond[3]=((((-1.0)*pz*x275))+((x266*x268))+(((-1.0)*x271))+(((-1.0)*x273))+(((-1.0)*x266*x270)));
-//                                                                        evalcond[4]=((-0.1503)+(((-1.0)*(px*px)))+(((-0.72)*x270))+(((-1.0)*(pz*pz)))+(((-0.2592)*x267))+(((-1.0)*x270*x276))+(((-1.0)*(py*py)))+(((0.72)*x274))+(((0.72)*x268))+((x268*x276)));
+//                                                                        IkReal x282=IKsin(j10);
+//                                                                        IkReal x283=IKcos(j10);
+//                                                                        IkReal x284=((0.24)*cj11);
+//                                                                        IkReal x285=((0.24)*sj11);
+//                                                                        IkReal x286=(px*sj9);
+//                                                                        IkReal x287=(cj9*py);
+//                                                                        IkReal x288=((0.36)*x283);
+//                                                                        IkReal x289=((0.36)*x282);
+//                                                                        IkReal x290=(pz*x282);
+//                                                                        IkReal x291=((1.0)*x283);
+//                                                                        IkReal x292=((0.72)*x283);
+//                                                                        evalcond[0]=((((-1.0)*x282*x284))+pz+(((-1.0)*x289))+((x283*x285)));
+//                                                                        evalcond[1]=((-0.36)+x286+(((-1.0)*x282*x285))+(((-1.0)*x287))+(((-1.0)*x288))+(((-1.0)*x283*x284)));
+//                                                                        evalcond[2]=((-0.36)+x290+(((-1.0)*x287*x291))+(((-1.0)*x284))+(((-1.0)*x288))+((x283*x286)));
+//                                                                        evalcond[3]=((((-1.0)*x282*x287))+(((-1.0)*pz*x291))+(((-1.0)*x285))+(((-1.0)*x289))+((x282*x286)));
+//                                                                        evalcond[4]=((-0.2016)+(((-0.2592)*x283))+(((0.72)*x290))+(((-1.0)*(px*px)))+(((-0.72)*x287))+(((0.72)*x286))+((x286*x292))+(((-1.0)*(pz*pz)))+(((-1.0)*x287*x292))+(((-1.0)*(py*py))));
                                                                         if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                         {
 //                                                                            continue;
@@ -2854,21 +2852,21 @@ public:
                                                         IkReal j10array[1], cj10array[1], sj10array[1];
                                                         bool j10valid[1]= {false};
 //                                                        _nj10 = 1;
-//                                                        IkReal x277=(cj9*py);
-//                                                        IkReal x278=((33.0)*cj11);
-//                                                        IkReal x279=((100.0)*pz);
-//                                                        IkReal x280=(px*sj9);
-//                                                        CheckValue<IkReal> x281 = IKatan2WithCheck(IkReal(((((-10.89)*cj11*sj11))+((x277*x279))+(((36.0)*pz))+(((-11.88)*sj11))+(((-1.0)*x279*x280)))),IkReal(((-12.96)+(((-10.89)*(cj11*cj11)))+(((-23.76)*cj11))+((pz*x279)))),IKFAST_ATAN2_MAGTHRESH);
-                                                        if (false)//if(!x281.valid)
+//                                                        IkReal x293=((6.0)*cj11);
+//                                                        IkReal x294=(cj9*py);
+//                                                        IkReal x295=(px*sj9);
+//                                                        IkReal x296=((25.0)*pz);
+//                                                        CheckValue<IkReal> x297=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((3.24)+(((-9.0)*x295))+(((9.0)*x294))+(((2.16)*cj11))+(((-6.0)*pz*sj11))+(((-1.0)*x293*x295))+((x293*x294)))),-1);
+                                                        if (false)//if(!x297.valid)
                                                         {
 //                                                            continue;
                                                         }
-//                                                        CheckValue<IkReal> x282=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((12.96)+(((36.0)*x277))+(((-33.0)*pz*sj11))+((x277*x278))+(((-36.0)*x280))+(((-1.0)*x278*x280))+(((11.88)*cj11)))),-1);
-                                                        if (false)//if(!x282.valid)
+//                                                        CheckValue<IkReal> x298 = IKatan2WithCheck(IkReal(((((9.0)*pz))+(((-2.16)*sj11))+(((-1.0)*x295*x296))+((x294*x296))+(((-1.44)*cj11*sj11)))),IkReal(((-3.24)+((pz*x296))+(((-4.32)*cj11))+(((-1.44)*(cj11*cj11))))),IKFAST_ATAN2_MAGTHRESH);
+                                                        if (false)//if(!x298.valid)
                                                         {
 //                                                            continue;
                                                         }
-//                                                        j10array[0]=((-1.5707963267949)+(x281.value)+(((1.5707963267949)*(x282.value))));
+//                                                        j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x297.value)))+(x298.value));
 //                                                        sj10array[0]=IKsin(j10array[0]);
 //                                                        cj10array[0]=IKcos(j10array[0]);
                                                         if (false)//if( j10array[0] > IKPI )
@@ -2902,22 +2900,22 @@ public:
 //                                                            sj10 = sj10array[ij10];
                                                             {
                                                                 IkReal evalcond[5];
-//                                                                IkReal x283=IKsin(j10);
-//                                                                IkReal x284=IKcos(j10);
-//                                                                IkReal x285=(px*sj9);
-//                                                                IkReal x286=((0.33)*cj11);
-//                                                                IkReal x287=(cj9*py);
-//                                                                IkReal x288=((0.33)*sj11);
-//                                                                IkReal x289=((0.36)*x284);
-//                                                                IkReal x290=((0.36)*x283);
-//                                                                IkReal x291=(pz*x283);
-//                                                                IkReal x292=((1.0)*x284);
-//                                                                IkReal x293=((0.72)*x284);
-//                                                                evalcond[0]=(((x284*x288))+(((-1.0)*x290))+pz+(((-1.0)*x283*x286)));
-//                                                                evalcond[1]=((-0.36)+x285+(((-1.0)*x287))+(((-1.0)*x284*x286))+(((-1.0)*x289))+(((-1.0)*x283*x288)));
-//                                                                evalcond[2]=((-0.36)+((x284*x285))+x291+(((-1.0)*x287*x292))+(((-1.0)*x286))+(((-1.0)*x289)));
-//                                                                evalcond[3]=((((-1.0)*pz*x292))+(((-1.0)*x290))+(((-1.0)*x288))+(((-1.0)*x283*x287))+((x283*x285)));
-//                                                                evalcond[4]=((-0.1503)+(((-0.2592)*x284))+(((0.72)*x291))+(((-1.0)*(px*px)))+(((-0.72)*x287))+(((0.72)*x285))+((x285*x293))+(((-1.0)*(pz*pz)))+(((-1.0)*x287*x293))+(((-1.0)*(py*py))));
+//                                                                IkReal x299=IKsin(j10);
+//                                                                IkReal x300=IKcos(j10);
+//                                                                IkReal x301=((0.24)*cj11);
+//                                                                IkReal x302=((0.24)*sj11);
+//                                                                IkReal x303=(px*sj9);
+//                                                                IkReal x304=(cj9*py);
+//                                                                IkReal x305=((0.36)*x300);
+//                                                                IkReal x306=((0.36)*x299);
+//                                                                IkReal x307=(pz*x299);
+//                                                                IkReal x308=((1.0)*x300);
+//                                                                IkReal x309=((0.72)*x300);
+//                                                                evalcond[0]=(pz+(((-1.0)*x299*x301))+((x300*x302))+(((-1.0)*x306)));
+//                                                                evalcond[1]=((-0.36)+(((-1.0)*x304))+x303+(((-1.0)*x299*x302))+(((-1.0)*x300*x301))+(((-1.0)*x305)));
+//                                                                evalcond[2]=((-0.36)+x307+(((-1.0)*x304*x308))+((x300*x303))+(((-1.0)*x301))+(((-1.0)*x305)));
+//                                                                evalcond[3]=(((x299*x303))+(((-1.0)*x299*x304))+(((-1.0)*pz*x308))+(((-1.0)*x306))+(((-1.0)*x302)));
+//                                                                evalcond[4]=((-0.2016)+(((0.72)*x303))+(((0.72)*x307))+(((-1.0)*(px*px)))+((x303*x309))+(((-0.2592)*x300))+(((-1.0)*(pz*pz)))+(((-1.0)*x304*x309))+(((-1.0)*(py*py)))+(((-0.72)*x304)));
                                                                 if (false)//if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                                 {
 //                                                                    continue;
@@ -2958,21 +2956,21 @@ public:
                                                 IkReal j10array[1], cj10array[1], sj10array[1];
                                                 bool j10valid[1]= {false};
                                                 _nj10 = 1;
-                                                IkReal x294=((3300.0)*cj11);
-                                                IkReal x295=(cj9*py);
-                                                IkReal x296=((3300.0)*sj11);
-                                                IkReal x297=(px*sj9);
-                                                CheckValue<IkReal> x298 = IKatan2WithCheck(IkReal(((((3600.0)*pz))+(((-1188.0)*sj11))+((pz*x294))+(((-1.0)*x295*x296))+((x296*x297)))),IkReal(((-1296.0)+(((3600.0)*x297))+(((-1.0)*pz*x296))+(((-3600.0)*x295))+(((-1188.0)*cj11))+((x294*x297))+(((-1.0)*x294*x295)))),IKFAST_ATAN2_MAGTHRESH);
-                                                if(!x298.valid)
+                                                IkReal x310=((150.0)*sj11);
+                                                IkReal x311=(cj9*py);
+                                                IkReal x312=(px*sj9);
+                                                IkReal x313=((150.0)*cj11);
+                                                CheckValue<IkReal> x314=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((117.0)+(((108.0)*cj11)))),-1);
+                                                if(!x314.valid)
                                                 {
 //                                                    continue;
                                                 }
-                                                CheckValue<IkReal> x299=IKPowWithIntegerCheck<IKFAST_REAL>(IKsign(((2385.0)+(((2376.0)*cj11)))),-1);
-                                                if(!x299.valid)
+                                                CheckValue<IkReal> x315 = IKatan2WithCheck(IkReal((((x310*x312))+(((225.0)*pz))+(((-1.0)*x310*x311))+(((-54.0)*sj11))+((pz*x313)))),IkReal(((-81.0)+(((-225.0)*x311))+((x312*x313))+(((-1.0)*pz*x310))+(((225.0)*x312))+(((-54.0)*cj11))+(((-1.0)*x311*x313)))),IKFAST_ATAN2_MAGTHRESH);
+                                                if(!x315.valid)
                                                 {
 //                                                    continue;
                                                 }
-                                                j10array[0]=((-1.5707963267949)+(x298.value)+(((1.5707963267949)*(x299.value))));
+                                                j10array[0]=((-1.5707963267949)+(((1.5707963267949)*(x314.value)))+(x315.value));
                                                 sj10array[0]=IKsin(j10array[0]);
                                                 cj10array[0]=IKcos(j10array[0]);
                                                 if( j10array[0] > IKPI )
@@ -3006,22 +3004,22 @@ public:
                                                     sj10 = sj10array[ij10];
                                                     {
                                                         IkReal evalcond[5];
-                                                        IkReal x300=IKsin(j10);
-                                                        IkReal x301=IKcos(j10);
-                                                        IkReal x302=(px*sj9);
-                                                        IkReal x303=((0.33)*cj11);
-                                                        IkReal x304=(cj9*py);
-                                                        IkReal x305=((0.33)*sj11);
-                                                        IkReal x306=((0.36)*x301);
-                                                        IkReal x307=((0.36)*x300);
-                                                        IkReal x308=(pz*x300);
-                                                        IkReal x309=((1.0)*x301);
-                                                        IkReal x310=((0.72)*x301);
-                                                        evalcond[0]=(((x301*x305))+pz+(((-1.0)*x300*x303))+(((-1.0)*x307)));
-                                                        evalcond[1]=((-0.36)+(((-1.0)*x301*x303))+(((-1.0)*x304))+x302+(((-1.0)*x300*x305))+(((-1.0)*x306)));
-                                                        evalcond[2]=((-0.36)+((x301*x302))+x308+(((-1.0)*x304*x309))+(((-1.0)*x306))+(((-1.0)*x303)));
-                                                        evalcond[3]=((((-1.0)*x300*x304))+(((-1.0)*pz*x309))+((x300*x302))+(((-1.0)*x307))+(((-1.0)*x305)));
-                                                        evalcond[4]=((-0.1503)+((x302*x310))+(((0.72)*x302))+(((0.72)*x308))+(((-1.0)*(px*px)))+(((-0.2592)*x301))+(((-1.0)*x304*x310))+(((-1.0)*(pz*pz)))+(((-1.0)*(py*py)))+(((-0.72)*x304)));
+                                                        IkReal x316=IKsin(j10);
+                                                        IkReal x317=IKcos(j10);
+                                                        IkReal x318=((0.24)*cj11);
+                                                        IkReal x319=((0.24)*sj11);
+                                                        IkReal x320=(px*sj9);
+                                                        IkReal x321=(cj9*py);
+                                                        IkReal x322=((0.36)*x317);
+                                                        IkReal x323=((0.36)*x316);
+                                                        IkReal x324=(pz*x316);
+                                                        IkReal x325=((1.0)*x317);
+                                                        IkReal x326=((0.72)*x317);
+                                                        evalcond[0]=(((x317*x319))+(((-1.0)*x323))+pz+(((-1.0)*x316*x318)));
+                                                        evalcond[1]=((-0.36)+(((-1.0)*x322))+(((-1.0)*x321))+x320+(((-1.0)*x317*x318))+(((-1.0)*x316*x319)));
+                                                        evalcond[2]=((-0.36)+(((-1.0)*x321*x325))+(((-1.0)*x322))+x324+(((-1.0)*x318))+((x317*x320)));
+                                                        evalcond[3]=((((-1.0)*x323))+(((-1.0)*x319))+((x316*x320))+(((-1.0)*x316*x321))+(((-1.0)*pz*x325)));
+                                                        evalcond[4]=((-0.2016)+(((0.72)*x320))+(((0.72)*x324))+(((-1.0)*(px*px)))+(((-1.0)*x321*x326))+((x320*x326))+(((-0.2592)*x317))+(((-0.72)*x321))+(((-1.0)*(pz*pz)))+(((-1.0)*(py*py))));
                                                         if( IKabs(evalcond[0]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[1]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[2]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[3]) > IKFAST_EVALCOND_THRESH  || IKabs(evalcond[4]) > IKFAST_EVALCOND_THRESH  )
                                                         {
 //                                                            continue;
@@ -3084,7 +3082,7 @@ IKFAST_API bool ComputeIk2(const IkReal* eetrans, const IkReal* eerot, const IkR
 
 IKFAST_API const char* GetKinematicsHash()
 {
-//    return "<robot:GenericRobot - Hunker (f7071dcf5459c249fade087ece139e54)>";
+//    return "<robot:GenericRobot - Hunker (478e384d3e70b2b7bae27b584cda0040)>";
 }
 
 IKFAST_API const char* GetIkFastVersion()

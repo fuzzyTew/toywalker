@@ -385,9 +385,9 @@ Array3 ServoRhobanXL320::pidGain()
 {
 	READ(xl320.ram.gain);
 	return {
-		xl320.ram.gain.proportional / 8.0,
-		xl320.ram.gain.integral * 1000.0 / 2048.0,
-		xl320.ram.gain.derivative * 4.0 / 1000.0
+		xl320.ram.gain.proportional / Real(8.0),
+		xl320.ram.gain.integral * Real(1000.0 / 2048.0),
+		xl320.ram.gain.derivative * Real(4.0 / 1000.0)
 	};
 }
 
@@ -398,9 +398,9 @@ Array3 ServoRhobanXL320::pidGain(Array3 pid)
 	xl320.ram.gain.derivative = pid[2] * 1000.0 / 4.0;
 	WRITE(xl320.ram.gain);
 	return {
-		xl320.ram.gain.proportional / 8.0,
-		xl320.ram.gain.integral * 1000.0 / 2048.0,
-		xl320.ram.gain.derivative * 4.0 / 1000.0
+		xl320.ram.gain.proportional / Real(8.0),
+		xl320.ram.gain.integral * Real(1000.0 / 2048.0),
+		xl320.ram.gain.derivative * Real(4.0 / 1000.0)
 	};
 }
 

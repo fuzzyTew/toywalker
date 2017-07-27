@@ -47,7 +47,7 @@ next:
 			return selectable[selector.select(*this, &selectable[0], selectable.size())];
 		}
 	}
-	return Angles((size_t)0);
+	return Angles((int)0);
 }
 
 }

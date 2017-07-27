@@ -12,7 +12,7 @@ template <size_t MAX_JOINTS, size_t _MAX_SOLUTIONS=8>
 class IkFastSolutionArray : public ikfast::IkSolutionListBase<Real>
 {
 public:
-	static constexpr size_t MAX_SOLUTIONS = _MAX_SOLUTIONS;
+	static constexpr int MAX_SOLUTIONS = _MAX_SOLUTIONS;
 	IkFastSolutionArray(size_t dof = 0)
 	: dof(dof)
 	{ }
@@ -56,7 +56,7 @@ private:
 	{
 		void GetSolution(Real * solution, const Real * freevalues) const
 		{
-			for (std::size_t i = 0; i < vinfos.size(); ++ i)
+			for (int i = 0; i < vinfos.size(); ++ i)
 				if (vinfos[i].freeind < 0) {
 					solution[i] = vinfos[i].foffset;
 				} else {

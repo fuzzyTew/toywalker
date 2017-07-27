@@ -14,26 +14,30 @@ public:
 	constexpr static size_t MAX_LIMBS = 8;
 
 	Body()
-	: _worldToBody(Isometry3::Identity()),
-	  _bodyToWorld(_worldToBody)
+	: _areaToBody(Isometry3::Identity()),
+	  _bodyToArea(_areaToBody)
 	{ }
 
 	size_t limbs() const { return _limbs.size(); }
 	Limb & limb(size_t limb) { return *_limbs[limb]; }
 
-	Isometry3 const & bodyToWorld() const { return _bodyToWorld; }
-	Isometry3 const & worldToBody() const { return _worldToBody; }
+	Isometry3 const & bodyToArea() const { return _bodyToArea; }
+	Isometry3 const & areaToBody() const { return _areaToBody; }
 
-	void bodyToWorld(Isometry3 const & bodyToWorld)
+	void bodyToArea(Isometry3 const & bodyToArea)
 	{
-		_bodyToWorld = bodyToWorld;
-		_worldToBody = _bodyToWorld.inverse(Eigen::Isometry);
+		_bodyToArea = bodyToArea;
+		_areaToBody = _bodyToArea.inverse(Eigen::Isometry);
 
 		for (size_t i = 0; i < limbs(); ++ i)
 			if (limb(i).attached()) {
-				limb(i).goalWorld(limb(i).footGoalWorld());
-			} else {
-				limb(i).goalBody(limb(i).footGoalBody());
+				limb(i).goalArea(limb(i).footGoalArea());
+			// TODO: I've commented this out because it disallows us
+			//       from moving detached limbs.  But now detached limbs
+			//       do not have an up-to-date area location if they are
+			//       not moved.  Perhaps update it.
+			//} else {
+			//	limb(i).goalBody(limb(i).footGoalBody());
 			}
 				
 	}
@@ -47,7 +51,7 @@ protected:
 
 	virtual void removeLimb(Limb * limb)
 	{
-		size_t i;
+		int i;
 		for (i = 0; _limbs[i] != limb; ++ i);
 		for (; i < _limbs.size() - 1; ++ i) {
 			_limbs[i] = _limbs[i + 1];
@@ -56,9 +60,9 @@ protected:
 	}
 
 private:
-	Eigen::Array<Limb *, Eigen::Dynamic, 1, 0, MAX_LIMBS, 1> _limbs;
-	Isometry3 _worldToBody;
-	Isometry3 _bodyToWorld;
+	ArrayX<MAX_LIMBS, Limb *> _limbs;
+	Isometry3 _areaToBody;
+	Isometry3 _bodyToArea;
 };
 
 }

@@ -115,13 +115,13 @@
 			<origin xyz="${-6*pitch} 0 0"/>
 		</joint>
 		<link name="${name}Foot">
-			<xacro:wheelY x="1.5" y="2.25" z="0"><xacro:mud/></xacro:wheelY>
-			<xacro:wheelY x="1.5" y="-2.25" z="0"><xacro:mud/></xacro:wheelY>
+			<xacro:wheelY x="0" y="2.25" z="0"><xacro:mud/></xacro:wheelY>
+			<xacro:wheelY x="0" y="-2.25" z="0"><xacro:mud/></xacro:wheelY>
 		</link>
 		<joint name="${name}Ankle" type="fixed">
 			<parent link="${name}Calf"/>
 			<child link="${name}Foot"/>
-			<origin xyz="${-5.5 * pitch} ${-2 * reflect * pitch} 0"/>
+			<origin xyz="${-4 * pitch} ${-2 * reflect * pitch} 0"/>
 		</joint>
 	</xacro:macro>
 

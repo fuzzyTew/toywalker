@@ -4,7 +4,7 @@
 
 namespace kinematics {
 	constexpr double home = 0.72;
-	constexpr double reach = 11.5 * 0.06;
+	constexpr double reach = 10 * 0.06;
 }
 
 namespace kinematics_ikfast_backRightFoot_translation3d {

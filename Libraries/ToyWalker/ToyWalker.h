@@ -12,7 +12,6 @@
 	#endif
 #endif
 #define EIGEN_DONT_ALIGN
-#define EIGEN_DEFAULT_DENSE_INDEX_TYPE std::size_t
 #include <Eigen31.h>
 
 // // remove exceptions from all code

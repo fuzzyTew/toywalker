@@ -40,7 +40,7 @@ public:
 		for (size_t i = 0; i < nSolutions; ++ i)
 		{
 			Real avg = 0;
-			size_t j;
+			int j;
 			for (j = 0; j < joints.size(); ++ j)
 				avg += jointValue(solutions[i], j);
 			avg /= solutions[i].size();
@@ -94,7 +94,7 @@ public:
 		for (size_t i = 0; i < nSolutions; ++ i)
 		{
 			Real distance = 0;
-			for (size_t j = 0; j < solutions[i].size(); ++ j) {
+			for (int j = 0; j < solutions[i].size(); ++ j) {
 				distance += abs(solutions[i][j] - pose[j]);
 			}
 			if (distance < minDistance) {

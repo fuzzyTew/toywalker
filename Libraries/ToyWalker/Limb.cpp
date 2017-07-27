@@ -15,13 +15,14 @@ Limb::Limb(Body & body, Vector3 const & home, Array2 const & reach, Servos const
   _anglesGoal(_servos.size()),
   _alert(false),
   _body(body),
-  _contact(false)
+  _contact(false),
+  _step(nullptr)
 {
 	auto start = millis();
 	bool present;
 	do {
 		present = true;
-		for (size_t i = 0; i < _servos.size(); ++ i) {
+		for (int i = 0; i < _servos.size(); ++ i) {
 			terminal_tick();
 			if (!_servos[i]->present()) {
 				present = false;
@@ -40,8 +41,8 @@ void Limb::activate()
 {
 	anglesGoal(angles());
 	_footGoal = footBody(_anglesGoal);
-	_world = _body.bodyToWorld() * _footGoal;
-	for (size_t i = 0; i < _servos.size(); ++ i)
+	_area = _body.bodyToArea() * _footGoal;
+	for (int i = 0; i < _servos.size(); ++ i)
 		_servos[i]->activate();
 
 	_body.addLimb(this);
@@ -49,7 +50,7 @@ void Limb::activate()
 
 bool Limb::activated()
 {
-	for (size_t i = 0; i < _servos.size(); ++ i)
+	for (int i = 0; i < _servos.size(); ++ i)
 		if (!_servos[i]->activated())
 			return false;
 	return true;
@@ -57,7 +58,7 @@ bool Limb::activated()
 
 void Limb::deactivate()
 {
-	for (size_t i = 0; i < _servos.size(); ++ i)
+	for (int i = 0; i < _servos.size(); ++ i)
 		_servos[i]->deactivate();
 
 	_body.removeLimb(this);
@@ -68,20 +69,20 @@ bool Limb::goalBody(Vector3 const & footDestination)
 	Angles p = planBody(footDestination);
 	if (p.size()) {
 		_footGoal = footDestination;
-		_world = _body.bodyToWorld() * footDestination;
+		_area = _body.bodyToArea() * footDestination;
 	}
 	return handleGoalResult(p);
 }
 
-bool Limb::goalWorld(Vector3 const & footDestination)
+bool Limb::goalArea(Vector3 const & footDestination)
 {
-	Vector3 footBody = _body.worldToBody() * footDestination;
+	Vector3 footBody = _body.areaToBody() * footDestination;
 	Angles p = planBody(footBody);
 	if (p.size()) {
 		_footGoal = footBody;
-		_world = footDestination;
+		_area = footDestination;
 	} else if (attached()) {
-		_world = footDestination;
+		_area = footDestination;
 	}
 	return handleGoalResult(p);
 }
@@ -92,27 +93,27 @@ bool Limb::handleGoalResult(Limb::Angles const & p)
 		anglesGoal(p);
 		if (_alert) {
 			_alert = false;
-			for (size_t i = 0; i < _servos.size(); ++ i)
+			for (int i = 0; i < _servos.size(); ++ i)
 				_servos[i]->alert(false);
 		}
 		return true;
 	} else {
 		_alert = true;
-		for (size_t i = 0; i < _servos.size(); ++ i)
+		for (int i = 0; i < _servos.size(); ++ i)
 			_servos[i]->alert(true);
 		return false;
 	}
 }
 
-Limb::Angles Limb::planWorld(Vector3 const & footDestination)
+Limb::Angles Limb::planArea(Vector3 const & footDestination)
 {
-	return planBody(_body.worldToBody() * footDestination);
+	return planBody(_body.areaToBody() * footDestination);
 }
 
 Limb::Angles Limb::angles()
 {
 	Angles ret(_servos.size());
-	for (size_t i = 0; i < _servos.size(); ++ i) {
+	for (int i = 0; i < _servos.size(); ++ i) {
 		_servos[i]->alert(false);
 		ret[i] = _servos[i]->angle();
 	}
@@ -121,7 +122,7 @@ Limb::Angles Limb::angles()
 
 Limb::Angles Limb::anglesGoal(Limb::Angles const & plan)
 {
-	for (size_t i = 0; i < _servos.size(); ++ i)
+	for (int i = 0; i < _servos.size(); ++ i)
 		_anglesGoal[i] = _servos[i]->angleGoal(plan[i]);
 	return _anglesGoal;
 }

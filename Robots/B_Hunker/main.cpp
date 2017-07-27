@@ -6,6 +6,17 @@
 #include "kinematics_ikfast.frontRightFoot.translation3d.hpp"
 
 #include <Walker.hpp>
+#include <WalkGaitFormula.hpp>
+#include <WalkStepCompromise.hpp>
+#include <WalkStepCubic.hpp>
+#include <PathSegmentQuadratic.hpp>
+#include <PathSequence.hpp>
+#include <PathSegmentLine.hpp>
+#include <PathEllipse.hpp>
+#include <PathDelayed.hpp>
+#include <PathLookAt.hpp>
+#include <PathConstant.hpp>
+#include <PathProduct.hpp>
 #include <GroundPlane.hpp>
 #include <LimbIkFast.hpp>
 #include <ServoRhobanXL320.hpp>
@@ -21,7 +32,8 @@ class Hunker : public Walker
 {
 public:
 	Hunker()
-	: Walker({0,0,0}, ground),
+	: Walker({0,0,0}, ground, gait, 3 * 0.06),
+	  gait(2*0.75, {{0, 0, 0.625*0.75}, {3, 0.375*0.75, 1.0*0.75}, {1, 1.0*0.75, 1.625*0.75}, {2, 1.375*0.75, 2.0*0.75}}),
 	  backRightAimingHip(2), backRightLiftingHip(1), backRightKnee(3),
 	  backLeftAimingHip(4), backLeftLiftingHip(5), backLeftKnee(6),
 	  frontRightAimingHip(7), frontRightLiftingHip(8), frontRightKnee(9),
@@ -29,32 +41,43 @@ public:
 	  ikSelector({ {1, 1}, {2, -1} }),
 	  backRightLeg(*this,
 	               {-0.72, 0, 0.15},
-	               {7 * 0.06, 11.5 * 0.06},
+	               {7 * 0.06, 10 * 0.06},
 		       kinematics_ikfast_backRightFoot_translation3d::ComputeIk,
 		       kinematics_ikfast_backRightFoot_translation3d::ComputeFk,
 		       ikSelector,
 		       backRightAimingHip, backRightLiftingHip, backRightKnee),
 	  backLeftLeg(*this,
 	              {0, 0.72, 0.15},
-	              {7 * 0.06, 11.5 * 0.06},
+	              {7 * 0.06, 10 * 0.06},
 		      kinematics_ikfast_backLeftFoot_translation3d::ComputeIk,
 		      kinematics_ikfast_backLeftFoot_translation3d::ComputeFk,
 		      ikSelector,
 		      backLeftAimingHip, backLeftLiftingHip, backLeftKnee),
 	  frontRightLeg(*this,
 	                {0, -0.72, 0.15},
-	                {7 * 0.06, 11.5 * 0.06},
+	                {7 * 0.06, 10 * 0.06},
 		        kinematics_ikfast_frontRightFoot_translation3d::ComputeIk,
 		        kinematics_ikfast_frontRightFoot_translation3d::ComputeFk,
 			ikSelector,
-		        frontRightAimingHip, frontRightLiftingHip, frontRightKnee),
+		        frontRightAimingHip, frontRightLiftingHip, frontRightKnee), 
 	  frontLeftLeg(*this,
 	               {0.72, 0, 0.15},
-	               {7 * 0.06, 11.5 * 0.06},
+	               {7 * 0.06, 10 * 0.06},
 		       kinematics_ikfast_frontLeftFoot_translation3d::ComputeIk,
 		       kinematics_ikfast_frontLeftFoot_translation3d::ComputeFk,
 		       ikSelector,
 		       frontLeftAimingHip, frontLeftLiftingHip, frontLeftKnee),
+	  backRightStep(*this, backRightLeg, 3/16.0),
+	  backLeftStep(*this, backLeftLeg, 3/16.0),
+	  frontRightStep(*this, frontRightLeg, 3/16.0),
+	  frontLeftStep(*this, frontLeftLeg, 3/16.0),
+	  subpath1({0,0,0}, {4,0,0}, 12),
+	  subpath2({4,0,0}, {0,1,0}, {0,0,0}, 48),
+	  movePath(subpath1, subpath2),
+	  lookPath(movePath, -6),
+	  bodyPath(movePath, lookPath, {0,0,1}),
+	  bodyAdjustment(Isometry3(AngleAxis(M_PI / 4, Vector3::UnitZ()))),
+	  adjustedPath(bodyPath, bodyAdjustment),
 	  going(true)
 	{
 		curlimb = limbs() - 1;
@@ -64,13 +87,37 @@ public:
 		fpsCount = 0;
 		fpsTotal = 0;
 		fpsStart = fpsTime;
+
+		auto hr = heightRange(Isometry3::Identity());
+		Real height = hr[0] + 1/16.0;//(hr[0] + hr[1]) / 2;
+		Vector3 x = subpath1.beginning();
+		x.z() = height;
+		subpath1.beginning(x);
+		x = subpath1.end();
+		x.z() = height;
+		subpath1.end(x);
+		x = subpath2.center();
+		x.z() = height;
+		subpath2.center(x);
+
+		path(adjustedPath);
 	} 
 
 	void tick()
 	{
     		ServoRhobanXL320::tick();
+		Walker::tick();
+		/*
+		Real time = path().now();
+		Vector3 pos = path().at(time).translation();
+		terminal_io()->print(time); terminal_io()->print(": ");
+		terminal_io()->print(pos.x()); terminal_io()->print(" ,");
+		terminal_io()->print(pos.y()); terminal_io()->print(" ,");
+		terminal_io()->print(pos.z()); terminal_io()->println();
+		*/
 
 
+#if 0
 		if (going) {
 			/*++ fpsCount; ++ fpsTotal;
 			if (millis() - fpsTime >= 500) {
@@ -80,7 +127,7 @@ public:
 				fpsTime = millis();
 				fpsCount = 0;
 			}*/
-			//auto test = limb(0).footGoalWorld();//(ground.projection(bodyToWorld() * limb(0).homeBody()));
+			//auto test = limb(0).footGoalArea();//(ground.projection(bodyToArea() * limb(0).homeBody()));
 			//terminal_io()->print("Test = ");
 			//for (size_t i = 0; i < test.size(); ++ i) {
 			//	if (i)
@@ -88,7 +135,7 @@ public:
 			//	terminal_io()->print(test(i));
 			//}
 			//terminal_io()->println();
-			//limb(0).goalWorld(test);
+			//limb(0).goalArea(test);
 			/*uint32 time = millis();
 			switch(state) {
 			case 0: // moving to home
@@ -117,7 +164,7 @@ public:
 			//heightPct(0.5 + sin(millis() / 1024.0) / 2.125);
 			auto range = heightRange();
 			//walker.position({sin(millis() / 1024.0) * 0.25, cos(millis() / 1024.0) * 0.25, (range[1] - range[0])*((sin(millis() / 512.0) * 0.375 + 0.375)) + range[0]});
-			bodyToWorld(
+			bodyToArea(
 				Translation3(
 					sin(millis() / scale1) * 2.0/16,
 					cos(millis() / scale1) * 2.0/16,
@@ -134,9 +181,12 @@ public:
 		//backLeftLeg.goal({0, 0.72, -0.4 + sin(millis() / 1024.0) / 32});
 		//frontRightLeg.goal({0, -0.72, -0.4 + sin(millis() / 1024.0) / 32});
 		//frontLeftLeg.goal({0.72, 0, -0.4 + sin(millis() / 1024.0) / 32});
+#endif
 	}
 
 	GroundPlane ground;
+
+	WalkGaitFormula gait;
 
 	ServoRhobanXL320 backRightAimingHip, backRightLiftingHip, backRightKnee;
 	ServoRhobanXL320 backLeftAimingHip, backLeftLiftingHip, backLeftKnee;
@@ -149,6 +199,21 @@ public:
 	LimbIkFast backLeftLeg;
 	LimbIkFast frontRightLeg;
 	LimbIkFast frontLeftLeg;
+
+	WalkStepCubic backRightStep;
+	WalkStepCubic backLeftStep;
+	WalkStepCubic frontRightStep;
+	WalkStepCubic frontLeftStep;
+
+	PathSegmentLine<Vector3> subpath1;
+	PathEllipse subpath2;
+	PathSequence<Vector3> movePath;
+	PathDelayed<Vector3> lookPath;
+	PathLookAt bodyPath;
+
+	PathConstant<Isometry3> bodyAdjustment;
+	PathProduct<Isometry3, 2> adjustedPath;
+
 
 	bool going;
 	size_t curlimb;
@@ -167,7 +232,7 @@ Hunker * hunker;
 TERMINAL_COMMAND(project, "Project legs to ground to stand")
 {
 	for (size_t i = 0; i < hunker->limbs(); ++ i) {
-		hunker->limb(i).goalWorld(hunker->ground.projection(hunker->bodyToWorld() * hunker->limb(i).homeBody()));
+		hunker->limb(i).goalArea(hunker->ground.projection(hunker->bodyToArea() * hunker->limb(i).homeBody()));
 	}
 }
 
@@ -181,10 +246,11 @@ TERMINAL_COMMAND(attach, "Affix legs to ground")
 TERMINAL_COMMAND(detach, "Release legs from ground")
 {
 	for (size_t i = 0; i < hunker->limbs(); ++ i) {
-		hunker->limb(i).release();
+		hunker->limb(i).detach();
 	}
 }
 
+/*
 TERMINAL_COMMAND(heightpct, "Set height of robot from 0.0 - 1.0")
 {
 	if (argc != 1) {
@@ -193,7 +259,9 @@ TERMINAL_COMMAND(heightpct, "Set height of robot from 0.0 - 1.0")
 	}
 	hunker->heightPct(atof(argv[0]));
 }
+*/
 
+/*
 TERMINAL_COMMAND(height, "Set height of robot in decimeters")
 {
 	if (argc != 1) {
@@ -202,7 +270,9 @@ TERMINAL_COMMAND(height, "Set height of robot in decimeters")
 	}
 	hunker->height(atof(argv[0]));
 }
+*/
 
+/*
 TERMINAL_COMMAND(heightrange, "Get heights robot can reach")
 {
 	auto range = hunker->heightRange();
@@ -211,8 +281,10 @@ TERMINAL_COMMAND(heightrange, "Get heights robot can reach")
 	terminal_io()->print(range[1]);
 	terminal_io()->println(" dm");
 }
+*/
 
 
+/*
 TERMINAL_COMMAND(go, "Continuous motion")
 {
 	hunker->going = true;
@@ -238,6 +310,7 @@ TERMINAL_COMMAND(deactivate, "Loose limbs")
 	hunker->frontRightLeg.deactivate();
 	hunker->frontLeftLeg.deactivate();
 }
+*/
 
 TERMINAL_COMMAND(eeprom, "Show contents of servo eeprom")
 {
